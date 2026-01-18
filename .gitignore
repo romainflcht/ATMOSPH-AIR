@@ -1,0 +1,17 @@
+# MPLAB X Ignore List
+
+# _ BUILD DIRECTORIES __________________________________________________________
+build/
+dist/
+debug/
+nbproject/private/
+nbproject/Makefile-*
+nbproject/Package-*
+.vscode/
+.vscode/*
+
+# _ TEMPORARY FILES ____________________________________________________________
+.DS_Store
+Thumbs.db
+*.bak
+*.tmp
