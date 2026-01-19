@@ -10,7 +10,7 @@
 #include "drivers/sen6x.h"
 
 
-extern SEN65_DATA_t SEN6x_data; 
+extern SEN6X_DATA_t sen6x_data; 
 
 
 const uint8_t image_data[] = {
@@ -57,14 +57,14 @@ int main(void)
                 text_buffer, 
                 "PM1: %.3f\nPM2.5: %.3f\nPM4: %.3f\nPM10: %.3f\n"
                 "HUMIDITY: %.3f\nTEMP: %.3f\nVOC: %.3f\nNOx: %.3f", 
-                SEN6x_data.PM_1_0, 
-                SEN6x_data.PM_2_5, 
-                SEN6x_data.PM_4_0, 
-                SEN6x_data.PM_10_0, 
-                SEN6x_data.humidity, 
-                SEN6x_data.temp, 
-                SEN6x_data.VOC, 
-                SEN6x_data.NOx
+                sen6x_data.PM_1_0, 
+                sen6x_data.PM_2_5, 
+                sen6x_data.PM_4_0, 
+                sen6x_data.PM_10_0, 
+                sen6x_data.humidity, 
+                sen6x_data.temp, 
+                sen6x_data.VOC, 
+                sen6x_data.NOx
         );
         
         display_fill(MIN_INTENSITY); 

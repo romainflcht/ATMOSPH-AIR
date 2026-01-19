@@ -10,17 +10,66 @@
 
 //* _ DEFINITIONS ______________________________________________________________
 
-#define SEN6X_ADDR              0x6B
+#define SEN60                           100
+#define SEN63C                          101
+#define SEN65                           102
+#define SEN66                           103
+#define SEN68                           104
 
-#define SEN6X_RX_BUF_LENGTH     40
-#define SEN6X_COMMAND_LENGTH    2
+/// @define SEN_DEVICE_USED
+/// @brief this defines the SEN device used. Multiple options are available:
+///         - SEN60  -> PM sensor. 
+///         - SEN63C -> PM, RH, T and CO2 sensor. 
+///         - SEN65  -> PM, RH, T, VOC and NOx sensor. 
+///         - SEN66  -> PM, RH, T, CO2, VOC and NOx sensor.
+///         - SEN68  -> PM, RH, T, VOC, NOx and HCHO sensor. 
+#define SEN_DEVICE_USED                 SEN65
 
-#define SEN6X_INIT_DELAY_MS     2500
-#define SEN6X_INIT_CONFIG       X(0x0021) \
-                                X(0xD304)
+// Buffer configuration. 
+#define SEN6X_RX_BUF_LENGTH             27
+#define SEN6X_COMMAND_LENGTH            2
 
-#define UINT_16_UNKNOWN_VAL     0xFFFF
-#define INT_16_UNKNOWN_VAL      0x7FFF
+// Initialization. 
+#define SEN6X_INIT_CONFIG               X(STOP_MEASUREMENT) \
+                                        X(DEVICE_RESET)
+// Timing. 
+#define WAIT_TIME_SAFETY_MS             5
+#define DEVICE_RESET_WAIT_TIME          1200
+#define DEVICE_START_WAIT_TIME          50
+#define DEVICE_STOP_WAIT_TIME           1000
+#define DEVICE_READ_WAIT_TIME           20
+
+// Constant. 
+#define UINT_16_UNKNOWN_VAL             0xFFFF
+#define INT_16_UNKNOWN_VAL              0x7FFF
+
+
+// Device specific configuration. 
+#if SEN_DEVICE_USED == SEN60
+    #define SEN6X_ADDR                  0x6C
+    #define SEN6X_MEASUREMENT_LENGTH    15
+
+#elif SEN_DEVICE_USED == SEN63C
+    #define SEN6X_ADDR                  0x6B
+    #define SEN6X_MEASUREMENT_LENGTH    21
+
+#elif SEN_DEVICE_USED == SEN65
+    #define SEN6X_ADDR              0x6B
+    #define SEN6X_MEASUREMENT_LENGTH    24
+
+#elif SEN_DEVICE_USED == SEN66
+    #define SEN6X_ADDR              0x6B
+    #define SEN6X_MEASUREMENT_LENGTH    27
+
+#elif SEN_DEVICE_USED == SEN68
+    #define SEN6X_ADDR              0x6B
+    #define SEN6X_MEASUREMENT_LENGTH    27
+
+#else
+    #error "~[ERR: DEVICE SELECTION] No SENx sensor selected."
+
+#endif
+
 
 //* _ ENUMERATIONS _____________________________________________________________
 
@@ -42,18 +91,40 @@ typedef enum sen6x_states
 /// @brief enumerate available commands to operate the SEN6x sensor. 
 typedef enum sen6x_command
 {
-    START_MEASUREMENT       = 0x0021, 
-    STOP_MEASUREMENT        = 0x0104, 
-    GET_DATA_READY          = 0x0202,
-    READ_MEASURED_SEN65     = 0x0446, 
-    READ_MEASURED_SEN66     = 0x0300, 
-    READ_RAW_MEASURED_SEN65 = 0x0455, 
-    READ_RAW_MEASURED_SEN66 = 0x0405, 
+    #if SEN_DEVICE_USED == SEN60
+        DEVICE_RESET            = 0x3F8D, 
+        START_MEASUREMENT       = 0x2152, 
+        STOP_MEASUREMENT        = 0x3F86, 
+        GET_DATA_READY          = 0xE4B8,
+    #else
+        DEVICE_RESET            = 0xD304, 
+        START_MEASUREMENT       = 0x0021, 
+        STOP_MEASUREMENT        = 0x0104, 
+        GET_DATA_READY          = 0x0202,
+    #endif
+            
+    #if SEN_DEVICE_USED == SEN60
+        READ_MEASURED       = 0xEC05, 
+        
+    #elif SEN_DEVICE_USED == SEN63C
+        READ_MEASURED       = 0x0471, 
+        
+    #elif SEN_DEVICE_USED == SEN65
+        READ_MEASURED       = 0x0446, 
+        
+    #elif SEN_DEVICE_USED == SEN66
+        READ_MEASURED       = 0x0300, 
+        
+    #elif SEN_DEVICE_USED == SEN68
+        READ_MEASURED       = 0x0767, 
+        
+    #endif
 }   SEN6X_COMMAND_t;
 
 
-typedef struct sen65_data
+typedef struct sen6x_data
 {
+    float PM_0_5; 
     float PM_1_0; 
     float PM_2_5; 
     float PM_4_0; 
@@ -62,12 +133,18 @@ typedef struct sen65_data
     float temp;
     float VOC;
     float NOx;
-}   SEN65_DATA_t;
+    float CO2; 
+    float HCHO; 
+}   SEN6X_DATA_t;
 
 //* _ FUNCTION DECLARATIONS ____________________________________________________
 
+/// @fn void sen6x_init(void); 
+/// @ brief initialize any SEN6x device. 
 void sen6x_init(void); 
 
+/// @fn void sen6x_task(void); 
+/// @brief maintains the sensor measurement reading state machine. 
 void sen6x_task(void); 
 
 

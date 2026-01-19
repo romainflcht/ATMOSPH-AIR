@@ -259,7 +259,9 @@ void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity)
     y_cur = 0; 
     while(str[index])
     {
-        if (str[index] == '\n')
+        // If a NL or CR character is detected, reset the x cursor position and 
+        // increment the y cursor position. 
+        if (str[index] == '\n' || str[index] == '\r')
         {
             y_cur += FONT_CHAR_HEIGHT; 
             x_cur = 0; 
