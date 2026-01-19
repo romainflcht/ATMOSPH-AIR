@@ -10,6 +10,9 @@
 #include "drivers/sen6x.h"
 
 
+extern SEN65_DATA_t SEN6x_data; 
+
+
 const uint8_t image_data[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 
     0x0F, 0x77, 0x77, 0x77, 0x77, 0xF0, 0x0F, 0x77, 0x77, 0x77, 0x77, 0xF0, 
@@ -21,6 +24,8 @@ const uint8_t image_data[] = {
 //* _ ENTRY POINT ______________________________________________________________
 int main(void)
 {
+    char text_buffer[1024]; 
+    
     //* _ MODULE INITIALIZATIONS _______________________________________________
     SYS_Initialize(NULL);
     SYSTICK_init(); 
@@ -48,6 +53,23 @@ int main(void)
         SYS_Tasks();
 
         sen6x_task(); 
+        sprintf(
+                text_buffer, 
+                "PM1: %.3f\nPM2.5: %.3f\nPM4: %.3f\nPM10: %.3f\n"
+                "HUMIDITY: %.3f\nTEMP: %.3f\nVOC: %.3f\nNOx: %.3f", 
+                SEN6x_data.PM_1_0, 
+                SEN6x_data.PM_2_5, 
+                SEN6x_data.PM_4_0, 
+                SEN6x_data.PM_10_0, 
+                SEN6x_data.humidity, 
+                SEN6x_data.temp, 
+                SEN6x_data.VOC, 
+                SEN6x_data.NOx
+        );
+        
+        display_fill(MIN_INTENSITY); 
+        display_draw_str(0, 0, text_buffer, MAX_INTENSITY); 
+        ssd1362_refresh(); 
     }
 
     // Execution should not come here during normal operation

@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=../src/config/default/peripheral/nvic/plib_nvic.c ../src/config/default/peripheral/port/plib_port.c ../src/config/default/peripheral/sercom/i2c_master/plib_sercom1_i2c_master.c ../src/config/default/peripheral/sercom/spi_master/plib_sercom2_spi_master.c ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.c ../src/config/default/peripheral/sercom/usart/plib_sercom3_usart.c ../src/config/default/stdio/xc32_monitor.c ../src/config/default/initialization.c ../src/config/default/interrupts.c ../src/config/default/exceptions.c ../src/config/default/startup_xc32.c ../src/config/default/libc_syscalls.c ../src/cores/i2c.c ../src/cores/spi.c ../src/cores/uart.c ../src/drivers/ssd1362.c ../src/drivers/sen6x.c ../src/utils/fonts.c ../src/main.c ../src/config/default/peripheral/systick/plib_systick.c ../src/cores/systick.c
+SOURCEFILES_QUOTED_IF_SPACED=../src/config/default/peripheral/nvic/plib_nvic.c ../src/config/default/peripheral/port/plib_port.c ../src/config/default/peripheral/sercom/i2c_master/plib_sercom1_i2c_master.c ../src/config/default/peripheral/sercom/spi_master/plib_sercom2_spi_master.c ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.c ../src/config/default/peripheral/sercom/usart/plib_sercom3_usart.c ../src/config/default/peripheral/systick/plib_systick.c ../src/config/default/stdio/xc32_monitor.c ../src/config/default/initialization.c ../src/config/default/interrupts.c ../src/config/default/exceptions.c ../src/config/default/startup_xc32.c ../src/config/default/libc_syscalls.c ../src/cores/i2c.c ../src/cores/spi.c ../src/cores/uart.c ../src/cores/systick.c ../src/drivers/ssd1362.c ../src/drivers/sen6x.c ../src/utils/fonts.c ../src/main.c ../src/utils/utils.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/1865468468/plib_nvic.o ${OBJECTDIR}/_ext/1865521619/plib_port.o ${OBJECTDIR}/_ext/508257091/plib_sercom1_i2c_master.o ${OBJECTDIR}/_ext/17022449/plib_sercom2_spi_master.o ${OBJECTDIR}/_ext/504274921/plib_sercom0_usart.o ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o ${OBJECTDIR}/_ext/163028504/xc32_monitor.o ${OBJECTDIR}/_ext/1171490990/initialization.o ${OBJECTDIR}/_ext/1171490990/interrupts.o ${OBJECTDIR}/_ext/1171490990/exceptions.o ${OBJECTDIR}/_ext/1171490990/startup_xc32.o ${OBJECTDIR}/_ext/1171490990/libc_syscalls.o ${OBJECTDIR}/_ext/1536727238/i2c.o ${OBJECTDIR}/_ext/1536727238/spi.o ${OBJECTDIR}/_ext/1536727238/uart.o ${OBJECTDIR}/_ext/1639450193/ssd1362.o ${OBJECTDIR}/_ext/1639450193/sen6x.o ${OBJECTDIR}/_ext/1519963337/fonts.o ${OBJECTDIR}/_ext/1360937237/main.o ${OBJECTDIR}/_ext/1827571544/plib_systick.o ${OBJECTDIR}/_ext/1536727238/systick.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/1865468468/plib_nvic.o.d ${OBJECTDIR}/_ext/1865521619/plib_port.o.d ${OBJECTDIR}/_ext/508257091/plib_sercom1_i2c_master.o.d ${OBJECTDIR}/_ext/17022449/plib_sercom2_spi_master.o.d ${OBJECTDIR}/_ext/504274921/plib_sercom0_usart.o.d ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o.d ${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d ${OBJECTDIR}/_ext/1171490990/initialization.o.d ${OBJECTDIR}/_ext/1171490990/interrupts.o.d ${OBJECTDIR}/_ext/1171490990/exceptions.o.d ${OBJECTDIR}/_ext/1171490990/startup_xc32.o.d ${OBJECTDIR}/_ext/1171490990/libc_syscalls.o.d ${OBJECTDIR}/_ext/1536727238/i2c.o.d ${OBJECTDIR}/_ext/1536727238/spi.o.d ${OBJECTDIR}/_ext/1536727238/uart.o.d ${OBJECTDIR}/_ext/1639450193/ssd1362.o.d ${OBJECTDIR}/_ext/1639450193/sen6x.o.d ${OBJECTDIR}/_ext/1519963337/fonts.o.d ${OBJECTDIR}/_ext/1360937237/main.o.d ${OBJECTDIR}/_ext/1827571544/plib_systick.o.d ${OBJECTDIR}/_ext/1536727238/systick.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/1865468468/plib_nvic.o ${OBJECTDIR}/_ext/1865521619/plib_port.o ${OBJECTDIR}/_ext/508257091/plib_sercom1_i2c_master.o ${OBJECTDIR}/_ext/17022449/plib_sercom2_spi_master.o ${OBJECTDIR}/_ext/504274921/plib_sercom0_usart.o ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o ${OBJECTDIR}/_ext/1827571544/plib_systick.o ${OBJECTDIR}/_ext/163028504/xc32_monitor.o ${OBJECTDIR}/_ext/1171490990/initialization.o ${OBJECTDIR}/_ext/1171490990/interrupts.o ${OBJECTDIR}/_ext/1171490990/exceptions.o ${OBJECTDIR}/_ext/1171490990/startup_xc32.o ${OBJECTDIR}/_ext/1171490990/libc_syscalls.o ${OBJECTDIR}/_ext/1536727238/i2c.o ${OBJECTDIR}/_ext/1536727238/spi.o ${OBJECTDIR}/_ext/1536727238/uart.o ${OBJECTDIR}/_ext/1536727238/systick.o ${OBJECTDIR}/_ext/1639450193/ssd1362.o ${OBJECTDIR}/_ext/1639450193/sen6x.o ${OBJECTDIR}/_ext/1519963337/fonts.o ${OBJECTDIR}/_ext/1360937237/main.o ${OBJECTDIR}/_ext/1519963337/utils.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/1865468468/plib_nvic.o.d ${OBJECTDIR}/_ext/1865521619/plib_port.o.d ${OBJECTDIR}/_ext/508257091/plib_sercom1_i2c_master.o.d ${OBJECTDIR}/_ext/17022449/plib_sercom2_spi_master.o.d ${OBJECTDIR}/_ext/504274921/plib_sercom0_usart.o.d ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o.d ${OBJECTDIR}/_ext/1827571544/plib_systick.o.d ${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d ${OBJECTDIR}/_ext/1171490990/initialization.o.d ${OBJECTDIR}/_ext/1171490990/interrupts.o.d ${OBJECTDIR}/_ext/1171490990/exceptions.o.d ${OBJECTDIR}/_ext/1171490990/startup_xc32.o.d ${OBJECTDIR}/_ext/1171490990/libc_syscalls.o.d ${OBJECTDIR}/_ext/1536727238/i2c.o.d ${OBJECTDIR}/_ext/1536727238/spi.o.d ${OBJECTDIR}/_ext/1536727238/uart.o.d ${OBJECTDIR}/_ext/1536727238/systick.o.d ${OBJECTDIR}/_ext/1639450193/ssd1362.o.d ${OBJECTDIR}/_ext/1639450193/sen6x.o.d ${OBJECTDIR}/_ext/1519963337/fonts.o.d ${OBJECTDIR}/_ext/1360937237/main.o.d ${OBJECTDIR}/_ext/1519963337/utils.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/1865468468/plib_nvic.o ${OBJECTDIR}/_ext/1865521619/plib_port.o ${OBJECTDIR}/_ext/508257091/plib_sercom1_i2c_master.o ${OBJECTDIR}/_ext/17022449/plib_sercom2_spi_master.o ${OBJECTDIR}/_ext/504274921/plib_sercom0_usart.o ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o ${OBJECTDIR}/_ext/163028504/xc32_monitor.o ${OBJECTDIR}/_ext/1171490990/initialization.o ${OBJECTDIR}/_ext/1171490990/interrupts.o ${OBJECTDIR}/_ext/1171490990/exceptions.o ${OBJECTDIR}/_ext/1171490990/startup_xc32.o ${OBJECTDIR}/_ext/1171490990/libc_syscalls.o ${OBJECTDIR}/_ext/1536727238/i2c.o ${OBJECTDIR}/_ext/1536727238/spi.o ${OBJECTDIR}/_ext/1536727238/uart.o ${OBJECTDIR}/_ext/1639450193/ssd1362.o ${OBJECTDIR}/_ext/1639450193/sen6x.o ${OBJECTDIR}/_ext/1519963337/fonts.o ${OBJECTDIR}/_ext/1360937237/main.o ${OBJECTDIR}/_ext/1827571544/plib_systick.o ${OBJECTDIR}/_ext/1536727238/systick.o
+OBJECTFILES=${OBJECTDIR}/_ext/1865468468/plib_nvic.o ${OBJECTDIR}/_ext/1865521619/plib_port.o ${OBJECTDIR}/_ext/508257091/plib_sercom1_i2c_master.o ${OBJECTDIR}/_ext/17022449/plib_sercom2_spi_master.o ${OBJECTDIR}/_ext/504274921/plib_sercom0_usart.o ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o ${OBJECTDIR}/_ext/1827571544/plib_systick.o ${OBJECTDIR}/_ext/163028504/xc32_monitor.o ${OBJECTDIR}/_ext/1171490990/initialization.o ${OBJECTDIR}/_ext/1171490990/interrupts.o ${OBJECTDIR}/_ext/1171490990/exceptions.o ${OBJECTDIR}/_ext/1171490990/startup_xc32.o ${OBJECTDIR}/_ext/1171490990/libc_syscalls.o ${OBJECTDIR}/_ext/1536727238/i2c.o ${OBJECTDIR}/_ext/1536727238/spi.o ${OBJECTDIR}/_ext/1536727238/uart.o ${OBJECTDIR}/_ext/1536727238/systick.o ${OBJECTDIR}/_ext/1639450193/ssd1362.o ${OBJECTDIR}/_ext/1639450193/sen6x.o ${OBJECTDIR}/_ext/1519963337/fonts.o ${OBJECTDIR}/_ext/1360937237/main.o ${OBJECTDIR}/_ext/1519963337/utils.o
 
 # Source Files
-SOURCEFILES=../src/config/default/peripheral/nvic/plib_nvic.c ../src/config/default/peripheral/port/plib_port.c ../src/config/default/peripheral/sercom/i2c_master/plib_sercom1_i2c_master.c ../src/config/default/peripheral/sercom/spi_master/plib_sercom2_spi_master.c ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.c ../src/config/default/peripheral/sercom/usart/plib_sercom3_usart.c ../src/config/default/stdio/xc32_monitor.c ../src/config/default/initialization.c ../src/config/default/interrupts.c ../src/config/default/exceptions.c ../src/config/default/startup_xc32.c ../src/config/default/libc_syscalls.c ../src/cores/i2c.c ../src/cores/spi.c ../src/cores/uart.c ../src/drivers/ssd1362.c ../src/drivers/sen6x.c ../src/utils/fonts.c ../src/main.c ../src/config/default/peripheral/systick/plib_systick.c ../src/cores/systick.c
+SOURCEFILES=../src/config/default/peripheral/nvic/plib_nvic.c ../src/config/default/peripheral/port/plib_port.c ../src/config/default/peripheral/sercom/i2c_master/plib_sercom1_i2c_master.c ../src/config/default/peripheral/sercom/spi_master/plib_sercom2_spi_master.c ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.c ../src/config/default/peripheral/sercom/usart/plib_sercom3_usart.c ../src/config/default/peripheral/systick/plib_systick.c ../src/config/default/stdio/xc32_monitor.c ../src/config/default/initialization.c ../src/config/default/interrupts.c ../src/config/default/exceptions.c ../src/config/default/startup_xc32.c ../src/config/default/libc_syscalls.c ../src/cores/i2c.c ../src/cores/spi.c ../src/cores/uart.c ../src/cores/systick.c ../src/drivers/ssd1362.c ../src/drivers/sen6x.c ../src/utils/fonts.c ../src/main.c ../src/utils/utils.c
 
 # Pack Options 
 PACK_COMMON_OPTIONS=-I "${CMSIS_DIR}/CMSIS/Core/Include"
@@ -140,6 +140,12 @@ ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o: ../src/config/default/peripher
 	@${RM} ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o.d" -o ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o ../src/config/default/peripheral/sercom/usart/plib_sercom3_usart.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
+${OBJECTDIR}/_ext/1827571544/plib_systick.o: ../src/config/default/peripheral/systick/plib_systick.c  .generated_files/flags/default/88f819ee234edc9f756cc6d367c7a48a5cc717a5 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}/_ext/1827571544" 
+	@${RM} ${OBJECTDIR}/_ext/1827571544/plib_systick.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1827571544/plib_systick.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1827571544/plib_systick.o.d" -o ${OBJECTDIR}/_ext/1827571544/plib_systick.o ../src/config/default/peripheral/systick/plib_systick.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
+	
 ${OBJECTDIR}/_ext/163028504/xc32_monitor.o: ../src/config/default/stdio/xc32_monitor.c  .generated_files/flags/default/864c7be9386bc42585fd5052d2b933962fcafd09 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}/_ext/163028504" 
 	@${RM} ${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d 
@@ -194,6 +200,12 @@ ${OBJECTDIR}/_ext/1536727238/uart.o: ../src/cores/uart.c  .generated_files/flags
 	@${RM} ${OBJECTDIR}/_ext/1536727238/uart.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1536727238/uart.o.d" -o ${OBJECTDIR}/_ext/1536727238/uart.o ../src/cores/uart.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
+${OBJECTDIR}/_ext/1536727238/systick.o: ../src/cores/systick.c  .generated_files/flags/default/71ec7950bb3564a5c99d398ec9d7d48f7382bbe4 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}/_ext/1536727238" 
+	@${RM} ${OBJECTDIR}/_ext/1536727238/systick.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1536727238/systick.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1536727238/systick.o.d" -o ${OBJECTDIR}/_ext/1536727238/systick.o ../src/cores/systick.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
+	
 ${OBJECTDIR}/_ext/1639450193/ssd1362.o: ../src/drivers/ssd1362.c  .generated_files/flags/default/1a99793ce0f7347fb80b292da553c518297da63a .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}/_ext/1639450193" 
 	@${RM} ${OBJECTDIR}/_ext/1639450193/ssd1362.o.d 
@@ -218,17 +230,11 @@ ${OBJECTDIR}/_ext/1360937237/main.o: ../src/main.c  .generated_files/flags/defau
 	@${RM} ${OBJECTDIR}/_ext/1360937237/main.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1360937237/main.o.d" -o ${OBJECTDIR}/_ext/1360937237/main.o ../src/main.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/_ext/1827571544/plib_systick.o: ../src/config/default/peripheral/systick/plib_systick.c  .generated_files/flags/default/88f819ee234edc9f756cc6d367c7a48a5cc717a5 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/_ext/1827571544" 
-	@${RM} ${OBJECTDIR}/_ext/1827571544/plib_systick.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1827571544/plib_systick.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1827571544/plib_systick.o.d" -o ${OBJECTDIR}/_ext/1827571544/plib_systick.o ../src/config/default/peripheral/systick/plib_systick.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
-	
-${OBJECTDIR}/_ext/1536727238/systick.o: ../src/cores/systick.c  .generated_files/flags/default/71ec7950bb3564a5c99d398ec9d7d48f7382bbe4 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/_ext/1536727238" 
-	@${RM} ${OBJECTDIR}/_ext/1536727238/systick.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1536727238/systick.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1536727238/systick.o.d" -o ${OBJECTDIR}/_ext/1536727238/systick.o ../src/cores/systick.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
+${OBJECTDIR}/_ext/1519963337/utils.o: ../src/utils/utils.c  .generated_files/flags/default/33f880a6e0e60f8f1117571a95e0f9e7e41a3e2d .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}/_ext/1519963337" 
+	@${RM} ${OBJECTDIR}/_ext/1519963337/utils.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1519963337/utils.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1519963337/utils.o.d" -o ${OBJECTDIR}/_ext/1519963337/utils.o ../src/utils/utils.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
 else
 ${OBJECTDIR}/_ext/1865468468/plib_nvic.o: ../src/config/default/peripheral/nvic/plib_nvic.c  .generated_files/flags/default/5f556f08e94bd03880ee14c1682603371eecc49a .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
@@ -266,6 +272,12 @@ ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o: ../src/config/default/peripher
 	@${RM} ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o.d 
 	@${RM} ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o.d" -o ${OBJECTDIR}/_ext/504274921/plib_sercom3_usart.o ../src/config/default/peripheral/sercom/usart/plib_sercom3_usart.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
+	
+${OBJECTDIR}/_ext/1827571544/plib_systick.o: ../src/config/default/peripheral/systick/plib_systick.c  .generated_files/flags/default/3490a8d52093ab96488b156c4822ae9925d2ed53 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}/_ext/1827571544" 
+	@${RM} ${OBJECTDIR}/_ext/1827571544/plib_systick.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1827571544/plib_systick.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1827571544/plib_systick.o.d" -o ${OBJECTDIR}/_ext/1827571544/plib_systick.o ../src/config/default/peripheral/systick/plib_systick.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
 ${OBJECTDIR}/_ext/163028504/xc32_monitor.o: ../src/config/default/stdio/xc32_monitor.c  .generated_files/flags/default/d3983f645214e6f5643519d333086e9adbc4751c .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}/_ext/163028504" 
@@ -321,6 +333,12 @@ ${OBJECTDIR}/_ext/1536727238/uart.o: ../src/cores/uart.c  .generated_files/flags
 	@${RM} ${OBJECTDIR}/_ext/1536727238/uart.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1536727238/uart.o.d" -o ${OBJECTDIR}/_ext/1536727238/uart.o ../src/cores/uart.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
+${OBJECTDIR}/_ext/1536727238/systick.o: ../src/cores/systick.c  .generated_files/flags/default/78fa4eb426d09411f7dc2ebe4c4939e0ce84f212 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}/_ext/1536727238" 
+	@${RM} ${OBJECTDIR}/_ext/1536727238/systick.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1536727238/systick.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1536727238/systick.o.d" -o ${OBJECTDIR}/_ext/1536727238/systick.o ../src/cores/systick.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
+	
 ${OBJECTDIR}/_ext/1639450193/ssd1362.o: ../src/drivers/ssd1362.c  .generated_files/flags/default/a816be21f3f1d49fcb2b2dcff2b38a4052f1d006 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}/_ext/1639450193" 
 	@${RM} ${OBJECTDIR}/_ext/1639450193/ssd1362.o.d 
@@ -345,17 +363,11 @@ ${OBJECTDIR}/_ext/1360937237/main.o: ../src/main.c  .generated_files/flags/defau
 	@${RM} ${OBJECTDIR}/_ext/1360937237/main.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1360937237/main.o.d" -o ${OBJECTDIR}/_ext/1360937237/main.o ../src/main.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
-${OBJECTDIR}/_ext/1827571544/plib_systick.o: ../src/config/default/peripheral/systick/plib_systick.c  .generated_files/flags/default/3490a8d52093ab96488b156c4822ae9925d2ed53 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/_ext/1827571544" 
-	@${RM} ${OBJECTDIR}/_ext/1827571544/plib_systick.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1827571544/plib_systick.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1827571544/plib_systick.o.d" -o ${OBJECTDIR}/_ext/1827571544/plib_systick.o ../src/config/default/peripheral/systick/plib_systick.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
-	
-${OBJECTDIR}/_ext/1536727238/systick.o: ../src/cores/systick.c  .generated_files/flags/default/78fa4eb426d09411f7dc2ebe4c4939e0ce84f212 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/_ext/1536727238" 
-	@${RM} ${OBJECTDIR}/_ext/1536727238/systick.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1536727238/systick.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1536727238/systick.o.d" -o ${OBJECTDIR}/_ext/1536727238/systick.o ../src/cores/systick.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
+${OBJECTDIR}/_ext/1519963337/utils.o: ../src/utils/utils.c  .generated_files/flags/default/26b7a8be9a8c8e499b539b36413e712f714666dc .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}/_ext/1519963337" 
+	@${RM} ${OBJECTDIR}/_ext/1519963337/utils.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1519963337/utils.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -ffunction-sections -fdata-sections -O0 -fno-common -I"../src" -I"../src/config/default" -I"../src/packs/CMSIS/" -I"../src/packs/CMSIS/CMSIS/Core/Include" -I"../src/packs/PIC32CM5164LS00048_DFP" -MP -MMD -MF "${OBJECTDIR}/_ext/1519963337/utils.o.d" -o ${OBJECTDIR}/_ext/1519963337/utils.o ../src/utils/utils.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
 endif
 

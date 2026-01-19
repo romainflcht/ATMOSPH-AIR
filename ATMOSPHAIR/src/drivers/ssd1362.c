@@ -249,13 +249,34 @@ void display_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_intensity)
 void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity)
 {
     uint32_t index; 
+    uint32_t x_cur; 
+    uint32_t y_cur; 
     
     // Execute the "display_draw_char" function and increment the x position of 
     // each char. 
     index = 0; 
+    x_cur = 0; 
+    y_cur = 0; 
     while(str[index])
     {
-        display_draw_char(x + (index * FONT_CHAR_WIDTH), y, str[index], fg_intensity); 
+        if (str[index] == '\n')
+        {
+            y_cur += FONT_CHAR_HEIGHT; 
+            x_cur = 0; 
+        }
+        
+        else
+        {
+            display_draw_char(
+                    x + (x_cur * FONT_CHAR_WIDTH), 
+                    y + y_cur, 
+                    str[index], 
+                    fg_intensity
+            ); 
+
+            x_cur += 1; 
+        }
+        
         index += 1; 
     }
 }

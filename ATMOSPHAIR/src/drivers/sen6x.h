@@ -6,6 +6,7 @@
 #include "definitions.h" 
 
 #include "../cores/systick.h"
+#include "../utils/utils.h"
 
 //* _ DEFINITIONS ______________________________________________________________
 
@@ -17,6 +18,9 @@
 #define SEN6X_INIT_DELAY_MS     2500
 #define SEN6X_INIT_CONFIG       X(0x0021) \
                                 X(0xD304)
+
+#define UINT_16_UNKNOWN_VAL     0xFFFF
+#define INT_16_UNKNOWN_VAL      0x7FFF
 
 //* _ ENUMERATIONS _____________________________________________________________
 
