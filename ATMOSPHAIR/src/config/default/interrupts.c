@@ -78,7 +78,7 @@ void __attribute__((optimize("-O1"), long_call, noreturn, used))Dummy_Handler(vo
 }
 
 /* MISRAC 2023 deviation block start */
-/* MISRA C-2023 Rule 8.6 deviated 7 times.  Deviation record ID -  H3_MISRAC_2023_R_8_6_DR_1 */
+/* MISRA C-2023 Rule 8.6 deviated 8 times.  Deviation record ID -  H3_MISRAC_2023_R_8_6_DR_1 */
 /* Device vectors list dummy definition*/
 extern void SVCall_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void PendSV_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
@@ -87,6 +87,7 @@ extern void SERCOM3_0_Handler          ( void ) __attribute__((weak, alias("Dumm
 extern void SERCOM3_1_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void SERCOM3_2_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void SERCOM3_OTHER_Handler      ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
+extern void ADC_OTHER_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 
 
 /* MISRAC 2023 deviation block end */
@@ -96,7 +97,7 @@ extern void SERCOM3_OTHER_Handler      ( void ) __attribute__((weak, alias("Dumm
 
 
 /* MISRAC 2023 deviation block start */
-/* MISRA C-2023 Rule 2.8 deviated 7 times.  Deviation record ID -  H3_MISRAC_2023_R_2_8_DR_1 */
+/* MISRA C-2023 Rule 2.8 deviated 8 times.  Deviation record ID -  H3_MISRAC_2023_R_2_8_DR_1 */
 
 __attribute__ ((section(".vectors"), used))
 const H3DeviceVectors exception_table=
@@ -127,6 +128,8 @@ const H3DeviceVectors exception_table=
     .pfnSERCOM3_1_Handler          = SERCOM3_1_Handler,
     .pfnSERCOM3_2_Handler          = SERCOM3_2_Handler,
     .pfnSERCOM3_OTHER_Handler      = SERCOM3_OTHER_Handler,
+    .pfnADC_OTHER_Handler          = ADC_OTHER_Handler,
+    .pfnADC_RESRDY_Handler         = ADC_RESRDY_InterruptHandler,
 
 
 };

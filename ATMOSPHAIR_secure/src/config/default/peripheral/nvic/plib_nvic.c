@@ -69,6 +69,7 @@ void NVIC_Initialize( void )
     NVIC_SetTargetState(SERCOM2_1_IRQn);
     NVIC_SetTargetState(SERCOM2_2_IRQn);
     NVIC_SetTargetState(SERCOM2_OTHER_IRQn);
+    NVIC_SetTargetState(ADC_RESRDY_IRQn);
 
 
 

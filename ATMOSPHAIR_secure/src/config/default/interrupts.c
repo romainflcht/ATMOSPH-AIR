@@ -121,8 +121,6 @@ extern void TCC0_Handler               ( void ) __attribute__((weak, alias("Dumm
 extern void TCC1_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void TCC2_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void TCC3_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
-extern void ADC_OTHER_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
-extern void ADC_RESRDY_Handler         ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void AC_Handler                 ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void DAC_UNDERRUN_Handler       ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void DAC_EMPTY_Handler          ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
@@ -194,8 +192,6 @@ const H3DeviceVectors exception_table=
     .pfnTCC1_Handler               = TCC1_Handler,
     .pfnTCC2_Handler               = TCC2_Handler,
     .pfnTCC3_Handler               = TCC3_Handler,
-    .pfnADC_OTHER_Handler          = ADC_OTHER_Handler,
-    .pfnADC_RESRDY_Handler         = ADC_RESRDY_Handler,
     .pfnAC_Handler                 = AC_Handler,
     .pfnDAC_UNDERRUN_Handler       = DAC_UNDERRUN_Handler,
     .pfnDAC_EMPTY_Handler          = DAC_EMPTY_Handler,

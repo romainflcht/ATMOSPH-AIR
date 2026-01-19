@@ -65,6 +65,7 @@ void SysTick_Handler (void);
 void SERCOM0_USART_InterruptHandler (void);
 void SERCOM1_I2C_InterruptHandler (void);
 void SERCOM2_SPI_InterruptHandler (void);
+void ADC_RESRDY_InterruptHandler (void);
 
 
 

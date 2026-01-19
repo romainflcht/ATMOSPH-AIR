@@ -7,6 +7,10 @@
       <logicalFolder name="config" displayName="config" projectFiles="true">
         <logicalFolder name="default" displayName="default" projectFiles="true">
           <logicalFolder name="peripheral" displayName="peripheral" projectFiles="true">
+            <logicalFolder name="adc" displayName="adc" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/adc/plib_adc_common.h</itemPath>
+              <itemPath>../src/config/default/peripheral/adc/plib_adc.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="nvic" displayName="nvic" projectFiles="true">
               <itemPath>../src/config/default/peripheral/nvic/plib_nvic.h</itemPath>
             </logicalFolder>
@@ -176,12 +180,13 @@
           <itemPath>atmosphair_default/components/nvmctrl.yml</itemPath>
           <itemPath>atmosphair_default/components/cmsis.yml</itemPath>
           <itemPath>atmosphair_default/components/core.yml</itemPath>
-          <itemPath>atmosphair_default/components/dfp.yml</itemPath>
-          <itemPath>atmosphair_default/components/sercom1.yml</itemPath>
           <itemPath>atmosphair_default/components/sercom0.yml</itemPath>
           <itemPath>atmosphair_default/components/stdio.yml</itemPath>
           <itemPath>atmosphair_default/components/evsys.yml</itemPath>
           <itemPath>atmosphair_default/components/sercom2.yml</itemPath>
+          <itemPath>atmosphair_default/components/dfp.yml</itemPath>
+          <itemPath>atmosphair_default/components/sercom1.yml</itemPath>
+          <itemPath>atmosphair_default/components/adc.yml</itemPath>
           <itemPath>atmosphair_default/components/pm.yml</itemPath>
           <itemPath>atmosphair_default/components/sercom3.yml</itemPath>
         </logicalFolder>
@@ -209,6 +214,9 @@
       <logicalFolder name="config" displayName="config" projectFiles="true">
         <logicalFolder name="default" displayName="default" projectFiles="true">
           <logicalFolder name="peripheral" displayName="peripheral" projectFiles="true">
+            <logicalFolder name="adc" displayName="adc" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/adc/plib_adc.c</itemPath>
+            </logicalFolder>
             <logicalFolder name="nvic" displayName="nvic" projectFiles="true">
               <itemPath>../src/config/default/peripheral/nvic/plib_nvic.c</itemPath>
             </logicalFolder>
@@ -436,7 +444,7 @@
         <property key="oXC32ld-extra-opts" value=""/>
         <property key="optimization-level" value=""/>
         <property key="preprocessor-macros"
-                  value="AS_SIZE=0x40000;BOOTPROT_SIZE=0x0;NONSECURE;RS_SIZE=0x8000"/>
+                  value="AS_SIZE=0x19600;BOOTPROT_SIZE=0x0;NONSECURE;RS_SIZE=0xa80"/>
         <property key="remove-unused-sections" value="true"/>
         <property key="report-memory-usage" value="false"/>
         <property key="serial-length" value=""/>

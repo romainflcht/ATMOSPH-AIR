@@ -1,12 +1,12 @@
 Pin Number,Pin ID,Custom Name,Function,Mode, Direction,Latch,Pull Up,Pull Down,Drive Strength
 1,PA00,,Available,,,,,,NORMAL
 2,PA01,,Available,,,,,,NORMAL
-3,PA02,,Available,,,,,,NORMAL
-4,PA03,,Available,,,,,,NORMAL
+3,PA02,,ADC_AIN0,Analog,High Impedance,n/a,,,NORMAL
+4,PA03,,ADC_AIN1,Analog,High Impedance,n/a,,,NORMAL
 7,PB08,,SERCOM3_PAD0,Digital,High Impedance,n/a,No,No,NORMAL
 8,PB09,,SERCOM3_PAD1,Digital,High Impedance,n/a,No,No,NORMAL
-9,PA04,,Available,,,,,,NORMAL
-10,PA05,,Available,,,,,,NORMAL
+9,PA04,,ADC_AIN2/VREFP,Analog,High Impedance,n/a,,,NORMAL
+10,PA05,,ADC_AIN3,Analog,High Impedance,n/a,,,NORMAL
 11,PA06,,Available,,,,,,NORMAL
 12,PA07,,Available,,,,,,NORMAL
 13,PA08,,SERCOM1_PAD0,Digital,High Impedance,n/a,No,No,NORMAL

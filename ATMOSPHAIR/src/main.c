@@ -43,9 +43,6 @@ int main(void)
     
     ssd1362_refresh(); 
     
-    
-
-    
     //* _ MAIN LOOP ____________________________________________________________
     while(true)
     {
@@ -79,13 +76,7 @@ int main(void)
 
 // _ SAVES _____________________________________________________________________
 
-//        display_draw_rect(0, 0, DISPLAY_WIDTH - 1, 10, MAX_INTENSITY); 
-//        display_draw_str(DISPLAY_WIDTH - 15 - 24, 2, "100%", MAX_INTENSITY); 
-//        display_img(DISPLAY_WIDTH - 7, 1, 12, 8, image_data); 
-//        
-//        
-//
-//        ssd1362_refresh(); 
+//  UART
 //        while(SERCOM2_SPI_IsBusy());
     
 //        SERCOM0_USART_Write("AT\r\n", 4); 

@@ -66,10 +66,10 @@
 #pragma config BOD33_HYST = CLEAR
 #pragma config IDAU_RXN = CLEAR
 #pragma config NVMCTRL_DXN = SET
-#pragma config IDAU_AS = 0x400U
-#pragma config IDAU_ANSC = 0x10U
-#pragma config IDAU_DS = 0x40U
-#pragma config IDAU_RS = 0x100U
+#pragma config IDAU_AS = 0x196U
+#pragma config IDAU_ANSC = 0x44U
+#pragma config IDAU_DS = 0x0U
+#pragma config IDAU_RS = 0x15U
 #pragma config NVMCTRL_URWEN = SET
 #pragma config NONSECA_PAC = CLEAR
 #pragma config NONSECA_PM = CLEAR

@@ -63,7 +63,7 @@ extern "C" {
 // DOM-IGNORE-END
 
 /* Non-secure start address */
-#define TZ_START_NS 0x40000
+#define TZ_START_NS 0x19600
 
 /* Device Information */
 #define DEVICE_NAME			 "PIC32CM5164LS00048"

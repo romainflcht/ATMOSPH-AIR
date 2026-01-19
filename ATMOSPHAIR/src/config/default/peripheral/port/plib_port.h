@@ -143,10 +143,18 @@ typedef enum
 
 typedef enum
 {
+    /* PA02 pin */
+    PORT_PIN_PA02 = 2,
+    /* PA03 pin */
+    PORT_PIN_PA03 = 3,
     /* PB08 pin */
     PORT_PIN_PB08 = 40,
     /* PB09 pin */
     PORT_PIN_PB09 = 41,
+    /* PA04 pin */
+    PORT_PIN_PA04 = 4,
+    /* PA05 pin */
+    PORT_PIN_PA05 = 5,
     /* PA08 pin */
     PORT_PIN_PA08 = 8,
     /* PA09 pin */
