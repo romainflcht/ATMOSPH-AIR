@@ -77,13 +77,13 @@
 /// @brief enumerate all available states of the SEN6x state machine. 
 typedef enum sen6x_states
 {
-    IDLE,
-    MEASUREMENT,
-    WAIT_DATA_W,
-    WAIT_DATA_R,
-    READ_DATA_W, 
-    READ_DATA_R, 
-    PARSE_DATA, 
+    SEN6X_IDLE,
+    SEN6X_MEASUREMENT,
+    SEN6X_WAIT_DATA_W,
+    SEN6X_WAIT_DATA_R,
+    SEN6X_READ_DATA_W, 
+    SEN6X_READ_DATA_R, 
+    SEN6X_PARSE_DATA, 
 }   SEN6X_STATE_t;
 
 
@@ -121,6 +121,8 @@ typedef enum sen6x_command
     #endif
 }   SEN6X_COMMAND_t;
 
+
+//* _ STRUCTURE DEFINITIONS ____________________________________________________
 
 typedef struct sen6x_data
 {

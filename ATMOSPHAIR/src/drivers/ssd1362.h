@@ -105,7 +105,7 @@ void ssd1362_init(void);
 /// @brief set high to chip select and data/command pin (unselect the SPI 
 ///        device). 
 /// @param context not used. 
-void ssd1362_callback(uintptr_t context); 
+void SPI_callback(uintptr_t context); 
 
 
 /// @fn bool ssd1362_refresh(void);  

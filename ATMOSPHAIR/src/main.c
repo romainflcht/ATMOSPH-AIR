@@ -8,9 +8,11 @@
 
 #include "drivers/ssd1362.h"
 #include "drivers/sen6x.h"
+#include "cores/adc.h"
 
 
-extern SEN6X_DATA_t sen6x_data; 
+extern SEN6X_DATA_t         sen6x_data; 
+extern volatile ADC_DATA_t  ADC_data[4]; 
 
 
 const uint8_t image_data[] = {
@@ -28,18 +30,19 @@ int main(void)
     
     //* _ MODULE INITIALIZATIONS _______________________________________________
     SYS_Initialize(NULL);
-    SYSTICK_init(); 
     ssd1362_init(); 
     
     display_fill(MIN_INTENSITY); 
-    display_draw_str(0, 0, "INITIALIZING...", MAX_INTENSITY); 
+    display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZING...", MAX_INTENSITY); 
     
     ssd1362_refresh(); 
     
+    SYSTICK_init(); 
+    ADC_init(); 
     sen6x_init(); 
     
     display_fill(MIN_INTENSITY); 
-    display_draw_str(0, 0, "INITIALIZED!", MAX_INTENSITY); 
+    display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZED!", MAX_INTENSITY); 
     
     ssd1362_refresh(); 
     
@@ -49,20 +52,11 @@ int main(void)
         // Maintain state machines of all polled MPLAB Harmony modules.
         SYS_Tasks();
 
-        sen6x_task(); 
-        sprintf(
-                text_buffer, 
-                "PM1: %.3f\nPM2.5: %.3f\nPM4: %.3f\nPM10: %.3f\n"
-                "HUMIDITY: %.3f\nTEMP: %.3f\nVOC: %.3f\nNOx: %.3f", 
-                sen6x_data.PM_1_0, 
-                sen6x_data.PM_2_5, 
-                sen6x_data.PM_4_0, 
-                sen6x_data.PM_10_0, 
-                sen6x_data.humidity, 
-                sen6x_data.temp, 
-                sen6x_data.VOC, 
-                sen6x_data.NOx
-        );
+//        sen6x_task(); 
+        
+        
+        sprintf(text_buffer, "RES: %d\n", ADC_data[0].data); 
+        
         
         display_fill(MIN_INTENSITY); 
         display_draw_str(0, 0, text_buffer, MAX_INTENSITY); 
@@ -89,3 +83,17 @@ int main(void)
 //        for (int i = 0; i < 1000000; i += 1); 
 //
 //        SERCOM0_USART_Write("AT+CSQ\r\n", 8); 
+//
+//sprintf(
+//                text_buffer, 
+//                "PM1: %.3f\nPM2.5: %.3f\nPM4: %.3f\nPM10: %.3f\n"
+//                "HUMIDITY: %.3f\nTEMP: %.3f\nVOC: %.3f\nNOx: %.3f", 
+//                sen6x_data.PM_1_0, 
+//                sen6x_data.PM_2_5, 
+//                sen6x_data.PM_4_0, 
+//                sen6x_data.PM_10_0, 
+//                sen6x_data.humidity, 
+//                sen6x_data.temp, 
+//                sen6x_data.VOC, 
+//                sen6x_data.NOx
+//        );

@@ -16,4 +16,5 @@ nbproject/Package-*
 .DS_Store
 Thumbs.db
 *.bak
+*.bak0
 *.tmp

@@ -30,13 +30,13 @@ void ssd1362_init(void)
     DISPLAY_DATA_Set(); 
     
     // Set the callback to reset the chip select and data command pin. 
-    SERCOM2_SPI_CallbackRegister(ssd1362_callback, (uintptr_t)NULL); 
+    SERCOM2_SPI_CallbackRegister(SPI_callback, (uintptr_t)NULL); 
     
     return; 
 }
 
 
-void ssd1362_callback(uintptr_t context)
+void SPI_callback(uintptr_t context)
 {
     // Reset chip select and data select when the transimit is finished. 
     DISPLAY_CS_Set(); 

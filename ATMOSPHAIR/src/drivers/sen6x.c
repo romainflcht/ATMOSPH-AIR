@@ -6,7 +6,7 @@ SEN6X_DATA_t            sen6x_data;
 
 //* _ STATIC VARIABLES _________________________________________________________
 
-static SEN6X_STATE_t    curr_state                      = IDLE; 
+static SEN6X_STATE_t    curr_state                      = SEN6X_IDLE; 
 static uint8_t          rx_buffer[SEN6X_RX_BUF_LENGTH]  = {0}; 
 static uint8_t          tx_buffer[SEN6X_COMMAND_LENGTH] = {0}; 
 static uint16_t         last_command_executed           = 0; 
@@ -15,11 +15,11 @@ static uint32_t         last_command_timestamp          = 0;
 //* _ STATIC FUNCTION DECLARATIONS _____________________________________________
 
 // TODO: Write functions descriptor comment. 
-static void     IDLE_state(void); 
-static void     MEASUREMENT_state(void); 
-static void     WAIT_DATA_state(void); 
-static void     READ_DATA_state(void); 
-static void     PARSE_DATA_state(void); 
+static void     SEN6X_IDLE_state(void); 
+static void     SEN6X_MEASUREMENT_state(void); 
+static void     SEN6X_WAIT_DATA_state(void); 
+static void     SEN6X_READ_DATA_state(void); 
+static void     SEN6X_PARSE_DATA_state(void); 
 
 static void     sen6x_data_init(SEN6X_DATA_t* data);
 static uint16_t get_command_wait_time(uint16_t command); 
@@ -52,39 +52,33 @@ void sen6x_init(void)
 
 void sen6x_task(void)
 {
-    int i; 
     switch (curr_state)
     {
-        case IDLE:
-            IDLE_state();
+        case SEN6X_IDLE:
+            SEN6X_IDLE_state();
             break; 
             
-        case MEASUREMENT:
-            MEASUREMENT_state(); 
+        case SEN6X_MEASUREMENT:
+            SEN6X_MEASUREMENT_state(); 
             break; 
             
-        case WAIT_DATA_W:
-        case WAIT_DATA_R:
-            WAIT_DATA_state();
+        case SEN6X_WAIT_DATA_W:
+        case SEN6X_WAIT_DATA_R:
+            SEN6X_WAIT_DATA_state();
             break; 
                 
-        case READ_DATA_W:
-        case READ_DATA_R:
-            READ_DATA_state();
+        case SEN6X_READ_DATA_W:
+        case SEN6X_READ_DATA_R:
+            SEN6X_READ_DATA_state();
             break; 
             
-        case PARSE_DATA: 
-            PARSE_DATA_state(); 
+        case SEN6X_PARSE_DATA: 
+            SEN6X_PARSE_DATA_state(); 
             break; 
             
         default: 
-            for(i = 0; i < 24; i++ )
-            {
-                printf("%d, ", rx_buffer[i]); 
-                printf("\r\n"); 
-            }
+            curr_state = SEN6X_IDLE; 
             break; 
-
     }
     
     return; 
@@ -93,14 +87,14 @@ void sen6x_task(void)
 
 //* _ STATES FUNCTION IMPLEMENTATION ___________________________________________
 
-static void IDLE_state(void)
+static void SEN6X_IDLE_state(void)
 {
-    curr_state = MEASUREMENT; 
+    curr_state = SEN6X_MEASUREMENT; 
     return; 
 }
 
 
-static void MEASUREMENT_state(void)
+static void SEN6X_MEASUREMENT_state(void)
 {
     bool retval; 
     
@@ -123,12 +117,12 @@ static void MEASUREMENT_state(void)
     // the next state. 
     last_command_executed  = START_MEASUREMENT; 
     last_command_timestamp = SYSTICK_millis(); 
-    curr_state             = WAIT_DATA_W; 
+    curr_state             = SEN6X_WAIT_DATA_W; 
     return; 
 }
 
 
-static void WAIT_DATA_state(void)
+static void SEN6X_WAIT_DATA_state(void)
 {
     bool        retval; 
     uint16_t    wait_time; 
@@ -145,7 +139,7 @@ static void WAIT_DATA_state(void)
         return; 
     
     // Send the command to the I²C bus. 
-    if (curr_state == WAIT_DATA_W)
+    if (curr_state == SEN6X_WAIT_DATA_W)
     {
         // Build the command to send. 
         tx_buffer[0] = (uint8_t)(GET_DATA_READY >> 8);
@@ -153,7 +147,7 @@ static void WAIT_DATA_state(void)
         retval = SERCOM1_I2C_Write(SEN6X_ADDR, tx_buffer, SEN6X_COMMAND_LENGTH);  
     }
     
-    else if (curr_state == WAIT_DATA_R)
+    else if (curr_state == SEN6X_WAIT_DATA_R)
         retval = SERCOM1_I2C_Read(SEN6X_ADDR, rx_buffer, 3); 
     
     if (!retval)
@@ -168,7 +162,7 @@ static void WAIT_DATA_state(void)
 }
 
 
-static void READ_DATA_state(void)
+static void SEN6X_READ_DATA_state(void)
 {
     bool        retval; 
     uint8_t     crc_check; 
@@ -187,14 +181,14 @@ static void READ_DATA_state(void)
         return; 
     
     // Data is not ready, go back to the WAIT_DATA state. 
-    if (curr_state == READ_DATA_W && rx_buffer[1] == 0)
+    if (curr_state == SEN6X_READ_DATA_W && rx_buffer[1] == 0)
     {
-        curr_state = WAIT_DATA_W; 
+        curr_state = SEN6X_WAIT_DATA_W; 
         return; 
     }
     
     // Send the command to the I²C bus. 
-    if (curr_state == READ_DATA_W)
+    if (curr_state == SEN6X_READ_DATA_W)
     {
         // Build the command to send. 
         tx_buffer[0] = (uint8_t)(READ_MEASURED >> 8);
@@ -202,7 +196,7 @@ static void READ_DATA_state(void)
         retval = SERCOM1_I2C_Write(SEN6X_ADDR, tx_buffer, SEN6X_COMMAND_LENGTH); 
     }
     
-    else if (curr_state == READ_DATA_R)
+    else if (curr_state == SEN6X_READ_DATA_R)
         retval = SERCOM1_I2C_Read(SEN6X_ADDR, rx_buffer, SEN6X_MEASUREMENT_LENGTH); 
 
     if (!retval)
@@ -217,7 +211,7 @@ static void READ_DATA_state(void)
 }
 
 
-static void PARSE_DATA_state(void)
+static void SEN6X_PARSE_DATA_state(void)
 {
     if (SYSTICK_millis() - last_command_timestamp <= 25)
         return; 
@@ -278,7 +272,7 @@ static void PARSE_DATA_state(void)
     #endif
     
     last_command_executed = 0; 
-    curr_state = WAIT_DATA_W; 
+    curr_state = SEN6X_WAIT_DATA_W; 
     return; 
 }
 
