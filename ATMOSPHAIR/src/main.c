@@ -26,7 +26,7 @@ const uint8_t image_data[] = {
 //* _ ENTRY POINT ______________________________________________________________
 int main(void)
 {
-    char text_buffer[1024]; 
+    char text_buffer[128]; 
     
     //* _ MODULE INITIALIZATIONS _______________________________________________
     SYS_Initialize(NULL);
@@ -51,15 +51,46 @@ int main(void)
     {
         // Maintain state machines of all polled MPLAB Harmony modules.
         SYS_Tasks();
-
-//        sen6x_task(); 
-        
-        
-        sprintf(text_buffer, "RES: %d\n", ADC_data[0].data); 
-        
+        sen6x_task(); 
+        ADC_task(); 
         
         display_fill(MIN_INTENSITY); 
-        display_draw_str(0, 0, text_buffer, MAX_INTENSITY); 
+        sprintf(text_buffer, "ADCIN0: %d\n", ADC_data[0].data); 
+        display_draw_str(FONT_CHAR_WIDTH * 15, FONT_CHAR_HEIGHT * 0, text_buffer, MAX_INTENSITY); 
+
+        sprintf(text_buffer, "ADCIN1: %d\n", ADC_data[1].data); 
+        display_draw_str(FONT_CHAR_WIDTH * 15, FONT_CHAR_HEIGHT * 1, text_buffer, MAX_INTENSITY); 
+
+        sprintf(text_buffer, "ADCIN2: %d\n", ADC_data[2].data); 
+        display_draw_str(FONT_CHAR_WIDTH * 15, FONT_CHAR_HEIGHT * 2, text_buffer, MAX_INTENSITY); 
+
+        sprintf(text_buffer, "ADCIN3: %d\n", ADC_data[3].data); 
+        display_draw_str(FONT_CHAR_WIDTH * 15, FONT_CHAR_HEIGHT * 3, text_buffer, MAX_INTENSITY); 
+        
+        sprintf(text_buffer, "PM1  : %.3f\n", sen6x_data.PM_1_0);
+        display_draw_str(0, FONT_CHAR_HEIGHT * 0, text_buffer, MAX_INTENSITY); 
+        
+        sprintf(text_buffer, "PM2.5: %.3f\n", sen6x_data.PM_2_5);
+        display_draw_str(0, FONT_CHAR_HEIGHT * 1, text_buffer, MAX_INTENSITY); 
+
+        sprintf(text_buffer, "PM4  : %.3f\n", sen6x_data.PM_4_0);
+        display_draw_str(0, FONT_CHAR_HEIGHT * 2, text_buffer, MAX_INTENSITY); 
+
+        sprintf(text_buffer, "PM10 : %.3f\n", sen6x_data.PM_10_0);
+        display_draw_str(0, FONT_CHAR_HEIGHT * 3, text_buffer, MAX_INTENSITY); 
+        
+        sprintf(text_buffer, "RH   : %.3f\n", sen6x_data.humidity);
+        display_draw_str(0, FONT_CHAR_HEIGHT * 4, text_buffer, MAX_INTENSITY); 
+
+        sprintf(text_buffer, "TEMP : %.3f\n", sen6x_data.temp);
+        display_draw_str(0, FONT_CHAR_HEIGHT * 5, text_buffer, MAX_INTENSITY); 
+
+        sprintf(text_buffer, "VOC  : %.3f\n", sen6x_data.VOC);
+        display_draw_str(0, FONT_CHAR_HEIGHT * 6, text_buffer, MAX_INTENSITY); 
+
+        sprintf(text_buffer, "NOx  : %.3f\n", sen6x_data.NOx);
+        display_draw_str(0, FONT_CHAR_HEIGHT * 7, text_buffer, MAX_INTENSITY); 
+
         ssd1362_refresh(); 
     }
 

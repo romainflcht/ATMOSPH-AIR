@@ -132,19 +132,21 @@ static void ADC_START_CHANNEL_CONVERSION_state(void)
 
 static void ADC_WAIT_END_OF_CHANNEL_CONVERSION_state(void)
 {
-    if (SYSTICK_millis() - last_conversion_timestamp > CONVERSION_TIMEOUT_MS)
-        curr_state = ADC_IDLE; 
+    if (SYSTICK_millis() - last_conversion_timestamp <= CONVERSION_TIMEOUT_MS)
+        return; 
     
+    curr_state = ADC_IDLE;
     return; 
 }
 
 
 static void ADC_CONVERSION_DONE_state(void)
 {
-    if (SYSTICK_millis() - last_conversion_timestamp < WAIT_BETWEEN_CYCLE_MS)
+    if (SYSTICK_millis() - last_conversion_timestamp <= WAIT_BETWEEN_CYCLE_MS)
         return; 
     
     curr_state = ADC_IDLE; 
+    return; 
 }
 
 
