@@ -8,6 +8,7 @@
 #include "../cores/systick.h"
 #include "../utils/utils.h"
 
+
 //* _ DEFINITIONS ______________________________________________________________
 
 #define SEN60                           100
@@ -84,7 +85,7 @@ typedef enum sen6x_states
     SEN6X_READ_DATA_W, 
     SEN6X_READ_DATA_R, 
     SEN6X_PARSE_DATA, 
-}   SEN6X_STATE_t;
+}   SEN6X_STATES_t;
 
 
 /// @enum SEN6X_COMMAND_t

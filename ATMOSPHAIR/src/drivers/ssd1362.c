@@ -284,17 +284,30 @@ void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity)
 }
 
 
-void display_img(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t* img)
+void display_img(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uint8_t* img)
 {
     int x_index; 
     int y_index; 
+    uint8_t curr_pixel; 
     
     // Loop through each byte of the image and place it to the framebuffer to 
     // the right offset calculated using images indexes. 
     for (y_index = 0; y_index < h; y_index += 1)
         for (x_index = 0; x_index < w / 2; x_index += 1)
-            // TODO: Protect write to pixel out of display bound. 
-            framebuffer[(x + x_index) + (y + y_index) * DISPLAY_LOGICAL_WIDTH].intensity = img[x_index + y_index * (w / 2)]; 
+        {
+            if (COORD_ISINVALID((x + x_index), (y + y_index)))
+                continue; 
+            
+            curr_pixel = img[x_index + y_index * (w / 2)]; 
+            
+            if ((curr_pixel & 0xF0) == 0xF0) 
+                curr_pixel &= ~0xF0; 
+
+            if ((curr_pixel & 0x0F) == 0x0F) 
+                curr_pixel &= ~0x0F;
+
+            framebuffer[(x + x_index) + (y + y_index) * DISPLAY_LOGICAL_WIDTH].intensity = curr_pixel; 
+        }
     
     return; 
 }

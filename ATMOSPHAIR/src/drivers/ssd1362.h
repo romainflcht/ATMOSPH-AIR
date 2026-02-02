@@ -213,6 +213,6 @@ void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity);
 /// @param w   width of the image. 
 /// @param h   height of the image. 
 /// @param img uint8_t array that contains pixel data of the image. 
-void display_img(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t* img); 
+void display_img(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uint8_t* img); 
 
 #endif

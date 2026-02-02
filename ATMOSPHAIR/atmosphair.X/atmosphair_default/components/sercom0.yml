@@ -126,4 +126,92 @@ data:
           type: User
         type: Values
       type: KeyValueSet
+    USART_INTERRUPT_MODE_ENABLE:
+      attributes:
+        id: USART_INTERRUPT_MODE_ENABLE
+      children:
+      - children:
+        - attributes:
+            id: sercom0
+            value: 'true'
+          type: Dynamic
+        type: Values
+      type: Boolean
+    SERCOM_USART_SOURCE:
+      attributes:
+        id: SERCOM_USART_SOURCE
+      children:
+      - children:
+        - attributes:
+            id: security
+          children:
+          - type: Value
+            value: NON_SECURE
+          type: String
+        - attributes:
+            id: source
+          children:
+          - type: Value
+            value: ../peripheral/sercom_u2201/templates/plib_sercom_usart_ring_buffer.c.ftl
+          type: String
+        type: Attributes
+      type: File
+    SERCOM_USART_HEADER:
+      attributes:
+        id: SERCOM_USART_HEADER
+      children:
+      - children:
+        - attributes:
+            id: security
+          children:
+          - type: Value
+            value: NON_SECURE
+          type: String
+        - attributes:
+            id: source
+          children:
+          - type: Value
+            value: ../peripheral/sercom_u2201/templates/plib_sercom_usart_ring_buffer.h.ftl
+          type: String
+        type: Attributes
+      type: File
+    USART_RING_BUFFER_MODE_ENABLE:
+      attributes:
+        id: USART_RING_BUFFER_MODE_ENABLE
+      children:
+      - children:
+        - attributes:
+            id: sercom0
+            value: 'true'
+          type: Dynamic
+        type: Values
+      type: Boolean
+    USART_OPERATING_MODE:
+      attributes:
+        id: USART_OPERATING_MODE
+      children:
+      - children:
+        - attributes:
+            value: '2'
+          type: User
+        type: Values
+      type: KeyValueSet
+    USART_RX_RING_BUFFER_SIZE:
+      attributes:
+        id: USART_RX_RING_BUFFER_SIZE
+      children:
+      - children:
+        - attributes:
+            id: visible
+          children:
+          - type: Value
+            value: 'true'
+          type: Boolean
+        type: Attributes
+      - children:
+        - attributes:
+            value: '512'
+          type: User
+        type: Values
+      type: Integer
   userData: {}

@@ -7,7 +7,7 @@ volatile ADC_DATA_t         ADC_data[ADC_CHANNEL_COUNT];
 
 //* _ STATIC VARIABLE DECLARATIONS _____________________________________________
 
-static volatile ADC_STATE_t curr_state                = ADC_IDLE; 
+static volatile ADC_STATES_t curr_state                = ADC_IDLE; 
 static volatile uint8_t     selected_adc_channel_id   = 0; 
 static uint32_t             last_conversion_timestamp = 0; 
 

@@ -6,7 +6,7 @@ SEN6X_DATA_t            sen6x_data;
 
 //* _ STATIC VARIABLES _________________________________________________________
 
-static SEN6X_STATE_t    curr_state                      = SEN6X_IDLE; 
+static SEN6X_STATES_t    curr_state                      = SEN6X_IDLE; 
 static uint8_t          rx_buffer[SEN6X_RX_BUF_LENGTH]  = {0}; 
 static uint8_t          tx_buffer[SEN6X_COMMAND_LENGTH] = {0}; 
 static uint16_t         last_command_executed           = 0; 

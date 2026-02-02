@@ -54,6 +54,7 @@
       <logicalFolder name="f1" displayName="drivers" projectFiles="true">
         <itemPath>../src/drivers/ssd1362.h</itemPath>
         <itemPath>../src/drivers/sen6x.h</itemPath>
+        <itemPath>../src/drivers/m95.h</itemPath>
       </logicalFolder>
       <logicalFolder name="packs" displayName="packs" projectFiles="true">
         <logicalFolder name="CMSIS" displayName="CMSIS" projectFiles="true">
@@ -178,18 +179,18 @@
                      displayName="atmosphair_default"
                      projectFiles="true">
         <logicalFolder name="components" displayName="components" projectFiles="true">
-          <itemPath>atmosphair_default/components/sercom0.yml</itemPath>
-          <itemPath>atmosphair_default/components/adc.yml</itemPath>
-          <itemPath>atmosphair_default/components/dfp.yml</itemPath>
-          <itemPath>atmosphair_default/components/cmsis.yml</itemPath>
-          <itemPath>atmosphair_default/components/sercom3.yml</itemPath>
           <itemPath>atmosphair_default/components/nvmctrl.yml</itemPath>
-          <itemPath>atmosphair_default/components/pm.yml</itemPath>
-          <itemPath>atmosphair_default/components/sercom1.yml</itemPath>
-          <itemPath>atmosphair_default/components/sercom2.yml</itemPath>
-          <itemPath>atmosphair_default/components/stdio.yml</itemPath>
+          <itemPath>atmosphair_default/components/cmsis.yml</itemPath>
           <itemPath>atmosphair_default/components/core.yml</itemPath>
+          <itemPath>atmosphair_default/components/sercom0.yml</itemPath>
+          <itemPath>atmosphair_default/components/stdio.yml</itemPath>
           <itemPath>atmosphair_default/components/evsys.yml</itemPath>
+          <itemPath>atmosphair_default/components/sercom2.yml</itemPath>
+          <itemPath>atmosphair_default/components/dfp.yml</itemPath>
+          <itemPath>atmosphair_default/components/sercom1.yml</itemPath>
+          <itemPath>atmosphair_default/components/adc.yml</itemPath>
+          <itemPath>atmosphair_default/components/pm.yml</itemPath>
+          <itemPath>atmosphair_default/components/sercom3.yml</itemPath>
         </logicalFolder>
         <itemPath>atmosphair_default/mcc-config.mc4</itemPath>
       </logicalFolder>
@@ -260,6 +261,7 @@
       <logicalFolder name="f2" displayName="drivers" projectFiles="true">
         <itemPath>../src/drivers/ssd1362.c</itemPath>
         <itemPath>../src/drivers/sen6x.c</itemPath>
+        <itemPath>../src/drivers/m95.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="utils" projectFiles="true">
         <itemPath>../src/utils/fonts.c</itemPath>
@@ -313,51 +315,6 @@
                         PD="dist/default/production/atmosphair_secure.X.production.elf"
                         DD="dist/default/debug/atmosphair_secure.X.debug.elf">
           </makeArtifact>
-          <makeArtifact PL="..\..\ATMOSPHAIR_secure\atmosphair_secure.X"
-                        CT="1"
-                        CN="default"
-                        AC="true"
-                        BL="true"
-                        WD="..\..\ATMOSPHAIR_secure\atmosphair_secure.X"
-                        BC="${MAKE}  -f Makefile CONF=default"
-                        DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
-                        CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
-                        OP="dist/default/production/atmosphair_secure.X.production.hex"
-                        DOP="dist/default/debug/atmosphair_secure.X.debug.elf"
-                        FL="dist/default/production/atmosphair_secure.X.production.hex"
-                        PD="dist/default/production/atmosphair_secure.X.production.elf"
-                        DD="dist/default/debug/atmosphair_secure.X.debug.elf">
-          </makeArtifact>
-          <makeArtifact PL="..\..\ATMOSPHAIR_secure\atmosphair_secure.X"
-                        CT="1"
-                        CN="default"
-                        AC="true"
-                        BL="true"
-                        WD="..\..\ATMOSPHAIR_secure\atmosphair_secure.X"
-                        BC="${MAKE}  -f Makefile CONF=default"
-                        DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
-                        CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
-                        OP="dist/default/production/atmosphair_secure.X.production.null"
-                        DOP="dist/default/debug/atmosphair_secure.X.debug.null"
-                        FL="dist/default/production/atmosphair_secure.X.production.null"
-                        PD="dist/default/production/atmosphair_secure.X.production.elf"
-                        DD="dist/default/debug/atmosphair_secure.X.debug.elf">
-          </makeArtifact>
-          <makeArtifact PL="..\..\ATMOSPHAIR_secure\atmosphair_secure.X"
-                        CT="1"
-                        CN="default"
-                        AC="true"
-                        BL="true"
-                        WD="..\..\ATMOSPHAIR_secure\atmosphair_secure.X"
-                        BC="${MAKE}  -f Makefile CONF=default"
-                        DBC="${MAKE}  -f Makefile CONF=default TYPE_IMAGE=DEBUG_RUN"
-                        CC="rm -rf &quot;build/default&quot; &quot;dist/default&quot;"
-                        OP="dist/default/production/atmosphair_secure.X.production.null"
-                        DOP="dist/default/debug/atmosphair_secure.X.debug.null"
-                        FL="dist/default/production/atmosphair_secure.X.production.null"
-                        PD="dist/default/production/atmosphair_secure.X.production.elf"
-                        DD="dist/default/debug/atmosphair_secure.X.debug.elf">
-          </makeArtifact>
           <useAlternateLoadableFile>false</useAlternateLoadableFile>
           <parseOnProdLoad>false</parseOnProdLoad>
           <alternateLoadableFile></alternateLoadableFile>
@@ -378,6 +335,7 @@
       <C32>
         <property key="additional-warnings" value="false"/>
         <property key="addresss-attribute-use" value="false"/>
+        <property key="appendMe" value=""/>
         <property key="cast-align" value="false"/>
         <property key="code-model" value="default"/>
         <property key="const-model" value="default"/>
@@ -456,6 +414,7 @@
         <property key="additional-options-use-response-files" value="false"/>
         <property key="additional-options-write-sla" value="false"/>
         <property key="allocate-dinit" value="false"/>
+        <property key="appendMe" value="-l:atmosphair_secure_sg_veneer.lib"/>
         <property key="code-dinit" value="false"/>
         <property key="ebase-addr" value=""/>
         <property key="enable-check-sections" value="false"/>
@@ -503,6 +462,7 @@
       <C32CPP>
         <property key="additional-warnings" value="false"/>
         <property key="addresss-attribute-use" value="false"/>
+        <property key="appendMe" value=""/>
         <property key="check-new" value="false"/>
         <property key="eh-specs" value="true"/>
         <property key="enable-app-io" value="false"/>

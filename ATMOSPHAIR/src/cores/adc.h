@@ -23,13 +23,13 @@
 
 //* _ ENUMERATIONS _____________________________________________________________
 
-typedef enum adc_state
+typedef enum adc_states
 {
     ADC_IDLE, 
     ADC_START_CHANNEL_CONVERSION,
     ADC_WAIT_END_OF_CHANNEL_CONVERSION,
     ADC_CONVERSION_DONE,         
-}   ADC_STATE_t;
+}   ADC_STATES_t;
 
 
 //* _ STRUCTURE DEFINITIONS ____________________________________________________
@@ -44,7 +44,6 @@ typedef struct adc_data
 //* _ FUNCTION DECLARATIONS ____________________________________________________
 
 void ADC_init(void); 
-
 
 void ADC_task(void); 
 
