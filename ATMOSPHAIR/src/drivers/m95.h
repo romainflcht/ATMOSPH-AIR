@@ -5,16 +5,19 @@
 #include <stdlib.h>
 #include "definitions.h" 
 
-#include "../cores/uart.h"
 #include <string.h>
 
 
 //* _ DEFINITIONS ______________________________________________________________
 
-#define M95_COMMAND_END_CHAR    "\r\n"
-#define RX_BUFFER_SIZE          512
-#define RESPONSE_BUFFER_SIZE    RX_BUFFER_SIZE
-#define MAX_TX_COMMAND_SIZE     20
+
+#define RESPONSE_BUFFER_SIZE        512
+#define MAX_TX_COMMAND_SIZE         20
+#define INIT_WAIT_REPONSE_MS        10
+#define COMMAND_TIMEOUT_MS          1500
+#define M95_COMMAND_END_CHAR        "\r\n"
+#define OPERATOR_NAME_BUF_LENGTH    20
+
 
 #define M95_INIT_CONFIG         X("ATE0" M95_COMMAND_END_CHAR,               6) \
                                 X("AT+CMEE=1" M95_COMMAND_END_CHAR,         11) \
@@ -27,9 +30,12 @@
 #define M95_AT_COMMANDS         X(AT, "AT" M95_COMMAND_END_CHAR, STATUS)                    \
                                 X(SIM_STATUS, "AT+CPIN?" M95_COMMAND_END_CHAR, STATUS)      \
                                 X(SIGNAL_STRENGTH, "AT+CSQ" M95_COMMAND_END_CHAR, STATUS)   \
+                                X(OPERATOR_NAME, "AT+QSPN" M95_COMMAND_END_CHAR, STATUS)   \
 
 
-#define CONTAINS(buf, str)      strstr(buf, str) 
+#define CONTAINS(buf, str)      (strstr(buf, str)) 
+
+#define IS_ALPHA_CHAR(c)        ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
 
 //* _ ENUMERATIONS _____________________________________________________________
 
@@ -49,6 +55,9 @@ typedef enum m95_write_states
     M95_WRITE_SIM_DATA_VERIFY,
     M95_WRITE_SIGNAL_STRENGTH_SEND,
     M95_WRITE_SIGNAL_STRENGTH_VERIFY,
+    M95_WRITE_OPERATOR_SEND,
+    M95_WRITE_OPERATOR_VERIFY,
+    M_95_WRITE_END, 
 }   M95_WRITE_STATES_t;
 
 
@@ -57,6 +66,7 @@ typedef enum at_command_id
     AT, 
     SIM_STATUS,
     SIGNAL_STRENGTH, 
+    OPERATOR_NAME, 
     NULL_COMMAND, 
 }   AT_COMMAND_ID_t;
 
@@ -90,6 +100,7 @@ typedef struct tx_data
 {
     AT_COMMAND_ID_t     id; 
     AT_COMMAND_STATUS_t status; 
+    uint32_t            last_transmit_timestamp; 
 }   TX_DATA_t;
 
 
@@ -114,6 +125,8 @@ typedef struct m95_status
 {
     SIM_STATUS_t    sim_status; 
     uint8_t         signal_strength; 
+    char            operator_name[OPERATOR_NAME_BUF_LENGTH]; 
+    uint8_t         operator_name_length; 
 }   M95_STATUS_t;
 
 

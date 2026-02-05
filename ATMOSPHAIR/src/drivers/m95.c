@@ -1,4 +1,5 @@
 #include "m95.h"
+#include "cores/systick.h"
 
 //* _ GLOBAL VARIABLES _________________________________________________________
 
@@ -48,6 +49,13 @@ static void M95_transmit_buffer_reset(void);
 static void M95_parse_sim_status(const uint8_t* buf); 
 static void M95_parse_signal_strength(const uint8_t* buf); 
 
+/// @fn static void M95_parse_operator_name(const uint8_t* buf); 
+/// @brief this function parse string like: 
+///        +QSPN: "","","OPERATOR",0,"20801"
+///        it only retrieve the OPERATOR string. 
+/// @param buf buffer that contains the string. 
+static void M95_parse_operator_name(const uint8_t* buf); 
+
 
 //* _  FUNCTION IMPLEMENTATION _________________________________________________
 
@@ -63,7 +71,7 @@ void M95_init(void)
     // Send initialization commands.
     #define X(command, size)    strncpy(init_command, command, size);       \
                                 SERCOM0_USART_Write(init_command, size);    \
-                                SYSTICK_DelayMs(50); 
+                                SYSTICK_DelayMs(INIT_WAIT_REPONSE_MS); 
         
         M95_INIT_CONFIG
     #undef X
@@ -98,9 +106,18 @@ void M95_write_task(void)
             break; 
             
         case M95_WRITE_SIGNAL_STRENGTH_VERIFY:
-//            M95_VERIFY_COMMAND_state(); 
+            M95_VERIFY_COMMAND_state(); 
+            break; 
+        
+        case M95_WRITE_OPERATOR_SEND:
+            M95_WRITE_COMMAND_state(&AT_LUT[OPERATOR_NAME]); 
             break; 
             
+        case M95_WRITE_OPERATOR_VERIFY:
+            M95_VERIFY_COMMAND_state(); 
+            break; 
+            
+        case M_95_WRITE_END: 
         default: 
             curr_write_state = M95_WRITE_IDLE;
             break; 
@@ -112,6 +129,9 @@ void M95_write_task(void)
 
 static void M95_WRITE_IDLE_state(void)
 {
+    if (SYSTICK_millis() - tx_data.last_transmit_timestamp < COMMAND_TIMEOUT_MS)
+        return; 
+    
     curr_write_state = M95_WRITE_SIM_DATA_SEND; 
     return; 
 }
@@ -134,6 +154,7 @@ static void M95_WRITE_COMMAND_state(const AT_COMMAND_t* to_send)
     // Saves last command sent data and go to the next state. 
     tx_data.id = to_send->id; 
     tx_data.status = NOT_PROCESSED; 
+    tx_data.last_transmit_timestamp = SYSTICK_millis(); 
     curr_write_state += 1; 
     return; 
 }
@@ -143,15 +164,31 @@ static void M95_VERIFY_COMMAND_state(void)
 {
     // The last command send has not been processed yet, abort. 
     if (tx_data.status == NOT_PROCESSED)
+    {
+        // If the command has not been processed after the timeout delay, 
+        // reset the state machine.
+        if (SYSTICK_millis() - tx_data.last_transmit_timestamp >= COMMAND_TIMEOUT_MS)
+        {
+            curr_write_state = M95_WRITE_IDLE; 
+            M95_transmit_buffer_reset(); 
+        }
+        
         return; 
+    }
 
+    // If an error is detected, reset the state machine. 
     else if (tx_data.status == ERROR)
+    {
         curr_write_state = M95_WRITE_IDLE; 
+        M95_transmit_buffer_reset(); 
+        return; 
+    }
     
     // No error detected. 
     else
         curr_write_state += 1; 
     
+    // Reset the transmit buffer. 
     M95_transmit_buffer_reset(); 
     return; 
 }
@@ -260,6 +297,10 @@ static void M95_READ_PROCESS_COMMAND_state(void)
     else if (CONTAINS(rx_data.buf, "+CSQ: "))
         M95_parse_signal_strength(rx_data.buf); 
     
+    // Operator name data parsing. 
+    else if (CONTAINS(rx_data.buf, "+QSPN: "))
+        M95_parse_operator_name(rx_data.buf); 
+    
     // Clear the response buffer. 
     M95_response_buffer_reset(); 
     
@@ -288,6 +329,7 @@ static void M95_transmit_buffer_reset(void)
 {
     tx_data.id = NULL_COMMAND; 
     tx_data.status = NOT_PROCESSED; 
+    tx_data.last_transmit_timestamp = SYSTICK_millis(); 
     return; 
 }
 
@@ -318,5 +360,40 @@ static void M95_parse_signal_strength(const uint8_t* buf)
     else
         M95_status.signal_strength = rssi; 
     
+    return; 
+}
+
+
+static void M95_parse_operator_name(const uint8_t* buf)
+{
+    uint32_t    i; 
+    uint32_t    j; 
+    uint32_t    comma_count; 
+    
+    // Find the operator name field in the response. 
+    i = 0; 
+    comma_count = 0; 
+    while (buf[i] != '\0' && comma_count < 2) 
+    {
+        if (buf[i] == ',')
+            comma_count += 1;
+        i += 1;
+    }
+    
+    // Operator name found, skip " and spaces before getting the operator name. 
+    while (buf[i] != '\0' && (buf[i] == ' ' || buf[i] == '"')) 
+        i++;
+    
+    // Get the operator name. 
+    j = 0; 
+    while (buf[i] != '\0' && buf[i] != '"' && j < OPERATOR_NAME_BUF_LENGTH)
+    {
+        M95_status.operator_name[j] = buf[i]; 
+        i += 1; 
+        j += 1; 
+    }
+    
+    // Get the operator name length for easy display and manipulation. 
+    M95_status.operator_name_length = j + 1; 
     return; 
 }
