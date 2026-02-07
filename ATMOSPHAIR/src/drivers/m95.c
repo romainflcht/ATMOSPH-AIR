@@ -7,12 +7,21 @@ M95_STATUS_t M95_status = {0};
 
 //* _ STATIC VARIABLES _________________________________________________________
 
-static M95_WRITE_STATES_t   curr_write_state = M95_WRITE_IDLE; 
-static M95_READ_STATES_t    curr_read_state  = M95_READ_IDLE; 
+static M95_WRITE_STATES_t   curr_write_state = M95_IDLE; 
+static M95_READ_STATES_t    curr_read_state  = M95_RESPONSE_IDLE; 
+
+static const AT_COMMAND_t   AT_LUT[] = {
+    #define X(id, command, is_post_resp)  \
+        {id, command, sizeof(command) - 1, is_post_resp}, 
+    
+        M95_AT_COMMANDS
+    #undef X
+};
 
 static TX_DATA_t            tx_data = {
-    .id     = NULL_COMMAND, 
-    .status = NOT_PROCESSED, 
+    .last_command            = NULL, 
+    .status                  = NOT_PROCESSED, 
+    .last_transmit_timestamp = 0, 
 }; 
 
 static RX_DATA_t            rx_data = {
@@ -21,12 +30,6 @@ static RX_DATA_t            rx_data = {
     .waiting_process = false,
 }; 
 
-static const AT_COMMAND_t   AT_LUT[] = {
-    #define X(id, command, response_type)  {id, command, sizeof(command) - 1, response_type}, 
-    
-        M95_AT_COMMANDS
-    #undef X
-};
 
 //* _ STATIC FUNCTION DECLARATIONS _____________________________________________
 
@@ -34,7 +37,7 @@ static const AT_COMMAND_t   AT_LUT[] = {
 
 static void M95_WRITE_IDLE_state(void); 
 static void M95_WRITE_COMMAND_state(const AT_COMMAND_t* to_send); 
-static void M95_VERIFY_COMMAND_state(void); 
+static void M95_VERIFY_COMMAND_state(M95_WRITE_STATES_t on_success, M95_WRITE_STATES_t on_fail);
 
 // Read state functions.
 
@@ -55,6 +58,7 @@ static void M95_parse_signal_strength(const uint8_t* buf);
 ///        it only retrieve the OPERATOR string. 
 /// @param buf buffer that contains the string. 
 static void M95_parse_operator_name(const uint8_t* buf); 
+static void M95_parse_gprs_status(const uint8_t* buf); 
 
 
 //* _  FUNCTION IMPLEMENTATION _________________________________________________
@@ -69,9 +73,9 @@ void M95_init(void)
     while (SERCOM0_USART_WriteCountGet() > 0); 
     
     // Send initialization commands.
-    #define X(command, size)    strncpy(init_command, command, size);       \
-                                SERCOM0_USART_Write(init_command, size);    \
-                                SYSTICK_DelayMs(INIT_WAIT_REPONSE_MS); 
+    #define X(command, wait)    strncpy(init_command, command, sizeof(command));    \
+                                SERCOM0_USART_Write(init_command, sizeof(command)); \
+                                SYSTICK_DelayMs(wait); 
         
         M95_INIT_CONFIG
     #undef X
@@ -89,37 +93,62 @@ void M95_write_task(void)
 {
     switch (curr_write_state)
     {
-        case M95_WRITE_IDLE:
+        case M95_IDLE:
             M95_WRITE_IDLE_state(); 
             break; 
             
-        case M95_WRITE_SIM_DATA_SEND: 
-            M95_WRITE_COMMAND_state(&AT_LUT[SIM_STATUS]); 
+        case M95_ASK_SIM_DATA: 
+            M95_WRITE_COMMAND_state(&AT_LUT[CPIN]); 
             break;
         
-        case M95_WRITE_SIM_DATA_VERIFY: 
-            M95_VERIFY_COMMAND_state(); 
+        case M95_VERIFY_SIM_DATA: 
+            M95_VERIFY_COMMAND_state(M95_ASK_SIGNAL_STRENGTH, M95_ASK_SIM_DATA); 
             break; 
             
-        case M95_WRITE_SIGNAL_STRENGTH_SEND:
-            M95_WRITE_COMMAND_state(&AT_LUT[SIGNAL_STRENGTH]); 
+        case M95_ASK_SIGNAL_STRENGTH:
+            M95_WRITE_COMMAND_state(&AT_LUT[CSQ]); 
             break; 
             
-        case M95_WRITE_SIGNAL_STRENGTH_VERIFY:
-            M95_VERIFY_COMMAND_state(); 
+        case M95_VERIFY_SIGNAL_STRENGTH:
+            M95_VERIFY_COMMAND_state(M95_ASK_OPERATOR, M95_ASK_SIGNAL_STRENGTH); 
             break; 
         
-        case M95_WRITE_OPERATOR_SEND:
-            M95_WRITE_COMMAND_state(&AT_LUT[OPERATOR_NAME]); 
+        case M95_ASK_OPERATOR:
+            M95_WRITE_COMMAND_state(&AT_LUT[QSPN]); 
             break; 
             
-        case M95_WRITE_OPERATOR_VERIFY:
-            M95_VERIFY_COMMAND_state(); 
+        case M95_VERIFY_OPERATOR:
+            M95_VERIFY_COMMAND_state(M95_IDLE, M95_ASK_OPERATOR);  
             break; 
             
-        case M_95_WRITE_END: 
+        // MQTT. 
+        case M95_ASK_GPRS_START:
+            M95_WRITE_COMMAND_state(&AT_LUT[QIACT]); 
+            break; 
+            
+        case M95_VERIFY_GPRS_START:
+            M95_VERIFY_COMMAND_state(M95_ASK_GPRS_STATUS, M95_IDLE); 
+            break; 
+        
+        case M95_ASK_GPRS_STATUS:
+            M95_WRITE_COMMAND_state(&AT_LUT[QISTAT]); 
+            break; 
+            
+        case M95_VERIFY_GPRS_STATUS:
+            M95_VERIFY_COMMAND_state(M95_ASK_MQTT_OPEN, M95_ASK_GPRS_STATUS); 
+            break; 
+        
+        case M95_ASK_MQTT_OPEN:
+            M95_WRITE_COMMAND_state(&AT_LUT[QMTOPEN]); 
+            break; 
+            
+        case M95_VERIFY_MQTT_OPEN:
+//            M95_VERIFY_COMMAND_state(); 
+            break; 
+
+        case M95_WRITE_END: 
         default: 
-            curr_write_state = M95_WRITE_IDLE;
+            curr_write_state = M95_IDLE;
             break; 
     }
     
@@ -129,10 +158,15 @@ void M95_write_task(void)
 
 static void M95_WRITE_IDLE_state(void)
 {
-    if (SYSTICK_millis() - tx_data.last_transmit_timestamp < COMMAND_TIMEOUT_MS)
+    static bool is_init = true; 
+    
+    if (is_init)
+        is_init = false; 
+    
+    else if (SYSTICK_millis() - tx_data.last_transmit_timestamp < COMMAND_TIMEOUT_MS)
         return; 
     
-    curr_write_state = M95_WRITE_SIM_DATA_SEND; 
+    curr_write_state = M95_ASK_GPRS_START; 
     return; 
 }
 
@@ -152,7 +186,7 @@ static void M95_WRITE_COMMAND_state(const AT_COMMAND_t* to_send)
         return; 
     
     // Saves last command sent data and go to the next state. 
-    tx_data.id = to_send->id; 
+    tx_data.last_command = to_send; 
     tx_data.status = NOT_PROCESSED; 
     tx_data.last_transmit_timestamp = SYSTICK_millis(); 
     curr_write_state += 1; 
@@ -160,7 +194,7 @@ static void M95_WRITE_COMMAND_state(const AT_COMMAND_t* to_send)
 }
 
 
-static void M95_VERIFY_COMMAND_state(void)
+static void M95_VERIFY_COMMAND_state(M95_WRITE_STATES_t on_success, M95_WRITE_STATES_t on_fail)
 {
     // The last command send has not been processed yet, abort. 
     if (tx_data.status == NOT_PROCESSED)
@@ -169,24 +203,25 @@ static void M95_VERIFY_COMMAND_state(void)
         // reset the state machine.
         if (SYSTICK_millis() - tx_data.last_transmit_timestamp >= COMMAND_TIMEOUT_MS)
         {
-            curr_write_state = M95_WRITE_IDLE; 
+            curr_write_state = M95_IDLE; 
             M95_transmit_buffer_reset(); 
         }
         
         return; 
     }
 
-    // If an error is detected, reset the state machine. 
+    // If an error is detected, go back one state. 
     else if (tx_data.status == ERROR)
     {
-        curr_write_state = M95_WRITE_IDLE; 
+        if (curr_write_state > 0)
+            curr_write_state = on_fail; 
+        
         M95_transmit_buffer_reset(); 
         return; 
     }
     
     // No error detected. 
-    else
-        curr_write_state += 1; 
+    curr_write_state = on_success; 
     
     // Reset the transmit buffer. 
     M95_transmit_buffer_reset(); 
@@ -200,20 +235,20 @@ void M95_read_task(void)
 {
     switch (curr_read_state)
     {
-        case M95_READ_IDLE: 
+        case M95_RESPONSE_IDLE: 
             M95_READ_IDLE_state(); 
             break; 
             
-        case M95_READ_RESPONSE:
+        case M95_RESPONSE_GET:
             M95_READ_RESPONSE_state(); 
             break; 
             
-        case M95_READ_PROCESS_COMMAND:
+        case M95_RESPONSE_PROCESS:
             M95_READ_PROCESS_COMMAND_state(); 
             break; 
             
         default:
-            curr_read_state = M95_READ_IDLE; 
+            curr_read_state = M95_RESPONSE_IDLE; 
     }
 }
 
@@ -222,7 +257,7 @@ void M95_read_task(void)
 
 static void M95_READ_IDLE_state(void)
 {
-    curr_read_state = M95_READ_RESPONSE; 
+    curr_read_state = M95_RESPONSE_GET; 
     return; 
 }
 
@@ -249,7 +284,7 @@ static void M95_READ_RESPONSE_state(void)
             return; 
         
         rx_data.waiting_process = true; 
-        curr_read_state = M95_READ_PROCESS_COMMAND; 
+        curr_read_state = M95_RESPONSE_PROCESS; 
         return; 
     }
     
@@ -265,25 +300,28 @@ static void M95_READ_PROCESS_COMMAND_state(void)
     if (!rx_data.waiting_process)
     {
         M95_response_buffer_reset();
-        curr_read_state = M95_READ_RESPONSE; 
+        curr_read_state = M95_RESPONSE_GET; 
         return; 
     }
     
     // Check for the command response and process it. 
     if (CONTAINS(rx_data.buf, "OK"))
-        tx_data.status = OK; 
+    {
+        if (!tx_data.last_command || !tx_data.last_command->is_post_resp)
+            tx_data.status = OK; 
+    }
     
     // Error parsing. 
     else if (CONTAINS(rx_data.buf, "ERROR"))
     {
         tx_data.status = ERROR; 
-        switch(tx_data.id)
+        switch(tx_data.last_command->id)
         {
-            case SIM_STATUS:
+            case CPIN:
                 M95_status.sim_status = NOT_INSERTED; 
                 break; 
                 
-            case SIGNAL_STRENGTH:
+            case CSQ:
                 M95_status.signal_strength = 0; 
                 break; 
         }
@@ -301,11 +339,15 @@ static void M95_READ_PROCESS_COMMAND_state(void)
     else if (CONTAINS(rx_data.buf, "+QSPN: "))
         M95_parse_operator_name(rx_data.buf); 
     
+    // GPRS status parsing. 
+    else if (CONTAINS(rx_data.buf, "STATE: "))
+        M95_parse_gprs_status(rx_data.buf); 
+    
     // Clear the response buffer. 
     M95_response_buffer_reset(); 
     
     // Go back to the read response state to get the next response. 
-    curr_read_state = M95_READ_RESPONSE; 
+    curr_read_state = M95_RESPONSE_GET; 
     return; 
 }
 
@@ -327,7 +369,7 @@ static void M95_response_buffer_reset(void)
 
 static void M95_transmit_buffer_reset(void)
 {
-    tx_data.id = NULL_COMMAND; 
+    tx_data.last_command = NULL; 
     tx_data.status = NOT_PROCESSED; 
     tx_data.last_transmit_timestamp = SYSTICK_millis(); 
     return; 
@@ -345,6 +387,7 @@ static void M95_parse_sim_status(const uint8_t* buf)
     M95_status.sim_status = READY; 
     return;  
 }
+
 
 static void M95_parse_signal_strength(const uint8_t* buf)
 {
@@ -396,4 +439,16 @@ static void M95_parse_operator_name(const uint8_t* buf)
     // Get the operator name length for easy display and manipulation. 
     M95_status.operator_name_length = j + 1; 
     return; 
+}
+
+
+static void M95_parse_gprs_status(const uint8_t* buf)
+{
+    if (CONTAINS(buf, "IP GPRSACT"))
+        tx_data.status = OK; 
+    
+    else
+        tx_data.status = ERROR;
+    
+    return;
 }
