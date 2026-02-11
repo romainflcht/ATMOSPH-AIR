@@ -886,7 +886,7 @@ data:
       - children:
         - attributes:
             id: core
-            value: '0xc000'
+            value: '0x2c000'
           type: Dynamic
         type: Values
       type: String
@@ -2621,7 +2621,7 @@ data:
       children:
       - children:
         - attributes:
-            value: ''
+            value: Out
           type: User
         type: Values
       type: String

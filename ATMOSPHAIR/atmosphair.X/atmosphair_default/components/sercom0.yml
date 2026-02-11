@@ -68,7 +68,7 @@ data:
       - children:
         - attributes:
             id: sercom0
-            value: '63019'
+            value: '65326'
           type: Dynamic
         type: Values
       type: Integer
@@ -211,6 +211,27 @@ data:
       - children:
         - attributes:
             value: '512'
+          type: User
+        type: Values
+      type: Integer
+    USART_7816_BAUD_VALUE:
+      attributes:
+        id: USART_7816_BAUD_VALUE
+      children:
+      - children:
+        - attributes:
+            id: sercom0
+            value: '185'
+          type: Dynamic
+        type: Values
+      type: Integer
+    USART_BAUD_RATE:
+      attributes:
+        id: USART_BAUD_RATE
+      children:
+      - children:
+        - attributes:
+            value: '9600'
           type: User
         type: Values
       type: Integer

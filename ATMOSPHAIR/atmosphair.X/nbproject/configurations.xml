@@ -169,6 +169,7 @@
       <logicalFolder name="f3" displayName="utils" projectFiles="true">
         <itemPath>../src/utils/fonts.h</itemPath>
         <itemPath>../src/utils/utils.h</itemPath>
+        <itemPath>../src/utils/jsmn.h</itemPath>
       </logicalFolder>
       <itemPath>../src/configuration.h</itemPath>
     </logicalFolder>

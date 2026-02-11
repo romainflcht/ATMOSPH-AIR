@@ -38,6 +38,8 @@ static RX_DATA_t            rx_data = {
 static void M95_WRITE_IDLE_state(void); 
 static void M95_WRITE_COMMAND_state(const AT_COMMAND_t* to_send); 
 static void M95_VERIFY_COMMAND_state(M95_WRITE_STATES_t on_success, M95_WRITE_STATES_t on_fail);
+static void M95_PUBLISH_PAYLOAD_state(void); 
+static void M95_WAIT_NEXT_PUBLISH_state(void); 
 
 // Read state functions.
 
@@ -59,7 +61,9 @@ static void M95_parse_signal_strength(const uint8_t* buf);
 /// @param buf buffer that contains the string. 
 static void M95_parse_operator_name(const uint8_t* buf); 
 static void M95_parse_gprs_status(const uint8_t* buf); 
-
+static void M95_parse_mqtt_open(const uint8_t* buf); 
+static void M95_parse_mqtt_conn(const uint8_t* buf); 
+static void M95_parse_mqtt_publish(const uint8_t* buf); 
 
 //* _  FUNCTION IMPLEMENTATION _________________________________________________
 
@@ -69,12 +73,22 @@ void M95_init(void)
     uint8_t init_command[MAX_TX_COMMAND_SIZE]; 
     uint8_t dummy[RESPONSE_BUFFER_SIZE]; 
     
+    GSM_PWRKEY_Set(); 
+    SYSTICK_DelayMs(2000); 
+    GSM_PWRKEY_Clear(); 
+    
+    SYSTICK_DelayMs(5000); 
+
+    GSM_PWRKEY_Set(); 
+    SYSTICK_DelayMs(2000); 
+    GSM_PWRKEY_Clear(); 
+    
     // Wait for previous commands to be sent. 
     while (SERCOM0_USART_WriteCountGet() > 0); 
     
     // Send initialization commands.
     #define X(command, wait)    strncpy(init_command, command, sizeof(command));    \
-                                SERCOM0_USART_Write(init_command, sizeof(command)); \
+                                SERCOM0_USART_Write(init_command, sizeof(command) - 1); \
                                 SYSTICK_DelayMs(wait); 
         
         M95_INIT_CONFIG
@@ -127,7 +141,15 @@ void M95_write_task(void)
             break; 
             
         case M95_VERIFY_GPRS_START:
-            M95_VERIFY_COMMAND_state(M95_ASK_GPRS_STATUS, M95_IDLE); 
+            M95_VERIFY_COMMAND_state(M95_ASK_GPRS_STATUS, M95_ASK_GPRS_STOP); 
+            break; 
+        
+        case M95_ASK_GPRS_STOP:
+            M95_WRITE_COMMAND_state(&AT_LUT[QIDEACT]); 
+            break; 
+            
+        case M95_VERIFY_GPRS_STOP:
+            M95_VERIFY_COMMAND_state(M95_ASK_GPRS_START, M95_ASK_GPRS_STOP); 
             break; 
         
         case M95_ASK_GPRS_STATUS:
@@ -143,7 +165,35 @@ void M95_write_task(void)
             break; 
             
         case M95_VERIFY_MQTT_OPEN:
-//            M95_VERIFY_COMMAND_state(); 
+            M95_VERIFY_COMMAND_state(M95_ASK_MQTT_CONN, M95_ASK_MQTT_OPEN); 
+            break; 
+        
+        case M95_ASK_MQTT_CONN:
+            M95_WRITE_COMMAND_state(&AT_LUT[QMTCONN]); 
+            break; 
+            
+        case M95_VERIFY_MQTT_CONN:
+            M95_VERIFY_COMMAND_state(M95_ASK_MQTT_PUBLISH, M95_ASK_MQTT_CONN); 
+            break; 
+        
+        case M95_ASK_MQTT_PUBLISH:
+            M95_WRITE_COMMAND_state(&AT_LUT[QMTPUB_DATA]); 
+            break; 
+            
+        case M95_VERIFY_MQTT_PUBLISH:
+            M95_VERIFY_COMMAND_state(M95_PUBLISH_PAYLOAD, M95_ASK_MQTT_PUBLISH); 
+            break; 
+        
+        case M95_PUBLISH_PAYLOAD:
+            M95_PUBLISH_PAYLOAD_state(); 
+            break; 
+            
+        case M95_VERIFY_PAYLOAD:
+            M95_VERIFY_COMMAND_state(M95_WAIT_NEXT_PUBLISH, M95_ASK_MQTT_PUBLISH); 
+            break; 
+            
+        case M95_WAIT_NEXT_PUBLISH: 
+            M95_WAIT_NEXT_PUBLISH_state(); 
             break; 
 
         case M95_WRITE_END: 
@@ -179,7 +229,7 @@ static void M95_WRITE_COMMAND_state(const AT_COMMAND_t* to_send)
     if (SERCOM0_USART_WriteFreeBufferCountGet() < to_send->length)
         return; 
     
-    // Send the command and check if is was correctly written to the write 
+    // Send the command and check if it was correctly written to the write 
     // ring buffer. 
     retval = SERCOM0_USART_Write((uint8_t*)to_send->command, to_send->length); 
     if (retval != to_send->length)
@@ -229,6 +279,44 @@ static void M95_VERIFY_COMMAND_state(M95_WRITE_STATES_t on_success, M95_WRITE_ST
 }
 
 
+static void M95_PUBLISH_PAYLOAD_state(void)
+{
+    size_t      retval; 
+    uint8_t     payload[MAX_TX_COMMAND_SIZE]; 
+    uint32_t    payload_len;
+    
+    
+    payload_len = snprintf(payload, MAX_TX_COMMAND_SIZE, "{\"temp\":%d,\"rh\":%d}" M95_PUBLISH_SEND_CHAR, 12, 50); 
+    
+    
+    // Not enough space in write ring buffer, abort. 
+    if (SERCOM0_USART_WriteFreeBufferCountGet() < payload_len)
+        return; 
+    
+    // Send the command and check if it was correctly written to the write 
+    // ring buffer. 
+    retval = SERCOM0_USART_Write((uint8_t*)payload, payload_len); 
+    if (retval != payload_len)
+        return; 
+    
+    // Saves last command sent data and go to the next state. 
+    tx_data.last_command = &AT_LUT[QMTPUB_DATA]; 
+    tx_data.status = NOT_PROCESSED; 
+    tx_data.last_transmit_timestamp = SYSTICK_millis(); 
+    curr_write_state += 1; 
+}
+
+
+static void M95_WAIT_NEXT_PUBLISH_state(void)
+{
+    if (SYSTICK_millis() - tx_data.last_transmit_timestamp < COMMAND_TIMEOUT_MS)
+        return; 
+    
+    curr_write_state = M95_ASK_MQTT_PUBLISH; 
+    return; 
+}
+
+
 //* _ READ STATE MACHINES ______________________________________________________
 
 void M95_read_task(void)
@@ -264,21 +352,21 @@ static void M95_READ_IDLE_state(void)
 
 static void M95_READ_RESPONSE_state(void)
 {
-    uint8_t byte; 
+    uint8_t character; 
     size_t  retval; 
     
     // If not data is available, abort. 
     if (SERCOM0_USART_ReadCountGet() < 1 && rx_data.waiting_process)
         return; 
     
-    // Read one byte and process it. 
-    retval = SERCOM0_USART_Read(&byte, 1);
+    // Read one character and process it. 
+    retval = SERCOM0_USART_Read(&character, 1);
     if (retval < 1)
         return; 
     
     // Check if the received byte is a separator, if so set the command waiting 
     // flag and go to the next state. 
-    if (byte == '\r' || byte == '\n')
+    if (character == '\r' || character == '\n')
     {
         if (rx_data.buf_index < 1)
             return; 
@@ -288,7 +376,16 @@ static void M95_READ_RESPONSE_state(void)
         return; 
     }
     
-    rx_data.buf[rx_data.buf_index] = byte; 
+    else if (character == '>')
+    {
+        rx_data.buf[rx_data.buf_index] = character; 
+        
+        rx_data.waiting_process = true; 
+        curr_read_state = M95_RESPONSE_PROCESS;
+        return;
+    }
+    
+    rx_data.buf[rx_data.buf_index] = character; 
     rx_data.buf_index += 1; 
 }
 
@@ -339,10 +436,31 @@ static void M95_READ_PROCESS_COMMAND_state(void)
     else if (CONTAINS(rx_data.buf, "+QSPN: "))
         M95_parse_operator_name(rx_data.buf); 
     
+    // GPRS stop parsing. 
+    else if (CONTAINS(rx_data.buf, "DEACT OK"))
+        tx_data.status = OK; 
+    
     // GPRS status parsing. 
     else if (CONTAINS(rx_data.buf, "STATE: "))
         M95_parse_gprs_status(rx_data.buf); 
     
+    // MQTT open result parsing. 
+    else if (CONTAINS(rx_data.buf, "+QMTOPEN: "))
+        M95_parse_mqtt_open(rx_data.buf); 
+    
+    // MQTT connection result parsing. 
+    else if (CONTAINS(rx_data.buf, "+QMTCONN: "))
+        M95_parse_mqtt_conn(rx_data.buf); 
+    
+    // MQTT publish result parsing. 
+    else if (CONTAINS(rx_data.buf, "+QMTPUB: "))
+        M95_parse_mqtt_publish(rx_data.buf); 
+    
+    // Prepare the MQTT publish. 
+    else if (CONTAINS(rx_data.buf, ">"))
+        tx_data.status = OK; 
+
+
     // Clear the response buffer. 
     M95_response_buffer_reset(); 
     
@@ -391,7 +509,7 @@ static void M95_parse_sim_status(const uint8_t* buf)
 
 static void M95_parse_signal_strength(const uint8_t* buf)
 {
-    uint8_t rssi; 
+    uint32_t rssi; 
     
     rssi = atoi(buf + 6); 
     
@@ -450,5 +568,113 @@ static void M95_parse_gprs_status(const uint8_t* buf)
     else
         tx_data.status = ERROR;
     
+    return;
+}
+
+
+static void M95_parse_mqtt_open(const uint8_t* buf)
+{
+    int32_t  retval;
+    uint8_t* response; 
+    
+    response = strchr((const char*)buf, ','); 
+    
+    
+    if (!response)
+    {
+        tx_data.status = ERROR; 
+        return; 
+    }
+    
+    retval = atoi(response + 1);
+    
+    if (retval == 0)
+        tx_data.status = OK; 
+    
+    else
+        tx_data.status = ERROR; 
+    
+    return;
+}
+
+
+static void M95_parse_mqtt_conn(const uint8_t* buf)
+{
+    uint32_t i; 
+    uint32_t retvals[3];
+    uint8_t* response; 
+    
+    
+    response = strchr(buf, ':'); 
+    if (!response)
+    {
+        tx_data.status = ERROR; 
+        return; 
+    }
+    
+    response += 1; 
+    i = 0; 
+    while (i < 3)
+    {
+        retvals[i] = atoi(response); 
+        
+        response = strchr(response, ','); 
+        if (!buf)
+        {
+            tx_data.status = ERROR; 
+            return; 
+        }
+        
+        response += 1; 
+        i += 1; 
+    }
+
+    if (retvals[1] == 0 && retvals[2] == 0)
+        tx_data.status = OK; 
+    
+    else
+        tx_data.status = ERROR; 
+        
+    return;
+}
+
+
+static void M95_parse_mqtt_publish(const uint8_t* buf)
+{
+    uint32_t i; 
+    uint32_t retvals[3];
+    uint8_t* response; 
+    
+    
+    response = strchr(buf, ':'); 
+    if (!response)
+    {
+        tx_data.status = ERROR; 
+        return; 
+    }
+    
+    response += 1; 
+    i = 0; 
+    while (i < 3)
+    {
+        retvals[i] = atoi(response); 
+        
+        response = strchr(response, ','); 
+        if (!buf)
+        {
+            tx_data.status = ERROR; 
+            return; 
+        }
+        
+        response += 1; 
+        i += 1; 
+    }
+
+    if (retvals[1] == 0 && retvals[2] == 0)
+        tx_data.status = OK; 
+    
+    else
+        tx_data.status = ERROR; 
+        
     return;
 }

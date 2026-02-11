@@ -27,7 +27,7 @@
 #define SEN_DEVICE_USED                 SEN65
 
 // Buffer configuration. 
-#define SEN6X_RX_BUF_LENGTH             27
+#define SEN6X_RX_BUF_LENGTH             32
 #define SEN6X_COMMAND_LENGTH            2
 
 // Initialization. 
