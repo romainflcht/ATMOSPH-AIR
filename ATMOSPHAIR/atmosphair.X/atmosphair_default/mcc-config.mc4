@@ -67,7 +67,7 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\sercom\spi_master\plib_sercom_spi_master_common.h
   hash: 06e3c7813e1608b5008e3c8955569f9cff04bef321a34c35421f7979368a4ada
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\sercom\usart\plib_sercom0_usart.c
-  hash: c513cbcccb407e9dc46f07eedcafb695311dd693f004432fec85477f1acfcb2b
+  hash: f863b6e3c592a2ab5cb1e6c9541a711fa00376aa6be7ab1dd1ca7ea901bf4bf3
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\sercom\usart\plib_sercom0_usart.h
   hash: 0df2c338e8de7443bc597e108b579c4f29d23090bba433ebddf71d0eac3d218a
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\sercom\usart\plib_sercom3_usart.c

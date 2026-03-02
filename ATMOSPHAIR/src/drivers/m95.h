@@ -19,6 +19,8 @@
 #define RESPONSE_BUFFER_SIZE        512
 #define MAX_TX_COMMAND_SIZE         256
 #define COMMAND_TIMEOUT_MS          10000
+#define ERROR_WAIT_TIME_MS          2000
+#define MAX_ERR_BEFORE_FATAL        7
 #define M95_COMMAND_END_CHAR        "\r\n"
 #define M95_PUBLISH_SEND_CHAR       "\x1A"
 #define OPERATOR_NAME_BUF_LENGTH    16
@@ -73,12 +75,12 @@ typedef enum m95_write_states
     M95_ASK_OPERATOR,
     M95_VERIFY_OPERATOR,
             
+    M95_ASK_GPRS_STATUS, 
+    M95_VERIFY_GPRS_STATUS, 
     M95_ASK_GPRS_START, 
     M95_VERIFY_GPRS_START, 
     M95_ASK_GPRS_STOP, 
     M95_VERIFY_GPRS_STOP, 
-    M95_ASK_GPRS_STATUS, 
-    M95_VERIFY_GPRS_STATUS, 
     M95_ASK_MQTT_OPEN, 
     M95_VERIFY_MQTT_OPEN, 
     M95_ASK_MQTT_CONN, 
@@ -89,7 +91,8 @@ typedef enum m95_write_states
     M95_VERIFY_PAYLOAD, 
     M95_WAIT_NEXT_PUBLISH,
             
-    M95_WRITE_END,    
+    M95_ERROR_WAIT,
+    M95_FATAL_ERR,
 }   M95_WRITE_STATES_t;
 
 
@@ -177,6 +180,7 @@ typedef struct m95_status
 
 typedef struct mqtt_conn_status
 {
+    bool fatal_err; 
     bool gprs_is_up; 
     bool mqtt_is_open; 
     bool mqtt_is_conn; 

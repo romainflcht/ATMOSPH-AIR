@@ -1,16 +1,23 @@
 #include "m95.h"
 #include "cores/systick.h"
+#include "sen6x.h"
 
 //* _ GLOBAL VARIABLES _________________________________________________________
 
 M95_STATUS_t        M95_status = {0};
 MQTT_CONN_STATUS_t  mqtt_status = {0}; 
 
+//* _ EXTERN DECLARATIONS ______________________________________________________
+
+extern SEN6X_DATA_t         sen6x_data; 
+
 
 //* _ STATIC VARIABLES _________________________________________________________
 
-static M95_WRITE_STATES_t   curr_write_state = M95_IDLE; 
-static M95_READ_STATES_t    curr_read_state  = M95_RESPONSE_IDLE; 
+static M95_WRITE_STATES_t   curr_write_state  = M95_IDLE; 
+static M95_READ_STATES_t    curr_read_state   = M95_RESPONSE_IDLE; 
+static uint32_t             err_wait_count    = 1;
+static M95_WRITE_STATES_t   on_err_next_state = M95_IDLE; 
 
 static const AT_COMMAND_t   AT_LUT[] = {
     #define X(id, command, is_post_resp)  \
@@ -41,6 +48,7 @@ static void M95_WRITE_COMMAND_state(const AT_COMMAND_t* to_send);
 static void M95_VERIFY_COMMAND_state(M95_WRITE_STATES_t on_success, M95_WRITE_STATES_t on_fail);
 static void M95_PUBLISH_PAYLOAD_state(void); 
 static void M95_WAIT_NEXT_PUBLISH_state(void); 
+static void M95_ERROR_WAIT_state(void); 
 
 // Read state functions.
 
@@ -137,12 +145,20 @@ void M95_write_task(void)
             break; 
             
         // MQTT. 
+        case M95_ASK_GPRS_STATUS:
+            M95_WRITE_COMMAND_state(&AT_LUT[QISTAT]); 
+            break; 
+            
+        case M95_VERIFY_GPRS_STATUS:
+            M95_VERIFY_COMMAND_state(M95_ASK_MQTT_OPEN, M95_ASK_GPRS_START); 
+            break; 
+            
         case M95_ASK_GPRS_START:
             M95_WRITE_COMMAND_state(&AT_LUT[QIACT]); 
             break; 
             
         case M95_VERIFY_GPRS_START:
-            M95_VERIFY_COMMAND_state(M95_ASK_GPRS_STATUS, M95_ASK_GPRS_STOP); 
+            M95_VERIFY_COMMAND_state(M95_ASK_GPRS_STATUS, M95_ASK_GPRS_STATUS); 
             break; 
         
         case M95_ASK_GPRS_STOP:
@@ -153,16 +169,11 @@ void M95_write_task(void)
             M95_VERIFY_COMMAND_state(M95_ASK_GPRS_START, M95_ASK_GPRS_STOP); 
             break; 
         
-        case M95_ASK_GPRS_STATUS:
-            M95_WRITE_COMMAND_state(&AT_LUT[QISTAT]); 
-            break; 
-            
-        case M95_VERIFY_GPRS_STATUS:
-            M95_VERIFY_COMMAND_state(M95_ASK_MQTT_OPEN, M95_ASK_GPRS_STATUS); 
-            break; 
-        
         case M95_ASK_MQTT_OPEN:
-            M95_WRITE_COMMAND_state(&AT_LUT[QMTOPEN]); 
+            if (mqtt_status.mqtt_is_open)
+                curr_write_state = M95_ASK_MQTT_CONN; 
+            else
+                M95_WRITE_COMMAND_state(&AT_LUT[QMTOPEN]); 
             break; 
             
         case M95_VERIFY_MQTT_OPEN:
@@ -170,11 +181,15 @@ void M95_write_task(void)
             break; 
         
         case M95_ASK_MQTT_CONN:
-            M95_WRITE_COMMAND_state(&AT_LUT[QMTCONN]); 
+            if (mqtt_status.mqtt_is_conn)
+                curr_write_state = M95_ASK_MQTT_PUBLISH; 
+            
+            else
+                M95_WRITE_COMMAND_state(&AT_LUT[QMTCONN]); 
             break; 
             
         case M95_VERIFY_MQTT_CONN:
-            M95_VERIFY_COMMAND_state(M95_ASK_MQTT_PUBLISH, M95_ASK_MQTT_CONN); 
+            M95_VERIFY_COMMAND_state(M95_ASK_MQTT_PUBLISH, M95_ASK_MQTT_OPEN); 
             break; 
         
         case M95_ASK_MQTT_PUBLISH:
@@ -182,7 +197,7 @@ void M95_write_task(void)
             break; 
             
         case M95_VERIFY_MQTT_PUBLISH:
-            M95_VERIFY_COMMAND_state(M95_PUBLISH_PAYLOAD, M95_ASK_MQTT_PUBLISH); 
+            M95_VERIFY_COMMAND_state(M95_PUBLISH_PAYLOAD, M95_ASK_MQTT_OPEN); 
             break; 
         
         case M95_PUBLISH_PAYLOAD:
@@ -190,14 +205,21 @@ void M95_write_task(void)
             break; 
             
         case M95_VERIFY_PAYLOAD:
-            M95_VERIFY_COMMAND_state(M95_WAIT_NEXT_PUBLISH, M95_ASK_MQTT_PUBLISH); 
+            M95_VERIFY_COMMAND_state(M95_IDLE, M95_ASK_MQTT_OPEN); 
             break; 
             
         case M95_WAIT_NEXT_PUBLISH: 
             M95_WAIT_NEXT_PUBLISH_state(); 
             break; 
 
-        case M95_WRITE_END: 
+        case M95_ERROR_WAIT:
+            M95_ERROR_WAIT_state(); 
+            break; 
+            
+        case M95_FATAL_ERR: 
+            // Fatal err, needs reboot. 
+            break; 
+            
         default: 
             curr_write_state = M95_IDLE;
             break; 
@@ -209,7 +231,6 @@ void M95_write_task(void)
 
 static void M95_WRITE_IDLE_state(void)
 {
-    // TODO: When a task is finished, go back to this state and check MQTT state before starting a new task. 
     static bool is_init = true; 
     
     // Check if it is the first command to skip wait time. 
@@ -219,7 +240,7 @@ static void M95_WRITE_IDLE_state(void)
     else if ((SYSTICK_millis() - tx_data.last_transmit_timestamp) < COMMAND_TIMEOUT_MS)
         return; 
     
-    curr_write_state = M95_ASK_GPRS_START; 
+    curr_write_state = M95_ASK_GPRS_STATUS; 
     return; 
 }
 
@@ -266,8 +287,8 @@ static void M95_VERIFY_COMMAND_state(M95_WRITE_STATES_t on_success, M95_WRITE_ST
     // If an error is detected, go back one state. 
     else if (tx_data.status == ERROR)
     {
-        if (curr_write_state > 0)
-            curr_write_state = on_fail; 
+        curr_write_state = M95_ERROR_WAIT; 
+        on_err_next_state = on_fail; 
         
         M95_transmit_buffer_reset(); 
         return; 
@@ -276,7 +297,8 @@ static void M95_VERIFY_COMMAND_state(M95_WRITE_STATES_t on_success, M95_WRITE_ST
     // No error detected. 
     curr_write_state = on_success; 
     
-    // Reset the transmit buffer. 
+    // Reset the transmit buffer and error count. 
+    err_wait_count = 1; 
     M95_transmit_buffer_reset(); 
     return; 
 }
@@ -289,7 +311,30 @@ static void M95_PUBLISH_PAYLOAD_state(void)
     uint32_t    payload_len;
     
     
-    payload_len = snprintf(payload, MAX_TX_COMMAND_SIZE, "{\"temp\":%d,\"rh\":%d}" M95_PUBLISH_SEND_CHAR, 12, 50); 
+    payload_len = snprintf(
+            payload, 
+            MAX_TX_COMMAND_SIZE, 
+            "{\"PM0_5\":%.2f,\"PM1_0\":%.2f,\"PM2_5\":%.2f,\"PM4_0\":%.2f,"
+            "\"PM10_0\":%.2f,\"rh\":%.2f,\"temp\":%.2f,\"VOC\":%.2f,"
+            "\"NOx\":%.2f,\"CO2\":%.2f,\"HCHO\":%.2f}" M95_PUBLISH_SEND_CHAR, 
+            sen6x_data.PM_0_5, 
+            sen6x_data.PM_1_0, 
+            sen6x_data.PM_2_5, 
+            sen6x_data.PM_4_0, 
+            sen6x_data.PM_10_0, 
+            sen6x_data.humidity, 
+            sen6x_data.temp, 
+            sen6x_data.VOC, 
+            sen6x_data.NOx, 
+            sen6x_data.CO2, 
+            sen6x_data.HCHO
+        ); 
+    
+    if (payload_len >= MAX_TX_COMMAND_SIZE)
+    {
+        curr_write_state = M95_FATAL_ERR; 
+        return; 
+    }
     
     
     // Not enough space in write ring buffer, abort. 
@@ -319,6 +364,26 @@ static void M95_WAIT_NEXT_PUBLISH_state(void)
     return; 
 }
 
+
+static void M95_ERROR_WAIT_state(void)
+{
+    // Check if the max error count as been reached. 
+    if (err_wait_count >= (1 << MAX_ERR_BEFORE_FATAL))
+    {
+        curr_write_state = M95_FATAL_ERR; 
+        return; 
+    }
+    
+    if (SYSTICK_millis() - tx_data.last_transmit_timestamp < err_wait_count * ERROR_WAIT_TIME_MS)
+        return; 
+    
+    // Double error wait time each time an error is detected. 
+    err_wait_count = err_wait_count << 1; 
+    
+    // Restore the next state when waiting is finished. 
+    curr_write_state = on_err_next_state; 
+    return; 
+}
 
 //* _ READ STATE MACHINES ______________________________________________________
 
@@ -441,7 +506,10 @@ static void M95_READ_PROCESS_COMMAND_state(void)
     
     // GPRS stop parsing. 
     else if (CONTAINS(rx_data.buf, "DEACT OK"))
+    {
+        mqtt_status.gprs_is_up = 0; 
         tx_data.status = OK; 
+    }
     
     // GPRS status parsing. 
     else if (CONTAINS(rx_data.buf, "STATE: "))
@@ -594,7 +662,7 @@ static void M95_parse_mqtt_status(const uint8_t* buf)
 
 static void M95_parse_gprs_status(const uint8_t* buf)
 {
-    if (CONTAINS(buf, "IP GPRSACT"))
+    if (CONTAINS(buf, "IP GPRSACT") || CONTAINS(buf, "IP STATUS"))
     {
         tx_data.status = OK; 
         mqtt_status.gprs_is_up = 1;
