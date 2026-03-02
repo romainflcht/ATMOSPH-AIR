@@ -186,6 +186,8 @@ typedef struct mqtt_conn_status
 
 void M95_init(void); 
 
+void M95_task(void); 
+
 void M95_write_task(void); 
 
 void M95_read_task(void); 

@@ -140,15 +140,16 @@ typedef struct sen6x_data
     float HCHO; 
 }   SEN6X_DATA_t;
 
+
 //* _ FUNCTION DECLARATIONS ____________________________________________________
 
 /// @fn void sen6x_init(void); 
 /// @ brief initialize any SEN6x device. 
-void sen6x_init(void); 
+void SEN6X_init(void); 
 
 /// @fn void sen6x_task(void); 
 /// @brief maintains the sensor measurement reading state machine. 
-void sen6x_task(void); 
+void SEN6X_task(void); 
 
 
 #endif

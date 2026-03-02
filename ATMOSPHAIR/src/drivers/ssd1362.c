@@ -45,7 +45,7 @@ void SPI_callback(uintptr_t context)
 }
 
 
-bool ssd1362_refresh(void)
+bool SSD1362_refresh(void)
 {
     // If the SPI peripheral isn't busy, send the framebuffer to the screen. 
     if (SERCOM2_SPI_IsBusy())

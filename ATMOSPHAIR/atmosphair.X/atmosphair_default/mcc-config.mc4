@@ -17,11 +17,13 @@ modules:
 - sercom2
 - sercom3
 - stdio
+- tcc0
+- tcc1
 generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR\src\config\default\PIC32CM5164LS00048.ld
   hash: 30191e9762084f61078552f0f3c0c72f9ae205f659a0b5c8a39366bd0f159676
 - file: ..\..\ATMOSPHAIR\src\config\default\definitions.h
-  hash: 47541dabed82ad6432d240fff06ef1784da99bc3e7a078bf3e38d1b706662d21
+  hash: e62b3d71e25273140266474993a488b4202bd718580c7241c09ef6bd7f0e6335
 - file: ..\..\ATMOSPHAIR\src\config\default\device.h
   hash: 93a786fe6c731ae7fed16e8e6f02040c17e745ffa9b8b884d51ec7bdb658f951
 - file: ..\..\ATMOSPHAIR\src\config\default\device_cache.h
@@ -31,9 +33,9 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR\src\config\default\exceptions.c
   hash: d1567a190561858cc1cb7e796cf1a29720e52b9799bbd88b087993d8539e137f
 - file: ..\..\ATMOSPHAIR\src\config\default\initialization.c
-  hash: f6870811275036699767eb05deed19720eea55068ead5f3136bc8f397af2904b
+  hash: 256a85056087b9adab36d1aff18c1472d3d14b96266f5b8b15cdebc1e9df16c2
 - file: ..\..\ATMOSPHAIR\src\config\default\interrupts.c
-  hash: 4920f491270628c836ab2fe8dc3636a48bd8ef93c90a3cf6a00536c0cf329cb3
+  hash: e7661e0f0ddf93fc56dcb59a714b39b60b76c5fdb2393047750de26657ff2fe7
 - file: ..\..\ATMOSPHAIR\src\config\default\interrupts.h
   hash: 6f932fb6b08839bf95983a16d3d7728407150d42b4823108f7e4cd6b5893881a
 - file: ..\..\ATMOSPHAIR\src\config\default\libc_syscalls.c
@@ -51,7 +53,7 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\port\plib_port.c
   hash: c5272f06ad2d2ad55fd87b491edb908257f7ea7edcb721940d922743d3b41da6
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\port\plib_port.h
-  hash: bfa1183a3800c85fda4444a53084aa204134babea3166acf7d4ca79de7bae6f6
+  hash: e976b1dc758a11267ee908b007a8dbfe4cf33ba0a51de38c5356676bb246028d
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\sercom\i2c_master\plib_sercom1_i2c_master.c
   hash: 23f7ffd595100c1085ccd0585b5f2a7f9df5a31cb8a2f50cd36c352e9b182c71
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\sercom\i2c_master\plib_sercom1_i2c_master.h
@@ -78,8 +80,18 @@ generatedFileHashHistoryMap:
   hash: 477dc28931fc8765d8ec33d4afa79cc5659731d4f37e20139b3f17242407c06c
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\systick\plib_systick.h
   hash: a189d32422a5de630f963f5ec70b0ee72a7718647f35bd391e13badd54e4f701
+- file: ..\..\ATMOSPHAIR\src\config\default\peripheral\tcc\plib_tcc0.c
+  hash: 1a7c6901d01379f87980aa821d7ef5a99d13ca9f196508422ad463f9cb7b6fd7
+- file: ..\..\ATMOSPHAIR\src\config\default\peripheral\tcc\plib_tcc0.h
+  hash: 81f7d4577b88b3b9113e4e29151b4d5e8f528334ae653924dd9a6ce364147c25
+- file: ..\..\ATMOSPHAIR\src\config\default\peripheral\tcc\plib_tcc1.c
+  hash: 94a47ba795bda5ddd8a5026e26844f8873c4d5c14d80195c4700c1b10497a4e4
+- file: ..\..\ATMOSPHAIR\src\config\default\peripheral\tcc\plib_tcc1.h
+  hash: cc639012cd76b4c34eb4b693b7215b19c70fffcb09c8a7957c841735647096d9
+- file: ..\..\ATMOSPHAIR\src\config\default\peripheral\tcc\plib_tcc_common.h
+  hash: 2bd78c7b794475007265f122ca57ef54a64efc8894cc2423a1d0f74caa627b2b
 - file: ..\..\ATMOSPHAIR\src\config\default\pin_configurations.csv
-  hash: 8c8f079cb843e58787b724350f995b313a190befdfd77ced470bffa42c503039
+  hash: bec44bf4fc10a46b9eff3bdbf85e1f8c95d616f52e518c366ca64a425a659973
 - file: ..\..\ATMOSPHAIR\src\config\default\startup_xc32.c
   hash: 3aa1360f333b564211c35f641c7327c2111e11aa633bd02ec5a0be9466b1df04
 - file: ..\..\ATMOSPHAIR\src\config\default\stdio\xc32_monitor.c
@@ -277,15 +289,15 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\exceptions.c
   hash: 2c3b450b059db8a8839fdf58893f4c471cb9254fbf22dd5a210c6f358b2776f4
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\initialization.c
-  hash: 586edb8a14b1bdeb9c6e8c3e7e34c75357ed71f7ebe5484cad496a90e7765797
+  hash: eb0b103c7b9b4e20d6bb0f080e139a246d9af2991b4b151433f3b3d21a6c3f11
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\interrupts.c
-  hash: 2a20809d044cb5e392eb261972845f9676e66a51d7bb91f065857020386f1c35
+  hash: 48cf8b1573188dd0b67d8eb1ee2af5a430cdb6b2f6bda6e02f36bdd09375dc7f
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\interrupts.h
   hash: b4dd0ce5d3e62a422c995a0846d00a8df0ced7850bfb1bb9917cbac4df94f18d
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\libc_syscalls.c
   hash: c9afc1b1257829415a1a6746ce3744f0a768b339d59fff2ab3ca1fab58b2a916
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\clock\plib_clock.c
-  hash: d4cc7f522a80d32e53ebf4d371e369e14141a6e50f70bdb5233a4b0661ec7f04
+  hash: 3b41cb7d6c1faf9b0f3e7f9644288fe98badde4efa37571cac748ee0332768ce
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\clock\plib_clock.h
   hash: 48855ddfcdc10b43a141321e043ab6ad2eb994b09fdba511f17f1d93911c536c
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\evsys\plib_evsys.c
@@ -305,9 +317,9 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\pm\plib_pm.h
   hash: 027462b9369dc5bb8873f96fc3b5ca69ceaf3bd205be7246e58a093b16ee633c
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\port\plib_port.c
-  hash: 6239f480b5b052d86167f02500f97f819208131b67f14d55c4d14ab630b1e053
+  hash: a12879dd4315b677ee287363ee63c99fe76f42c8af0807279811bd0838c90f7b
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\port\plib_port.h
-  hash: 7cd7884f715b06100a8e2e5f6b343d29cdb92c28a484887f973ea2e892fe357e
+  hash: ae7a27c71299c112b495fc7e515ba72e76faefe0958a0c711ba1ef4721a591a6
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\startup_xc32.c
   hash: 3aa1360f333b564211c35f641c7327c2111e11aa633bd02ec5a0be9466b1df04
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\stdio\xc32_monitor.c

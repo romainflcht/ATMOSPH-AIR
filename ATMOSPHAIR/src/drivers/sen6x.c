@@ -21,18 +21,18 @@ static void     SEN6X_WAIT_DATA_state(void);
 static void     SEN6X_READ_DATA_state(void); 
 static void     SEN6X_PARSE_DATA_state(void); 
 
-static void     sen6x_data_init(SEN6X_DATA_t* data);
+static void     SEN6X_data_init(SEN6X_DATA_t* data);
 static uint16_t get_command_wait_time(uint16_t command); 
 static void     process_data(uint8_t* src, float divider, bool is_signed, float* dest); 
 
 
 //* _  FUNCTION IMPLEMENTATION _________________________________________________
 
-void sen6x_init(void)
+void SEN6X_init(void)
 {
     uint8_t command[2]; 
     
-    sen6x_data_init(&sen6x_data);
+    SEN6X_data_init(&sen6x_data);
     
     // Wait for the I²C peripheral to be available. 
     while (SERCOM1_I2C_IsBusy()); 
@@ -50,7 +50,7 @@ void sen6x_init(void)
 }
 
 
-void sen6x_task(void)
+void SEN6X_task(void)
 {
     switch (curr_state)
     {
@@ -279,7 +279,7 @@ static void SEN6X_PARSE_DATA_state(void)
 
 //* _ UTILITY FUNCTIONS ________________________________________________________
 
-static void sen6x_data_init(SEN6X_DATA_t* data)
+static void SEN6X_data_init(SEN6X_DATA_t* data)
 {
     uint32_t i; 
     

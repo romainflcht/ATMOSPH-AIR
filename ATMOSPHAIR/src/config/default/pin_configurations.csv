@@ -11,16 +11,16 @@ Pin Number,Pin ID,Custom Name,Function,Mode, Direction,Latch,Pull Up,Pull Down,D
 12,PA07,,Available,,,,,,NORMAL
 13,PA08,,SERCOM1_PAD0,Digital,High Impedance,n/a,No,No,NORMAL
 14,PA09,,SERCOM1_PAD1,Digital,High Impedance,n/a,No,No,NORMAL
-15,PA10,,Available,,,,,,NORMAL
-16,PA11,,Available,,,,,,NORMAL
+15,PA10,,TCC1_WO0,Digital,Out,Low,,,NORMAL
+16,PA11,,TCC1_WO1,Digital,High Impedance,n/a,No,No,NORMAL
 21,PA12,,SERCOM2_PAD0,Digital,High Impedance,n/a,No,No,NORMAL
 22,PA13,,SERCOM2_PAD1,Digital,High Impedance,n/a,No,No,NORMAL
 23,PA14,DISPLAY_CS,GPIO,Digital,Out,High,,,NORMAL
 24,PA15,DISPLAY_DATA,GPIO,Digital,Out,High,,,NORMAL
 25,PA16,,SERCOM0_PAD0,Digital,High Impedance,n/a,No,No,NORMAL
-26,PA17,GSM_PWRKEY,GPIO,Digital,High Impedance,n/a,No,No,NORMAL
+26,PA17,GSM_PWRKEY,GPIO,Digital,Out,Low,,,NORMAL
 27,PA18,,SERCOM0_PAD2,Digital,High Impedance,n/a,No,No,NORMAL
-28,PA19,,Available,,,,,,NORMAL
+28,PA19,,TCC0_WO3,Digital,High Impedance,n/a,No,No,NORMAL
 29,PA20,,Available,,,,,,NORMAL
 30,PA21,,Available,,,,,,NORMAL
 31,PA22,,Available,,,,,,NORMAL

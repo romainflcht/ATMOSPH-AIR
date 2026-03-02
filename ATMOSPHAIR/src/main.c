@@ -10,10 +10,16 @@
 #include "drivers/sen6x.h"
 #include "drivers/m95.h"
 #include "cores/adc.h"
+#include "drivers/buzzer.h"
+#include "cores/pwm.h"
 
 
 extern SEN6X_DATA_t         sen6x_data; 
 extern volatile ADC_DATA_t  ADC_data[4]; 
+
+extern const NOTE_t BOOT_MELODY[]; 
+extern const NOTE_t ERR_MELODY[]; 
+extern const NOTE_t UI_MELODY[]; 
 
 
 //* _ ENTRY POINT ______________________________________________________________
@@ -25,31 +31,40 @@ int main(void)
     
     //* _ MODULE INITIALIZATIONS _______________________________________________
     SYS_Initialize(NULL);
-//    ssd1362_init(); 
+    ssd1362_init(); 
     
-//    display_fill(MIN_INTENSITY); 
-//    display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZING...", MAX_INTENSITY); 
+    display_fill(MIN_INTENSITY); 
+    display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZING...", MAX_INTENSITY); 
     
-//    ssd1362_refresh(); 
+    SSD1362_refresh(); 
     
     SYSTICK_init(); 
 //    ADC_init(); 
     M95_init(); 
 //    sen6x_init(); 
     
-//    display_fill(MIN_INTENSITY); 
-//    display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZED!", MAX_INTENSITY); 
+    display_fill(MIN_INTENSITY); 
+    display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZED!", MAX_INTENSITY); 
     
-//    ssd1362_refresh(); 
+    SSD1362_refresh(); 
     
+    TCC1_PWMStart(); 
+    
+    TCC1_set_duty_cycle(0, 0);
+    TCC1_set_duty_cycle(1, 0);
+       
     //* _ MAIN LOOP ____________________________________________________________
     while(true)
     {
         // Maintain state machines of all polled MPLAB Harmony modules.
         SYS_Tasks();
-//        sen6x_task(); 
-        M95_write_task(); 
-        M95_read_task(); 
+        BUZZER_task(); 
+        SEN6X_task(); 
+        M95_task(); 
+
+        
+        
+//        BUZZER_play_melody(BOOT_MELODY); 
 //        ADC_task(); 
         
 //        display_fill(MIN_INTENSITY); 

@@ -57,6 +57,8 @@
 #include "peripheral/nvic/plib_nvic.h"
 #include "peripheral/systick/plib_systick.h"
 #include "peripheral/adc/plib_adc.h"
+#include "peripheral/tcc/plib_tcc1.h"
+#include "peripheral/tcc/plib_tcc0.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility

@@ -112,7 +112,7 @@ void SPI_callback(uintptr_t context);
 /// @brief send the framebuffer data to the screen. 
 /// @return false in case the SPI peripheral is busy, true is the request has 
 ///         been accepted by the peripheral. 
-bool ssd1362_refresh(void); 
+bool SSD1362_refresh(void); 
 
 
 //* _ SOFTWARE GRAPHICAL FUNCTION DECLARATIONS _________________________________

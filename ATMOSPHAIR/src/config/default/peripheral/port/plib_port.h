@@ -159,6 +159,10 @@ typedef enum
     PORT_PIN_PA08 = 8,
     /* PA09 pin */
     PORT_PIN_PA09 = 9,
+    /* PA10 pin */
+    PORT_PIN_PA10 = 10,
+    /* PA11 pin */
+    PORT_PIN_PA11 = 11,
     /* PA12 pin */
     PORT_PIN_PA12 = 12,
     /* PA13 pin */
@@ -173,6 +177,8 @@ typedef enum
     PORT_PIN_PA17 = 17,
     /* PA18 pin */
     PORT_PIN_PA18 = 18,
+    /* PA19 pin */
+    PORT_PIN_PA19 = 19,
     /* This element should not be used in any of the PORT APIs.
      * It will be used by other modules or application to denote that none of
      * the PORT Pin is used */

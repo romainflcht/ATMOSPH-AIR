@@ -3,7 +3,9 @@
 
 //* _ GLOBAL VARIABLES _________________________________________________________
 
-M95_STATUS_t M95_status = {0};
+M95_STATUS_t        M95_status = {0};
+MQTT_CONN_STATUS_t  mqtt_status = {0}; 
+
 
 //* _ STATIC VARIABLES _________________________________________________________
 
@@ -29,7 +31,6 @@ static RX_DATA_t            rx_data = {
     .buf             = {0}, 
     .waiting_process = false,
 }; 
-
 
 //* _ STATIC FUNCTION DECLARATIONS _____________________________________________
 
@@ -60,6 +61,7 @@ static void M95_parse_signal_strength(const uint8_t* buf);
 ///        it only retrieve the OPERATOR string. 
 /// @param buf buffer that contains the string. 
 static void M95_parse_operator_name(const uint8_t* buf); 
+static void M95_parse_mqtt_status(const uint8_t* buf); 
 static void M95_parse_gprs_status(const uint8_t* buf); 
 static void M95_parse_mqtt_open(const uint8_t* buf); 
 static void M95_parse_mqtt_conn(const uint8_t* buf); 
@@ -72,16 +74,6 @@ void M95_init(void)
 {
     uint8_t init_command[MAX_TX_COMMAND_SIZE]; 
     uint8_t dummy[RESPONSE_BUFFER_SIZE]; 
-    
-    GSM_PWRKEY_Set(); 
-    SYSTICK_DelayMs(2000); 
-    GSM_PWRKEY_Clear(); 
-    
-    SYSTICK_DelayMs(5000); 
-
-    GSM_PWRKEY_Set(); 
-    SYSTICK_DelayMs(2000); 
-    GSM_PWRKEY_Clear(); 
     
     // Wait for previous commands to be sent. 
     while (SERCOM0_USART_WriteCountGet() > 0); 
@@ -103,6 +95,14 @@ void M95_init(void)
 }
 
 
+void M95_task(void)
+{
+    M95_write_task(); 
+    M95_read_task(); 
+    return; 
+}
+
+
 void M95_write_task(void)
 {
     switch (curr_write_state)
@@ -110,7 +110,8 @@ void M95_write_task(void)
         case M95_IDLE:
             M95_WRITE_IDLE_state(); 
             break; 
-            
+        
+        // Get SIM data. 
         case M95_ASK_SIM_DATA: 
             M95_WRITE_COMMAND_state(&AT_LUT[CPIN]); 
             break;
@@ -208,12 +209,14 @@ void M95_write_task(void)
 
 static void M95_WRITE_IDLE_state(void)
 {
+    // TODO: When a task is finished, go back to this state and check MQTT state before starting a new task. 
     static bool is_init = true; 
     
+    // Check if it is the first command to skip wait time. 
     if (is_init)
         is_init = false; 
     
-    else if (SYSTICK_millis() - tx_data.last_transmit_timestamp < COMMAND_TIMEOUT_MS)
+    else if ((SYSTICK_millis() - tx_data.last_transmit_timestamp) < COMMAND_TIMEOUT_MS)
         return; 
     
     curr_write_state = M95_ASK_GPRS_START; 
@@ -444,6 +447,10 @@ static void M95_READ_PROCESS_COMMAND_state(void)
     else if (CONTAINS(rx_data.buf, "STATE: "))
         M95_parse_gprs_status(rx_data.buf); 
     
+    // MQTT status parsing. 
+    else if (CONTAINS(rx_data.buf, "+QMTSTAT: "))
+        M95_parse_mqtt_status(rx_data.buf); 
+    
     // MQTT open result parsing. 
     else if (CONTAINS(rx_data.buf, "+QMTOPEN: "))
         M95_parse_mqtt_open(rx_data.buf); 
@@ -560,13 +567,44 @@ static void M95_parse_operator_name(const uint8_t* buf)
 }
 
 
+static void M95_parse_mqtt_status(const uint8_t* buf)
+{
+    uint32_t retval;
+    uint8_t* response; 
+    
+    
+    response = strchr(buf, ','); 
+    if (!response)
+    {
+        mqtt_status.mqtt_is_open = 0; 
+        mqtt_status.mqtt_is_conn = 0; 
+        return; 
+    }
+
+    retval = atoi(response + 1); 
+
+    if (retval != 0)
+    {
+        mqtt_status.mqtt_is_open = 0; 
+        mqtt_status.mqtt_is_conn = 0; 
+    }
+    
+    return;
+}
+
 static void M95_parse_gprs_status(const uint8_t* buf)
 {
     if (CONTAINS(buf, "IP GPRSACT"))
+    {
         tx_data.status = OK; 
+        mqtt_status.gprs_is_up = 1;
+    }
     
     else
+    {
         tx_data.status = ERROR;
+        mqtt_status.gprs_is_up = 0;     
+    }
     
     return;
 }
@@ -583,16 +621,23 @@ static void M95_parse_mqtt_open(const uint8_t* buf)
     if (!response)
     {
         tx_data.status = ERROR; 
+        mqtt_status.mqtt_is_open = 0;
         return; 
     }
     
     retval = atoi(response + 1);
     
     if (retval == 0)
+    {
         tx_data.status = OK; 
+        mqtt_status.mqtt_is_open = 1;
+    }
     
     else
+    {
         tx_data.status = ERROR; 
+        mqtt_status.mqtt_is_open = 0;
+    }
     
     return;
 }
@@ -609,6 +654,7 @@ static void M95_parse_mqtt_conn(const uint8_t* buf)
     if (!response)
     {
         tx_data.status = ERROR; 
+        mqtt_status.mqtt_is_conn = 0;
         return; 
     }
     
@@ -622,6 +668,7 @@ static void M95_parse_mqtt_conn(const uint8_t* buf)
         if (!buf)
         {
             tx_data.status = ERROR; 
+            mqtt_status.mqtt_is_conn = 0;
             return; 
         }
         
@@ -630,10 +677,16 @@ static void M95_parse_mqtt_conn(const uint8_t* buf)
     }
 
     if (retvals[1] == 0 && retvals[2] == 0)
+    {
         tx_data.status = OK; 
+        mqtt_status.mqtt_is_conn = 1;
+    }
     
     else
+    {
         tx_data.status = ERROR; 
+        mqtt_status.mqtt_is_conn = 0;
+    }
         
     return;
 }
@@ -654,20 +707,22 @@ static void M95_parse_mqtt_publish(const uint8_t* buf)
     }
     
     response += 1; 
-    i = 0; 
-    while (i < 3)
+    for (i = 0; i < 3; i++)
     {
         retvals[i] = atoi(response); 
         
-        response = strchr(response, ','); 
-        if (!buf)
+        if (i < 2) 
         {
-            tx_data.status = ERROR; 
-            return; 
+            response = strchr(response, ','); 
+            
+            // If we passed the second coma, don't search another one. 
+            if (!response)
+            {
+                tx_data.status = ERROR; 
+                return; 
+            }
+            response += 1;
         }
-        
-        response += 1; 
-        i += 1; 
     }
 
     if (retvals[1] == 0 && retvals[2] == 0)

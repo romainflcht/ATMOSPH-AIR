@@ -100,8 +100,8 @@
 #pragma config NONSECC_TC0 = SET
 #pragma config NONSECC_TC1 = CLEAR
 #pragma config NONSECC_TC2 = CLEAR
-#pragma config NONSECC_TCC0 = CLEAR
-#pragma config NONSECC_TCC1 = CLEAR
+#pragma config NONSECC_TCC0 = SET
+#pragma config NONSECC_TCC1 = SET
 #pragma config NONSECC_TCC2 = CLEAR
 #pragma config NONSECC_TCC3 = CLEAR
 #pragma config NONSECC_ADC = SET
