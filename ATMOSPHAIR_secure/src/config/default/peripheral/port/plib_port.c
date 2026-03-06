@@ -104,7 +104,7 @@ void PORT_Initialize(void)
    PORT_SEC_REGS->GROUP[0].PORT_PMUX[11] = 0x0U;
    PORT_SEC_REGS->GROUP[0].PORT_PMUX[12] = 0x0U;
 
-   PORT_SEC_REGS->GROUP[0].PORT_NONSEC = 0x1cfff3cU;
+   PORT_SEC_REGS->GROUP[0].PORT_NONSEC = 0x1efff3cU;
    /************************** GROUP 1 Initialization *************************/
    PORT_SEC_REGS->GROUP[1].PORT_PINCFG[8] = 0x1U;
    PORT_SEC_REGS->GROUP[1].PORT_PINCFG[9] = 0x1U;

@@ -65,6 +65,7 @@
         <itemPath>../src/drivers/sen6x.h</itemPath>
         <itemPath>../src/drivers/m95.h</itemPath>
         <itemPath>../src/drivers/buzzer.h</itemPath>
+        <itemPath>../src/drivers/hid.h</itemPath>
       </logicalFolder>
       <logicalFolder name="packs" displayName="packs" projectFiles="true">
         <logicalFolder name="CMSIS" displayName="CMSIS" projectFiles="true">
@@ -285,6 +286,7 @@
         <itemPath>../src/drivers/sen6x.c</itemPath>
         <itemPath>../src/drivers/m95.c</itemPath>
         <itemPath>../src/drivers/buzzer.c</itemPath>
+        <itemPath>../src/drivers/hid.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="utils" projectFiles="true">
         <itemPath>../src/utils/fonts.c</itemPath>

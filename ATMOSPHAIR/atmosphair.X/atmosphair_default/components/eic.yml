@@ -35,7 +35,7 @@ data:
       - children:
         - attributes:
             id: eic
-            value: '0'
+            value: '6'
           type: Dynamic
         type: Values
       type: Hex
@@ -86,7 +86,7 @@ data:
       - children:
         - attributes:
             id: eic
-            value: '0'
+            value: '6'
           type: Dynamic
         type: Values
       type: Hex
@@ -237,4 +237,109 @@ data:
           type: Boolean
         type: Attributes
       type: File
+    EIC_DEBOUNCEN_2:
+      attributes:
+        id: EIC_DEBOUNCEN_2
+      children:
+      - children:
+        - attributes:
+            id: visible
+          children:
+          - type: Value
+            value: 'true'
+          type: Boolean
+        type: Attributes
+      - children:
+        - attributes:
+            value: 'true'
+          type: User
+        type: Values
+      type: Boolean
+    EIC_DEBOUNCEN_1:
+      attributes:
+        id: EIC_DEBOUNCEN_1
+      children:
+      - children:
+        - attributes:
+            id: visible
+          children:
+          - type: Value
+            value: 'true'
+          type: Boolean
+        type: Attributes
+      - children:
+        - attributes:
+            value: 'true'
+          type: User
+        type: Values
+      type: Boolean
+    EIC_CONFIG_FILTEN_1:
+      attributes:
+        id: EIC_CONFIG_FILTEN_1
+      children:
+      - children:
+        - attributes:
+            id: visible
+          children:
+          - type: Value
+            value: 'true'
+          type: Boolean
+        type: Attributes
+      - children:
+        - attributes:
+            value: 'true'
+          type: User
+        type: Values
+      type: Boolean
+    EIC_DEBOUNCEN_5:
+      attributes:
+        id: EIC_DEBOUNCEN_5
+      children:
+      - children:
+        - attributes:
+            id: visible
+          children:
+          - type: Value
+            value: 'true'
+          type: Boolean
+        type: Attributes
+      type: Boolean
+    EIC_ASYNCH_1:
+      attributes:
+        id: EIC_ASYNCH_1
+      children:
+      - children:
+        - attributes:
+            value: '1'
+          type: User
+        type: Values
+      type: KeyValueSet
+    EIC_ASYNCH_2:
+      attributes:
+        id: EIC_ASYNCH_2
+      children:
+      - children:
+        - attributes:
+            value: '1'
+          type: User
+        type: Values
+      type: KeyValueSet
+    EIC_CONFIG_FILTEN_2:
+      attributes:
+        id: EIC_CONFIG_FILTEN_2
+      children:
+      - children:
+        - attributes:
+            id: visible
+          children:
+          - type: Value
+            value: 'true'
+          type: Boolean
+        type: Attributes
+      - children:
+        - attributes:
+            value: 'true'
+          type: User
+        type: Values
+      type: Boolean
   userData: {}

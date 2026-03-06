@@ -84,8 +84,8 @@ void EIC_Initialize (void)
 
     /* Interrupt sense type and filter control for EXTINT channels 0 to (16-1) */
     EIC_SEC_REGS->EIC_CONFIG0 =  EIC_CONFIG0_SENSE0_NONE 
-        | EIC_CONFIG0_SENSE1_BOTH 
-        | EIC_CONFIG0_SENSE2_BOTH 
+        | EIC_CONFIG0_SENSE1_BOTH | EIC_CONFIG0_FILTEN1_Msk
+        | EIC_CONFIG0_SENSE2_BOTH | EIC_CONFIG0_FILTEN2_Msk
         | EIC_CONFIG0_SENSE3_NONE 
         | EIC_CONFIG0_SENSE4_NONE 
         | EIC_CONFIG0_SENSE5_NONE 
@@ -102,9 +102,15 @@ void EIC_Initialize (void)
         | EIC_CONFIG1_SENSE15_NONE ;
 
 
+    /* External Interrupt Asynchronous Mode enable */
+    EIC_SEC_REGS->EIC_ASYNCH = 0x6;
+
+    /* Debouncer enable */
+    EIC_SEC_REGS->EIC_DEBOUNCEN = 0x6;
 
 
-
+    /* Debouncer Setting */
+    EIC_SEC_REGS->EIC_DPRESCALER = EIC_DPRESCALER_PRESCALER0(0x0) | EIC_DPRESCALER_PRESCALER1(0x0) ;
 
     /* External Interrupt enable*/
     EIC_SEC_REGS->EIC_INTENSET = 0x6;

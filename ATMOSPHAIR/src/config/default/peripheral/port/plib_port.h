@@ -92,6 +92,14 @@
 #define GSM_PWRKEY_Get()               (((PORT_REGS->GROUP[0].PORT_IN >> 17)) & 0x01)
 #define GSM_PWRKEY_PIN                  PORT_PIN_PA17
 
+/*** Macros for HID_SCROLL pin ***/
+#define HID_SCROLL_Get()               (((PORT_REGS->GROUP[0].PORT_IN >> 22)) & 0x01)
+#define HID_SCROLL_PIN                  PORT_PIN_PA22
+
+/*** Macros for HID_SELECT pin ***/
+#define HID_SELECT_Get()               (((PORT_REGS->GROUP[0].PORT_IN >> 23)) & 0x01)
+#define HID_SELECT_PIN                  PORT_PIN_PA23
+
 /*** Macros for VIBRATION_MOTOR pin ***/
 #define VIBRATION_MOTOR_Set()               (PORT_REGS->GROUP[0].PORT_OUTSET = 1 << 24)
 #define VIBRATION_MOTOR_Clear()             (PORT_REGS->GROUP[0].PORT_OUTCLR = 1 << 24)
@@ -188,6 +196,8 @@ typedef enum
     PORT_PIN_PA18 = 18,
     /* PA19 pin */
     PORT_PIN_PA19 = 19,
+    /* PA21 pin */
+    PORT_PIN_PA21 = 21,
     /* PA22 pin */
     PORT_PIN_PA22 = 22,
     /* PA23 pin */

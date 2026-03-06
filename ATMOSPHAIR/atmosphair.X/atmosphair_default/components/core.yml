@@ -897,7 +897,7 @@ data:
       - children:
         - attributes:
             id: core
-            value: '30408508'
+            value: '32505660'
           type: Dynamic
         type: Values
       type: Hex
@@ -6272,6 +6272,209 @@ data:
             id: eic
             value: EIC_EXTINT_2_InterruptHandler
           type: Dynamic
+        type: Values
+      type: String
+    NVIC_8_0_SECURITY_TYPE:
+      attributes:
+        id: NVIC_8_0_SECURITY_TYPE
+      children:
+      - children:
+        - attributes:
+            id: core
+            value: '0'
+          type: Dynamic
+        type: Values
+      type: KeyValueSet
+    EIC_EXTINT_5_SET_NON_SECURE:
+      attributes:
+        id: EIC_EXTINT_5_SET_NON_SECURE
+      children:
+      - children:
+        - attributes:
+            id: eic
+            value: 'false'
+          type: Dynamic
+        type: Values
+      type: Boolean
+    EIC_EXTINT_5_INTERRUPT_ENABLE_UPDATE:
+      attributes:
+        id: EIC_EXTINT_5_INTERRUPT_ENABLE_UPDATE
+      children:
+      - children:
+        - attributes:
+            id: core
+            value: 'true'
+          type: Dynamic
+        type: Values
+      type: Boolean
+    NVIC_8_0_ENABLE:
+      attributes:
+        id: NVIC_8_0_ENABLE
+      children:
+      - children:
+        - attributes:
+            id: core
+            value: 'false'
+          type: Dynamic
+        type: Values
+      type: Boolean
+    EIC_EXTINT_5_INTERRUPT_ENABLE:
+      attributes:
+        id: EIC_EXTINT_5_INTERRUPT_ENABLE
+      children:
+      - children:
+        - attributes:
+            id: eic
+            value: 'false'
+          type: Dynamic
+        type: Values
+      type: Boolean
+    NVIC_8_0_HANDLER_LOCK:
+      attributes:
+        id: NVIC_8_0_HANDLER_LOCK
+      children:
+      - children:
+        - attributes:
+            id: core
+            value: 'false'
+          type: Dynamic
+        type: Values
+      type: Boolean
+    EIC_EXTINT_5_INTERRUPT_HANDLER_LOCK:
+      attributes:
+        id: EIC_EXTINT_5_INTERRUPT_HANDLER_LOCK
+      children:
+      - children:
+        - attributes:
+            id: eic
+            value: 'false'
+          type: Dynamic
+        type: Values
+      type: Boolean
+    NVIC_8_0_HANDLER:
+      attributes:
+        id: NVIC_8_0_HANDLER
+      children:
+      - children:
+        - attributes:
+            id: core
+            value: EIC_EXTINT_5_Handler
+          type: Dynamic
+        type: Values
+      type: String
+    EIC_EXTINT_5_INTERRUPT_HANDLER:
+      attributes:
+        id: EIC_EXTINT_5_INTERRUPT_HANDLER
+      children:
+      - children:
+        - attributes:
+            id: eic
+            value: EIC_EXTINT_5_Handler
+          type: Dynamic
+        type: Values
+      type: String
+    PORT_GROUP_0_PMUX10:
+      attributes:
+        id: PORT_GROUP_0_PMUX10
+      children:
+      - children:
+        - attributes:
+            id: core
+            value: '0x0'
+          type: Dynamic
+        type: Values
+      type: String
+    PORT_GROUP_0_PAD_21:
+      attributes:
+        id: PORT_GROUP_0_PAD_21
+      children:
+      - children:
+        - attributes:
+            id: core
+            value: PA21
+          type: Dynamic
+        type: Values
+      type: String
+    PORT_GROUP_0_PINCFG21:
+      attributes:
+        id: PORT_GROUP_0_PINCFG21
+      children:
+      - children:
+        - attributes:
+            id: core
+            value: '0x0'
+          type: Dynamic
+        type: Values
+      type: String
+    PORT_GROUP_0_PIN_21_USED:
+      attributes:
+        id: PORT_GROUP_0_PIN_21_USED
+      children:
+      - children:
+        - attributes:
+            id: core
+            value: 'false'
+          type: Dynamic
+        type: Values
+      type: Boolean
+    PIN_30_PERIPHERAL_FUNCTION:
+      attributes:
+        id: PIN_30_PERIPHERAL_FUNCTION
+      children:
+      - children:
+        - attributes:
+            value: ''
+          type: User
+        type: Values
+      type: String
+    PIN_30_IS_NON_SECURE:
+      attributes:
+        id: PIN_30_IS_NON_SECURE
+      children:
+      - children:
+        - attributes:
+            value: '1'
+          type: User
+        type: Values
+      type: KeyValueSet
+    PIN_31_DRVSTR:
+      attributes:
+        id: PIN_31_DRVSTR
+      children:
+      - children:
+        - attributes:
+            value: '0'
+          type: User
+        type: Values
+      type: KeyValueSet
+    PIN_32_DRVSTR:
+      attributes:
+        id: PIN_32_DRVSTR
+      children:
+      - children:
+        - attributes:
+            value: '0'
+          type: User
+        type: Values
+      type: KeyValueSet
+    PIN_31_FUNCTION_NAME:
+      attributes:
+        id: PIN_31_FUNCTION_NAME
+      children:
+      - children:
+        - attributes:
+            value: HID_SCROLL
+          type: User
+        type: Values
+      type: String
+    PIN_32_FUNCTION_NAME:
+      attributes:
+        id: PIN_32_FUNCTION_NAME
+      children:
+      - children:
+        - attributes:
+            value: HID_SELECT
+          type: User
         type: Values
       type: String
   userData:

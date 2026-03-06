@@ -12,10 +12,14 @@
 #include "cores/adc.h"
 #include "drivers/buzzer.h"
 #include "cores/pwm.h"
+#include "drivers/hid.h"
 
 
 extern SEN6X_DATA_t         sen6x_data; 
 extern volatile ADC_DATA_t  ADC_data[4]; 
+
+extern HID_EVENT_t                 scroll_hid; 
+extern HID_EVENT_t                 select_hid; 
 
 extern const NOTE_t BOOT_MELODY[]; 
 extern const NOTE_t ERR_MELODY[]; 
@@ -43,6 +47,8 @@ int main(void)
     M95_init(); 
 //    sen6x_init(); 
     
+    HID_init(); 
+    
     display_fill(MIN_INTENSITY); 
     display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZED!", MAX_INTENSITY); 
     
@@ -61,7 +67,19 @@ int main(void)
         BUZZER_task(); 
         SEN6X_task(); 
         M95_task(); 
-
+        
+        
+        if (scroll_hid.type != 0)
+        {
+            printf("ACTION DETECTED ON SCROLL: %d\n", scroll_hid.type); 
+            scroll_hid.type = 0; 
+        }
+        
+        if (select_hid.type != 0)
+        {
+            printf("ACTION DETECTED ON SELECT: %d\n", select_hid.type); 
+            select_hid.type = 0; 
+        }
         
         
 //        BUZZER_play_melody(BOOT_MELODY); 
