@@ -23,9 +23,9 @@ Pin Number,Pin ID,Custom Name,Function,Mode, Direction,Latch,Pull Up,Pull Down,D
 28,PA19,,TCC0_WO3,Digital,High Impedance,n/a,No,No,NORMAL
 29,PA20,,Available,,,,,,NORMAL
 30,PA21,,Available,,,,,,NORMAL
-31,PA22,,Available,,,,,,NORMAL
-32,PA23,,Available,,,,,,NORMAL
-33,PA24,,Available,,,,,,NORMAL
+31,PA22,,EIC_EXTINT1,Digital,High Impedance,n/a,No,No,NORMAL
+32,PA23,,EIC_EXTINT2,Digital,High Impedance,n/a,No,No,NORMAL
+33,PA24,VIBRATION_MOTOR,GPIO,Digital,In/Out,Low,,,NORMAL
 34,PA25,,Available,,,,,,NORMAL
 37,PB22,,Available,,,,,,NORMAL
 38,PB23,,Available,,,,,,NORMAL

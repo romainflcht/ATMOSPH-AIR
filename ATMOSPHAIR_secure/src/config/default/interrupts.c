@@ -79,8 +79,6 @@ extern void SysTick_Handler            ( void ) __attribute__((weak, alias("Dumm
 extern void SYSTEM_Handler             ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void RTC_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void EIC_EXTINT_0_Handler       ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
-extern void EIC_EXTINT_1_Handler       ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
-extern void EIC_EXTINT_2_Handler       ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void EIC_EXTINT_3_Handler       ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void EIC_EXTINT_4_Handler       ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
 extern void EIC_EXTINT_5_Handler       ( void ) __attribute__((weak, alias("Dummy_Handler"),noreturn));
@@ -148,8 +146,6 @@ const H3DeviceVectors exception_table=
     .pfnSYSTEM_Handler             = SYSTEM_Handler,
     .pfnRTC_Handler                = RTC_Handler,
     .pfnEIC_EXTINT_0_Handler       = EIC_EXTINT_0_Handler,
-    .pfnEIC_EXTINT_1_Handler       = EIC_EXTINT_1_Handler,
-    .pfnEIC_EXTINT_2_Handler       = EIC_EXTINT_2_Handler,
     .pfnEIC_EXTINT_3_Handler       = EIC_EXTINT_3_Handler,
     .pfnEIC_EXTINT_4_Handler       = EIC_EXTINT_4_Handler,
     .pfnEIC_EXTINT_5_Handler       = EIC_EXTINT_5_Handler,

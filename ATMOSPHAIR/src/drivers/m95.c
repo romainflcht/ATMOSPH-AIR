@@ -17,6 +17,7 @@ extern SEN6X_DATA_t         sen6x_data;
 static M95_WRITE_STATES_t   curr_write_state  = M95_IDLE; 
 static M95_READ_STATES_t    curr_read_state   = M95_RESPONSE_IDLE; 
 static uint32_t             err_wait_count    = 1;
+static uint32_t             timeout_count     = 1;
 static M95_WRITE_STATES_t   on_err_next_state = M95_IDLE; 
 
 static const AT_COMMAND_t   AT_LUT[] = {
@@ -207,10 +208,6 @@ void M95_write_task(void)
         case M95_VERIFY_PAYLOAD:
             M95_VERIFY_COMMAND_state(M95_IDLE, M95_ASK_MQTT_OPEN); 
             break; 
-            
-        case M95_WAIT_NEXT_PUBLISH: 
-            M95_WAIT_NEXT_PUBLISH_state(); 
-            break; 
 
         case M95_ERROR_WAIT:
             M95_ERROR_WAIT_state(); 
@@ -277,8 +274,15 @@ static void M95_VERIFY_COMMAND_state(M95_WRITE_STATES_t on_success, M95_WRITE_ST
         // reset the state machine.
         if (SYSTICK_millis() - tx_data.last_transmit_timestamp >= COMMAND_TIMEOUT_MS)
         {
+            timeout_count += 1; 
             curr_write_state = M95_IDLE; 
-            M95_transmit_buffer_reset(); 
+            M95_transmit_buffer_reset();
+            
+            if (timeout_count > MAX_TIMEOUT_COUNT)
+            {
+                M95_status.fatal_err = 1; 
+                curr_write_state = M95_FATAL_ERR; 
+            }
         }
         
         return; 
@@ -299,6 +303,7 @@ static void M95_VERIFY_COMMAND_state(M95_WRITE_STATES_t on_success, M95_WRITE_ST
     
     // Reset the transmit buffer and error count. 
     err_wait_count = 1; 
+    timeout_count  = 0; 
     M95_transmit_buffer_reset(); 
     return; 
 }
@@ -355,22 +360,13 @@ static void M95_PUBLISH_PAYLOAD_state(void)
 }
 
 
-static void M95_WAIT_NEXT_PUBLISH_state(void)
-{
-    if (SYSTICK_millis() - tx_data.last_transmit_timestamp < COMMAND_TIMEOUT_MS)
-        return; 
-    
-    curr_write_state = M95_ASK_MQTT_PUBLISH; 
-    return; 
-}
-
-
 static void M95_ERROR_WAIT_state(void)
 {
     // Check if the max error count as been reached. 
     if (err_wait_count >= (1 << MAX_ERR_BEFORE_FATAL))
     {
         curr_write_state = M95_FATAL_ERR; 
+        M95_status.fatal_err = 1; 
         return; 
     }
     

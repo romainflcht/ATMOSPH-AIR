@@ -153,6 +153,8 @@ void SYS_Initialize ( void* data )
 	SYSTICK_TimerInitialize();
 
     ADC_Initialize();
+    EIC_Initialize();
+
     TCC1_PWMInitialize();
 
     TCC0_PWMInitialize();

@@ -19,6 +19,7 @@
 #define RESPONSE_BUFFER_SIZE        512
 #define MAX_TX_COMMAND_SIZE         256
 #define COMMAND_TIMEOUT_MS          10000
+#define MAX_TIMEOUT_COUNT           3
 #define ERROR_WAIT_TIME_MS          2000
 #define MAX_ERR_BEFORE_FATAL        7
 #define M95_COMMAND_END_CHAR        "\r\n"
@@ -89,7 +90,6 @@ typedef enum m95_write_states
     M95_VERIFY_MQTT_PUBLISH, 
     M95_PUBLISH_PAYLOAD, 
     M95_VERIFY_PAYLOAD, 
-    M95_WAIT_NEXT_PUBLISH,
             
     M95_ERROR_WAIT,
     M95_FATAL_ERR,
@@ -171,6 +171,7 @@ typedef struct rx_data
 
 typedef struct m95_status
 {
+    bool            fatal_err; 
     SIM_STATUS_t    sim_status; 
     uint8_t         signal_strength; 
     char            operator_name[OPERATOR_NAME_BUF_LENGTH]; 
@@ -180,7 +181,6 @@ typedef struct m95_status
 
 typedef struct mqtt_conn_status
 {
-    bool fatal_err; 
     bool gprs_is_up; 
     bool mqtt_is_open; 
     bool mqtt_is_conn; 

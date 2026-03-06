@@ -11,6 +11,9 @@
               <itemPath>../src/config/default/peripheral/adc/plib_adc_common.h</itemPath>
               <itemPath>../src/config/default/peripheral/adc/plib_adc.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="eic" displayName="eic" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/eic/plib_eic.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="nvic" displayName="nvic" projectFiles="true">
               <itemPath>../src/config/default/peripheral/nvic/plib_nvic.h</itemPath>
             </logicalFolder>
@@ -199,6 +202,7 @@
           <itemPath>atmosphair_default/components/dfp.yml</itemPath>
           <itemPath>atmosphair_default/components/sercom1.yml</itemPath>
           <itemPath>atmosphair_default/components/adc.yml</itemPath>
+          <itemPath>atmosphair_default/components/eic.yml</itemPath>
           <itemPath>atmosphair_default/components/pm.yml</itemPath>
           <itemPath>atmosphair_default/components/sercom3.yml</itemPath>
         </logicalFolder>
@@ -228,6 +232,9 @@
           <logicalFolder name="peripheral" displayName="peripheral" projectFiles="true">
             <logicalFolder name="adc" displayName="adc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/adc/plib_adc.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="eic" displayName="eic" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/eic/plib_eic.c</itemPath>
             </logicalFolder>
             <logicalFolder name="nvic" displayName="nvic" projectFiles="true">
               <itemPath>../src/config/default/peripheral/nvic/plib_nvic.c</itemPath>

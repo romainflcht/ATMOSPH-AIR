@@ -201,6 +201,8 @@ void SYS_Initialize ( void* data )
 
     EVSYS_Initialize();
 
+    EIC_Initialize();
+
 
     NVIC_Initialize();
 

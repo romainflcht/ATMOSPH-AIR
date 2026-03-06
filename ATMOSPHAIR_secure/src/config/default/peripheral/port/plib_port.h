@@ -148,12 +148,6 @@ typedef enum
     PORT_PIN_PA20 = 20U,
     /* PA21 pin */
     PORT_PIN_PA21 = 21U,
-    /* PA22 pin */
-    PORT_PIN_PA22 = 22U,
-    /* PA23 pin */
-    PORT_PIN_PA23 = 23U,
-    /* PA24 pin */
-    PORT_PIN_PA24 = 24U,
     /* PA25 pin */
     PORT_PIN_PA25 = 25U,
     /* PB22 pin */

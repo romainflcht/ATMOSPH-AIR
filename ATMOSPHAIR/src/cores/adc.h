@@ -10,7 +10,7 @@
 
 //* _ DEFINITIONS ______________________________________________________________
 
-#define ADC_CHANNEL_COUNT       4
+#define ADC_CHANNEL_COUNT       5
 
 #define CONVERSION_TIMEOUT_MS   10
 #define WAIT_BETWEEN_CYCLE_MS   1

@@ -92,6 +92,15 @@
 #define GSM_PWRKEY_Get()               (((PORT_REGS->GROUP[0].PORT_IN >> 17)) & 0x01)
 #define GSM_PWRKEY_PIN                  PORT_PIN_PA17
 
+/*** Macros for VIBRATION_MOTOR pin ***/
+#define VIBRATION_MOTOR_Set()               (PORT_REGS->GROUP[0].PORT_OUTSET = 1 << 24)
+#define VIBRATION_MOTOR_Clear()             (PORT_REGS->GROUP[0].PORT_OUTCLR = 1 << 24)
+#define VIBRATION_MOTOR_Toggle()            (PORT_REGS->GROUP[0].PORT_OUTTGL = 1 << 24)
+#define VIBRATION_MOTOR_OutputEnable()      (PORT_REGS->GROUP[0].PORT_DIRSET = 1 << 24)
+#define VIBRATION_MOTOR_InputEnable()       (PORT_REGS->GROUP[0].PORT_DIRCLR = 1 << 24)
+#define VIBRATION_MOTOR_Get()               (((PORT_REGS->GROUP[0].PORT_IN >> 24)) & 0x01)
+#define VIBRATION_MOTOR_PIN                  PORT_PIN_PA24
+
 // *****************************************************************************
 /* PORT Group
 
@@ -179,6 +188,12 @@ typedef enum
     PORT_PIN_PA18 = 18,
     /* PA19 pin */
     PORT_PIN_PA19 = 19,
+    /* PA22 pin */
+    PORT_PIN_PA22 = 22,
+    /* PA23 pin */
+    PORT_PIN_PA23 = 23,
+    /* PA24 pin */
+    PORT_PIN_PA24 = 24,
     /* This element should not be used in any of the PORT APIs.
      * It will be used by other modules or application to denote that none of
      * the PORT Pin is used */
