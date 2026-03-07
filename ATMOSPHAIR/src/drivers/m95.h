@@ -24,6 +24,7 @@
 #define MAX_ERR_BEFORE_FATAL        7
 #define M95_COMMAND_END_CHAR        "\r\n"
 #define M95_PUBLISH_SEND_CHAR       "\x1A"
+#define MAX_RSSI_VAL                31
 #define OPERATOR_NAME_BUF_LENGTH    16
 
 

@@ -10,6 +10,16 @@
 #define FONT_CHAR_WIDTH         6
 #define FONT_CHAR_HEIGHT        8
 
-extern uint8_t FONT_SMALL[]; 
+extern const uint8_t FONT_6x8[]; 
+extern const uint8_t FONT_10x16[]; 
+extern const uint8_t FONT_10x16_BOLD[]; 
+
+
+typedef enum fonts
+{
+    FONT_6X8, 
+    FONT_10X16, 
+    FONT_10X16_BOLD, 
+}   FONTS_t;
 
 #endif

@@ -6,6 +6,7 @@
 #include "definitions.h" 
 
 #include "../utils/notes.h"
+#include "../cores/systick.h"
 
 //* _ DEFINITIONS ______________________________________________________________
 

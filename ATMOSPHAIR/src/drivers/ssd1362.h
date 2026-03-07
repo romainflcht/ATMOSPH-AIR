@@ -5,6 +5,8 @@
 
 #include <stdlib.h>
 #include "definitions.h"
+
+#include <stdarg.h>
 #include "../utils/fonts.h"
 
 
@@ -17,9 +19,11 @@
 #define DISPLAY_LOGICAL_WIDTH   256 / (8 / BIT_PER_PIXEL)
 #define DISPLAY_LOGICAL_HEIGHT  64
 #define BUFFER_SIZE             DISPLAY_LOGICAL_WIDTH * DISPLAY_LOGICAL_HEIGHT
+#define PRINTF_BUFFER_SIZE      64
 
-#define MAX_INTENSITY           0x0F
+#define MAX_INTENSITY           0x0E
 #define HALF_INTENSITY          MAX_INTENSITY / 2
+#define QUARTER_INTENSITY       MAX_INTENSITY / 4
 #define MIN_INTENSITY           0x00
 
 
@@ -194,7 +198,7 @@ void display_draw_fillrect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8
 /// @param y            y coordinate. 
 /// @param c            character to draw. 
 /// @param fg_intensity foreground intensity. 
-void display_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_intensity); 
+void display_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_intensity, const uint8_t* font_data); 
 
 
 /// @fn void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity);
@@ -203,7 +207,10 @@ void display_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_intensity);
 /// @param y            y coordinate. 
 /// @param str          string to draw. 
 /// @param fg_intensity foreground intensity. 
-void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity); 
+void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity, FONTS_t font); 
+
+
+uint32_t display_printf(uint32_t x, uint32_t y, uint8_t fg_intensity, FONTS_t font, char* format, ...); 
 
 
 /// @fn void display_img(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t* img);  

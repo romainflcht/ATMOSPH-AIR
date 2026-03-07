@@ -213,44 +213,88 @@ void display_draw_fillrect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8
     return; 
 }
 
-void display_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_intensity)
+void display_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_intensity, const uint8_t* font_data)
 {
-    uint8_t*   char_addr; 
-    uint8_t     current_byte; 
+    const uint8_t*  char_addr; 
+    uint8_t         font_height; 
+    uint8_t         font_width;
+    uint8_t         font_ascii_offset; 
+    uint8_t         bytes_per_col; 
+    uint16_t        current_pixel; 
+    
+    if (!font_data)
+        return; 
+    
+    // Get font information from font header. 
+    font_width        = font_data[1]; 
+    font_height       = font_data[2]; 
+    font_ascii_offset = font_data[3]; 
+    
+    bytes_per_col = (font_height > sizeof(uint8_t) * 8) ? 2 : 1; 
     
     // Get the address of the character we want to print from the font array. 
-    char_addr = FONT_SMALL + (4 + (c - FONT_FIRST_CHAR_OFFSET) * FONT_CHAR_WIDTH); 
+    char_addr = font_data + (FONT_HEADER_SIZE + (c - font_ascii_offset) * font_width * bytes_per_col); 
     
-    for (int i = 0; i < FONT_CHAR_WIDTH; i += 1)
+    for (int i = 0; i < font_width; i += 1)
     {
         // Get the raw byte to operate on it. 
-        current_byte = *char_addr;
+        if (bytes_per_col == 1)
+            current_pixel = *char_addr;
+        else
+            current_pixel = (char_addr[1] << 8) | char_addr[0]; 
         
         // Loop through each bit and set the pixel as foreground intensity if it
         // is high, background intensity if it is low. 
-        for (int j = 0; j < FONT_CHAR_HEIGHT; j += 1)
+        for (int j = 0; j < font_height; j += 1)
         {
-            if (current_byte & 0x01)
+            if (current_pixel & 0x01)
                 display_set_pixel(x + i, y + j, fg_intensity); 
             
             // Offset the byte by one to see the next bit. 
-            current_byte = current_byte >> 1; 
+            current_pixel = current_pixel >> 1; 
         }
         
         // Increment the character address to get the next byte that form the 
         // character. 
-        char_addr += 1; 
+        char_addr += bytes_per_col; 
     }
     
     return; 
 }
 
 
-void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity)
+void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity, FONTS_t font)
 {
-    uint32_t index; 
-    uint32_t x_cur; 
-    uint32_t y_cur; 
+    const uint8_t*  font_data; 
+    uint8_t         font_height; 
+    uint8_t         font_width;
+    uint8_t         font_spacing;
+    uint32_t        index; 
+    uint32_t        x_cur; 
+    uint32_t        y_cur; 
+    
+    
+    switch (font)
+    {
+        case FONT_6X8:
+            font_data = FONT_6x8; 
+            break; 
+            
+        case FONT_10X16: 
+            font_data = FONT_10x16; 
+            break; 
+            
+        case FONT_10X16_BOLD: 
+            font_data = FONT_10x16_BOLD;
+            break; 
+        
+        default: 
+            return; 
+    }
+    
+    font_spacing = font_data[0]; 
+    font_width   = font_data[1]; 
+    font_height  = font_data[2]; 
     
     // Execute the "display_draw_char" function and increment the x position of 
     // each char. 
@@ -263,17 +307,18 @@ void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity)
         // increment the y cursor position. 
         if (str[index] == '\n' || str[index] == '\r')
         {
-            y_cur += FONT_CHAR_HEIGHT; 
+            y_cur += font_height; 
             x_cur = 0; 
         }
         
         else
         {
             display_draw_char(
-                    x + (x_cur * FONT_CHAR_WIDTH), 
+                    x + (x_cur * font_width) + font_spacing, 
                     y + y_cur, 
                     str[index], 
-                    fg_intensity
+                    fg_intensity, 
+                    font_data
             ); 
 
             x_cur += 1; 
@@ -283,31 +328,43 @@ void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity)
     }
 }
 
+uint32_t display_printf(uint32_t x, uint32_t y, uint8_t fg_intensity, FONTS_t font, char* format, ...)
+{
+    char    str[PRINTF_BUFFER_SIZE]; 
+    size_t  char_count;
+    va_list args;
+    
+    va_start(args, format);
+
+    // Allocate and format the string and print it. 
+    char_count = vsnprintf(str, PRINTF_BUFFER_SIZE, format, args); 
+    
+    // Free allocated ressources.
+    va_end(args);
+    
+    if (char_count > 0)
+        display_draw_str(x, y, str, fg_intensity, font); 
+
+    return (uint32_t)char_count; 
+}
+
 
 void display_img(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uint8_t* img)
 {
     int x_index; 
     int y_index; 
     uint8_t curr_pixel; 
-    
-    // Loop through each byte of the image and place it to the framebuffer to 
-    // the right offset calculated using images indexes. 
+
     for (y_index = 0; y_index < h; y_index += 1)
-        for (x_index = 0; x_index < w / 2; x_index += 1)
+        for (x_index = 0; x_index < (w + 1) / 2; x_index += 1)
         {
-            if (COORD_ISINVALID((x + x_index), (y + y_index)))
+            if (COORD_ISINVALID((x + (x_index * 2)), (y + y_index)))
                 continue; 
             
-            curr_pixel = img[x_index + y_index * (w / 2)]; 
-            
-            if ((curr_pixel & 0xF0) == 0xF0) 
-                curr_pixel &= ~0xF0; 
+            curr_pixel = img[x_index + y_index * ((w + 1) / 2)]; 
 
-            if ((curr_pixel & 0x0F) == 0x0F) 
-                curr_pixel &= ~0x0F;
-
-            framebuffer[(x + x_index) + (y + y_index) * DISPLAY_LOGICAL_WIDTH].intensity = curr_pixel; 
+            framebuffer[(x / 2 + x_index) + (y + y_index) * DISPLAY_LOGICAL_WIDTH].intensity = curr_pixel; 
         }
     
-    return; 
+    return;
 }

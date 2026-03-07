@@ -13,7 +13,12 @@
 #include "drivers/buzzer.h"
 #include "cores/pwm.h"
 #include "drivers/hid.h"
+#include "utils/assets.h"
+#include "utils/widgets.h"
+#include "utils/fonts.h"
 
+extern const uint8_t MENU_LEFT_ASSET[]; 
+extern const uint8_t MENU_RIGHT_ASSET[]; 
 
 extern SEN6X_DATA_t         sen6x_data; 
 extern volatile ADC_DATA_t  ADC_data[4]; 
@@ -29,28 +34,25 @@ extern const NOTE_t UI_MELODY[];
 //* _ ENTRY POINT ______________________________________________________________
 int main(void)
 {
-//    char text_buffer[128]; 
-    
 
-    
     //* _ MODULE INITIALIZATIONS _______________________________________________
     SYS_Initialize(NULL);
     ssd1362_init(); 
     
     display_fill(MIN_INTENSITY); 
-    display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZING...", MAX_INTENSITY); 
+    display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZING...", MAX_INTENSITY, 1); 
+    
     
     SSD1362_refresh(); 
     
     SYSTICK_init(); 
-//    ADC_init(); 
+    ADC_init(); 
     M95_init(); 
-//    sen6x_init(); 
-    
+    SEN6X_init(); 
     HID_init(); 
     
     display_fill(MIN_INTENSITY); 
-    display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZED!", MAX_INTENSITY); 
+    display_draw_str(DISPLAY_WIDTH / 2 - 45, DISPLAY_HEIGHT / 2 - 4, "INITIALIZED!", MAX_INTENSITY, 0); 
     
     SSD1362_refresh(); 
     
@@ -58,6 +60,7 @@ int main(void)
     
     TCC1_set_duty_cycle(0, 0);
     TCC1_set_duty_cycle(1, 0);
+    int batt = 100; 
        
     //* _ MAIN LOOP ____________________________________________________________
     while(true)
@@ -67,62 +70,49 @@ int main(void)
         BUZZER_task(); 
         SEN6X_task(); 
         M95_task(); 
+        ADC_task(); 
         
+        display_fill(MIN_INTENSITY); 
+        draw_menu_widget(0, 0, batt); 
+
+        if (batt > 50)
+        {
+            draw_measurement_widget(34, 1, TEMP_WIDGET); 
+            draw_measurement_widget(138, 1, RH_WIDGET); 
+        }
+        
+        else
+        {
+            draw_measurement_widget(34, 1, PM_1_0_WIDGET); 
+            draw_measurement_widget(138, 1, PM_2_5_WIDGET); 
+        }
+ 
+        SSD1362_refresh(); 
+        batt -= 1; 
+        if (batt < 0)
+            batt = 100; 
+        
+
         
         if (scroll_hid.type != 0)
         {
-            printf("ACTION DETECTED ON SCROLL: %d\n", scroll_hid.type); 
+            if (scroll_hid.type == 1)
+                BUZZER_play_melody(UI_MELODY); 
+            else
+                BUZZER_play_melody(BOOT_MELODY); 
+            
             scroll_hid.type = 0; 
         }
         
         if (select_hid.type != 0)
         {
-            printf("ACTION DETECTED ON SELECT: %d\n", select_hid.type); 
+            if (select_hid.type == 1)
+                BUZZER_play_melody(UI_MELODY); 
+            else
+                BUZZER_play_melody(BOOT_MELODY); 
+            
             select_hid.type = 0; 
         }
-        
-        
-//        BUZZER_play_melody(BOOT_MELODY); 
-//        ADC_task(); 
-        
-//        display_fill(MIN_INTENSITY); 
-//        sprintf(text_buffer, "ADCIN0: %d\n", ADC_data[0].data); 
-//        display_draw_str(FONT_CHAR_WIDTH * 15, FONT_CHAR_HEIGHT * 0, text_buffer, MAX_INTENSITY); 
-//
-//        sprintf(text_buffer, "ADCIN1: %d\n", ADC_data[1].data); 
-//        display_draw_str(FONT_CHAR_WIDTH * 15, FONT_CHAR_HEIGHT * 1, text_buffer, MAX_INTENSITY); 
-//
-//        sprintf(text_buffer, "ADCIN2: %d\n", ADC_data[2].data); 
-//        display_draw_str(FONT_CHAR_WIDTH * 15, FONT_CHAR_HEIGHT * 2, text_buffer, MAX_INTENSITY); 
-//
-//        sprintf(text_buffer, "ADCIN3: %d\n", ADC_data[3].data); 
-//        display_draw_str(FONT_CHAR_WIDTH * 15, FONT_CHAR_HEIGHT * 3, text_buffer, MAX_INTENSITY); 
-//        
-//        sprintf(text_buffer, "PM1  : %.3f\n", sen6x_data.PM_1_0);
-//        display_draw_str(0, FONT_CHAR_HEIGHT * 0, text_buffer, MAX_INTENSITY); 
-//        
-//        sprintf(text_buffer, "PM2.5: %.3f\n", sen6x_data.PM_2_5);
-//        display_draw_str(0, FONT_CHAR_HEIGHT * 1, text_buffer, MAX_INTENSITY); 
-//
-//        sprintf(text_buffer, "PM4  : %.3f\n", sen6x_data.PM_4_0);
-//        display_draw_str(0, FONT_CHAR_HEIGHT * 2, text_buffer, MAX_INTENSITY); 
-//
-//        sprintf(text_buffer, "PM10 : %.3f\n", sen6x_data.PM_10_0);
-//        display_draw_str(0, FONT_CHAR_HEIGHT * 3, text_buffer, MAX_INTENSITY); 
-//        
-//        sprintf(text_buffer, "RH   : %.3f\n", sen6x_data.humidity);
-//        display_draw_str(0, FONT_CHAR_HEIGHT * 4, text_buffer, MAX_INTENSITY); 
-//
-//        sprintf(text_buffer, "TEMP : %.3f\n", sen6x_data.temp);
-//        display_draw_str(0, FONT_CHAR_HEIGHT * 5, text_buffer, MAX_INTENSITY); 
-//
-//        sprintf(text_buffer, "VOC  : %.3f\n", sen6x_data.VOC);
-//        display_draw_str(0, FONT_CHAR_HEIGHT * 6, text_buffer, MAX_INTENSITY); 
-//
-//        sprintf(text_buffer, "NOx  : %.3f\n", sen6x_data.NOx);
-//        display_draw_str(0, FONT_CHAR_HEIGHT * 7, text_buffer, MAX_INTENSITY); 
-//
-//        ssd1362_refresh(); 
     }
 
     // Execution should not come here during normal operation

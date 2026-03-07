@@ -4269,6 +4269,12 @@ data:
       children:
       - children:
         - attributes:
+            id: enabled
+          children:
+          - type: Value
+            value: 'false'
+          type: Boolean
+        - attributes:
             id: security
           children:
           - type: Value
@@ -4281,6 +4287,12 @@ data:
         id: DMAC_SOURCE
       children:
       - children:
+        - attributes:
+            id: enabled
+          children:
+          - type: Value
+            value: 'false'
+          type: Boolean
         - attributes:
             id: security
           children:
@@ -4295,6 +4307,12 @@ data:
       children:
       - children:
         - attributes:
+            id: enabled
+          children:
+          - type: Value
+            value: 'false'
+          type: Boolean
+        - attributes:
             id: name
           children:
           - type: Value
@@ -4307,6 +4325,12 @@ data:
         id: DMAC_SYS_DEF
       children:
       - children:
+        - attributes:
+            id: enabled
+          children:
+          - type: Value
+            value: 'false'
+          type: Boolean
         - attributes:
             id: name
           children:
@@ -6477,6 +6501,17 @@ data:
           type: User
         type: Values
       type: String
+    DMA_ENABLE:
+      attributes:
+        id: DMA_ENABLE
+      children:
+      - children:
+        - attributes:
+            id: core
+            value: 'false'
+          type: Dynamic
+        type: Values
+      type: Boolean
   userData:
     children:
     - attributes:

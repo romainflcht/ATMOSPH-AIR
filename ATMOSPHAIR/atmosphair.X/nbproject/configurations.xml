@@ -181,6 +181,8 @@
         <itemPath>../src/utils/fonts.h</itemPath>
         <itemPath>../src/utils/utils.h</itemPath>
         <itemPath>../src/utils/notes.h</itemPath>
+        <itemPath>../src/utils/assets.h</itemPath>
+        <itemPath>../src/utils/widgets.h</itemPath>
       </logicalFolder>
       <itemPath>../src/configuration.h</itemPath>
     </logicalFolder>
@@ -291,6 +293,8 @@
       <logicalFolder name="f3" displayName="utils" projectFiles="true">
         <itemPath>../src/utils/fonts.c</itemPath>
         <itemPath>../src/utils/utils.c</itemPath>
+        <itemPath>../src/utils/assets.c</itemPath>
+        <itemPath>../src/utils/widgets.c</itemPath>
       </logicalFolder>
       <itemPath>../src/main.c</itemPath>
     </logicalFolder>

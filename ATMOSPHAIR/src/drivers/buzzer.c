@@ -1,6 +1,7 @@
 #include "buzzer.h"
-#include "cores/systick.h"
 
+
+bool                    speaker_is_active   = 1; 
 static uint32_t         last_note_timestamp = 0; 
 static BUZZER_STATE_t   curr_state          = BUZZER_IDLE; 
 static const NOTE_t*    curr_melody         = NULL; 
@@ -27,7 +28,7 @@ const NOTE_t ERR_MELODY[] = {
 };
 
 const NOTE_t UI_MELODY[] = {
-    {.frequency = 1550,          .duration = 35},
+    {.frequency = 1550,          .duration = 5},
     {.frequency = MELODY_EOP,   .duration = MELODY_EOP},
 };
 
