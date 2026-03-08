@@ -226,9 +226,9 @@ void display_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_intensity, con
         return; 
     
     // Get font information from font header. 
-    font_width        = font_data[1]; 
-    font_height       = font_data[2]; 
-    font_ascii_offset = font_data[3]; 
+    font_width        = font_data[HEADER_FONT_WIDTH]; 
+    font_height       = font_data[HEADER_FONT_HEIGHT]; 
+    font_ascii_offset = font_data[HEADER_FONT_OFFSET]; 
     
     bytes_per_col = (font_height > sizeof(uint8_t) * 8) ? 2 : 1; 
     
@@ -292,9 +292,9 @@ void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity, F
             return; 
     }
     
-    font_spacing = font_data[0]; 
-    font_width   = font_data[1]; 
-    font_height  = font_data[2]; 
+    font_spacing = font_data[HEADER_CHAR_SPACING]; 
+    font_width   = font_data[HEADER_FONT_WIDTH]; 
+    font_height  = font_data[HEADER_FONT_HEIGHT]; 
     
     // Execute the "display_draw_char" function and increment the x position of 
     // each char. 

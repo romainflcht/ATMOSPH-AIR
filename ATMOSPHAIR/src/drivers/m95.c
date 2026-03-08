@@ -1,15 +1,10 @@
 #include "m95.h"
-#include "cores/systick.h"
-#include "sen6x.h"
 
-//* _ GLOBAL VARIABLES _________________________________________________________
 
-M95_STATUS_t        M95_status = {0};
-MQTT_CONN_STATUS_t  mqtt_status = {0}; 
+//* _ GLOBAL VARIABLE DECLARATIONS _____________________________________________
 
-//* _ EXTERN DECLARATIONS ______________________________________________________
-
-extern SEN6X_DATA_t         sen6x_data; 
+M95_STATUS_t        M95_status  = {0};
+MQTT_CONN_STATUS_t  MQTT_status = {0}; 
 
 
 //* _ STATIC VARIABLES _________________________________________________________
@@ -19,14 +14,6 @@ static M95_READ_STATES_t    curr_read_state   = M95_RESPONSE_IDLE;
 static uint32_t             err_wait_count    = 1;
 static uint32_t             timeout_count     = 1;
 static M95_WRITE_STATES_t   on_err_next_state = M95_IDLE; 
-
-static const AT_COMMAND_t   AT_LUT[] = {
-    #define X(id, command, is_post_resp)  \
-        {id, command, sizeof(command) - 1, is_post_resp}, 
-    
-        M95_AT_COMMANDS
-    #undef X
-};
 
 static TX_DATA_t            tx_data = {
     .last_command            = NULL, 
@@ -39,6 +26,18 @@ static RX_DATA_t            rx_data = {
     .buf             = {0}, 
     .waiting_process = false,
 }; 
+
+
+//* _ AT COMMANDS LUT __________________________________________________________
+
+static const AT_COMMAND_t   AT_LUT[] = {
+    #define X(id, command, is_post_resp)  \
+        {id, command, sizeof(command) - 1, is_post_resp}, 
+    
+        M95_AT_COMMANDS
+    #undef X
+};
+
 
 //* _ STATIC FUNCTION DECLARATIONS _____________________________________________
 
@@ -104,10 +103,11 @@ void M95_init(void)
 }
 
 
-void M95_task(void)
+void M95_tasks(void)
 {
+    // Wrapper to execute both state machines using one line of code (useless). 
     M95_write_task(); 
-    M95_read_task(); 
+    M95_read_tasks(); 
     return; 
 }
 
@@ -171,7 +171,7 @@ void M95_write_task(void)
             break; 
         
         case M95_ASK_MQTT_OPEN:
-            if (mqtt_status.mqtt_is_open)
+            if (MQTT_status.mqtt_is_open)
                 curr_write_state = M95_ASK_MQTT_CONN; 
             else
                 M95_WRITE_COMMAND_state(&AT_LUT[QMTOPEN]); 
@@ -182,7 +182,7 @@ void M95_write_task(void)
             break; 
         
         case M95_ASK_MQTT_CONN:
-            if (mqtt_status.mqtt_is_conn)
+            if (MQTT_status.mqtt_is_conn)
                 curr_write_state = M95_ASK_MQTT_PUBLISH; 
             
             else
@@ -214,7 +214,8 @@ void M95_write_task(void)
             break; 
             
         case M95_FATAL_ERR: 
-            // Fatal err, needs reboot. 
+            // Fatal error occurred, needs reboot. 
+            // May be caused by the module going to sleep or server is offline.
             break; 
             
         default: 
@@ -278,6 +279,8 @@ static void M95_VERIFY_COMMAND_state(M95_WRITE_STATES_t on_success, M95_WRITE_ST
             curr_write_state = M95_IDLE; 
             M95_transmit_buffer_reset();
             
+            // Check the timeout error count and go to fatal error state in case
+            // it goes over the limit. 
             if (timeout_count > MAX_TIMEOUT_COUNT)
             {
                 M95_status.fatal_err = 1; 
@@ -315,24 +318,24 @@ static void M95_PUBLISH_PAYLOAD_state(void)
     uint8_t     payload[MAX_TX_COMMAND_SIZE]; 
     uint32_t    payload_len;
     
-    
+    // Build the JSON string that will be sent to the server. 
     payload_len = snprintf(
             payload, 
             MAX_TX_COMMAND_SIZE, 
             "{\"PM0_5\":%.2f,\"PM1_0\":%.2f,\"PM2_5\":%.2f,\"PM4_0\":%.2f,"
             "\"PM10_0\":%.2f,\"rh\":%.2f,\"temp\":%.2f,\"VOC\":%.2f,"
             "\"NOx\":%.2f,\"CO2\":%.2f,\"HCHO\":%.2f}" M95_PUBLISH_SEND_CHAR, 
-            sen6x_data.PM_0_5, 
-            sen6x_data.PM_1_0, 
-            sen6x_data.PM_2_5, 
-            sen6x_data.PM_4_0, 
-            sen6x_data.PM_10_0, 
-            sen6x_data.humidity, 
-            sen6x_data.temp, 
-            sen6x_data.VOC, 
-            sen6x_data.NOx, 
-            sen6x_data.CO2, 
-            sen6x_data.HCHO
+            SEN6X_data.PM_0_5, 
+            SEN6X_data.PM_1_0, 
+            SEN6X_data.PM_2_5, 
+            SEN6X_data.PM_4_0, 
+            SEN6X_data.PM_10_0, 
+            SEN6X_data.humidity, 
+            SEN6X_data.temp, 
+            SEN6X_data.VOC, 
+            SEN6X_data.NOx, 
+            SEN6X_data.CO2, 
+            SEN6X_data.HCHO
         ); 
     
     if (payload_len >= MAX_TX_COMMAND_SIZE)
@@ -383,7 +386,7 @@ static void M95_ERROR_WAIT_state(void)
 
 //* _ READ STATE MACHINES ______________________________________________________
 
-void M95_read_task(void)
+void M95_read_tasks(void)
 {
     switch (curr_read_state)
     {
@@ -503,7 +506,7 @@ static void M95_READ_PROCESS_COMMAND_state(void)
     // GPRS stop parsing. 
     else if (CONTAINS(rx_data.buf, "DEACT OK"))
     {
-        mqtt_status.gprs_is_up = 0; 
+        MQTT_status.gprs_is_up = 0; 
         tx_data.status = OK; 
     }
     
@@ -640,8 +643,8 @@ static void M95_parse_mqtt_status(const uint8_t* buf)
     response = strchr(buf, ','); 
     if (!response)
     {
-        mqtt_status.mqtt_is_open = 0; 
-        mqtt_status.mqtt_is_conn = 0; 
+        MQTT_status.mqtt_is_open = 0; 
+        MQTT_status.mqtt_is_conn = 0; 
         return; 
     }
 
@@ -649,8 +652,8 @@ static void M95_parse_mqtt_status(const uint8_t* buf)
 
     if (retval != 0)
     {
-        mqtt_status.mqtt_is_open = 0; 
-        mqtt_status.mqtt_is_conn = 0; 
+        MQTT_status.mqtt_is_open = 0; 
+        MQTT_status.mqtt_is_conn = 0; 
     }
     
     return;
@@ -661,13 +664,13 @@ static void M95_parse_gprs_status(const uint8_t* buf)
     if (CONTAINS(buf, "IP GPRSACT") || CONTAINS(buf, "IP STATUS"))
     {
         tx_data.status = OK; 
-        mqtt_status.gprs_is_up = 1;
+        MQTT_status.gprs_is_up = 1;
     }
     
     else
     {
         tx_data.status = ERROR;
-        mqtt_status.gprs_is_up = 0;     
+        MQTT_status.gprs_is_up = 0;     
     }
     
     return;
@@ -685,7 +688,7 @@ static void M95_parse_mqtt_open(const uint8_t* buf)
     if (!response)
     {
         tx_data.status = ERROR; 
-        mqtt_status.mqtt_is_open = 0;
+        MQTT_status.mqtt_is_open = 0;
         return; 
     }
     
@@ -694,13 +697,13 @@ static void M95_parse_mqtt_open(const uint8_t* buf)
     if (retval == 0)
     {
         tx_data.status = OK; 
-        mqtt_status.mqtt_is_open = 1;
+        MQTT_status.mqtt_is_open = 1;
     }
     
     else
     {
         tx_data.status = ERROR; 
-        mqtt_status.mqtt_is_open = 0;
+        MQTT_status.mqtt_is_open = 0;
     }
     
     return;
@@ -718,7 +721,7 @@ static void M95_parse_mqtt_conn(const uint8_t* buf)
     if (!response)
     {
         tx_data.status = ERROR; 
-        mqtt_status.mqtt_is_conn = 0;
+        MQTT_status.mqtt_is_conn = 0;
         return; 
     }
     
@@ -732,7 +735,7 @@ static void M95_parse_mqtt_conn(const uint8_t* buf)
         if (!buf)
         {
             tx_data.status = ERROR; 
-            mqtt_status.mqtt_is_conn = 0;
+            MQTT_status.mqtt_is_conn = 0;
             return; 
         }
         
@@ -743,13 +746,13 @@ static void M95_parse_mqtt_conn(const uint8_t* buf)
     if (retvals[1] == 0 && retvals[2] == 0)
     {
         tx_data.status = OK; 
-        mqtt_status.mqtt_is_conn = 1;
+        MQTT_status.mqtt_is_conn = 1;
     }
     
     else
     {
         tx_data.status = ERROR; 
-        mqtt_status.mqtt_is_conn = 0;
+        MQTT_status.mqtt_is_conn = 0;
     }
         
     return;

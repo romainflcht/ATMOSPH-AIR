@@ -141,13 +141,18 @@ typedef struct sen6x_data
 }   SEN6X_DATA_t;
 
 
+//* _ EXTERN VARIABLE DECLARATIONS _____________________________________________
+
+extern SEN6X_DATA_t SEN6X_data; 
+
+
 //* _ FUNCTION DECLARATIONS ____________________________________________________
 
-/// @fn void sen6x_init(void); 
+/// @fn void SEN6X_init(void); 
 /// @ brief initialize any SEN6x device. 
 void SEN6X_init(void); 
 
-/// @fn void sen6x_task(void); 
+/// @fn void SEN6X_task(void); 
 /// @brief maintains the sensor measurement reading state machine. 
 void SEN6X_task(void); 
 

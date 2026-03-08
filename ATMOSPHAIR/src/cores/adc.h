@@ -10,15 +10,10 @@
 
 //* _ DEFINITIONS ______________________________________________________________
 
-#define ADC_CHANNEL_COUNT       5
-
 #define CONVERSION_TIMEOUT_MS   10
 #define WAIT_BETWEEN_CYCLE_MS   1
 
-
-#if ADC_CHANNEL_COUNT > 21 || ADC_CHANNEL_COUNT < 0
-    #error "~[ERR: DEVICE SELECTION] ADC_CHANNEL_COUNT needs to be between 0 and 21."
-#endif
+#define EMA_ALPHA_FACTOR        0.5
 
 
 //* _ ENUMERATIONS _____________________________________________________________
@@ -32,21 +27,41 @@ typedef enum adc_states
 }   ADC_STATES_t;
 
 
+typedef enum adc_channel
+{
+    ADC_HS2, 
+    ADC_O2,
+    ADC_CO,
+    ADC_FLAMMABLE_GASES,         
+    ADC_BATTERY_CHARGE,
+    ADC_CHANNEL_COUNT,      ///< Count of active ADC channels, need to be the last element in the enumeration. 
+}   ADC_CHANNEL_t;
+
+
 //* _ STRUCTURE DEFINITIONS ____________________________________________________
 
 typedef struct adc_data
 {
-    uint16_t    data; 
-    bool        data_is_new; 
+    uint16_t    data;               ///< ADC conversion result. 
+    uint16_t    ema_filtered_data;  ///< ADC conversion result filtered using the EMA algorithm. 
+    bool        data_is_new;        ///< Data has been converted and ready to be read. 
 }   ADC_DATA_t;
+
+
+//* _ EXTERN VARIABLE DECLARATIONS _____________________________________________
+
+extern volatile ADC_DATA_t ADC_data[ADC_CHANNEL_COUNT]; 
 
 
 //* _ FUNCTION DECLARATIONS ____________________________________________________
 
+/// @fn void ADC_init(void); 
+/// @brief initialize the ADC peripheral. 
 void ADC_init(void); 
 
-void ADC_task(void); 
 
-void ADC_callback(ADC_STATUS status, uintptr_t context); 
+/// @fn void ADC_task(void); 
+/// @brief maintains the ADC peripheral state machine. 
+void ADC_task(void); 
 
 #endif

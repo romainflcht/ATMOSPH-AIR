@@ -2,7 +2,8 @@
 
 
 void TCC1_set_duty_cycle(TCC1_CHANNEL_t channel, float duty)
-{    
+{
+    // Check if the given channel exist then change the duty cycle. 
     if (channel >= TCC1_CHANNEL_COUNT)
         return; 
         

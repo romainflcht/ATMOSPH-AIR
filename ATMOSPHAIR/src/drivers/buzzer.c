@@ -1,17 +1,12 @@
 #include "buzzer.h"
 
 
-bool                    speaker_is_active   = 1; 
-static uint32_t         last_note_timestamp = 0; 
-static BUZZER_STATE_t   curr_state          = BUZZER_IDLE; 
-static const NOTE_t*    curr_melody         = NULL; 
+//* _ GLOBAL VARIABLE DECLARATIONS _____________________________________________
 
-static void BUZZER_IDLE_state(void); 
-static void BUZZER_PLAY_NOTE_state(void); 
-static void BUZZER_WAIT_NOTE_state(void); 
-static void BUZZER_STOP_state(void); 
+bool speaker_is_active = 1; 
 
-//* _ MELODY LUT _______________________________________________________________
+
+//* _ GLOBAL MELODY LUT ________________________________________________________
 
 const NOTE_t BOOT_MELODY[] = {
     {.frequency = C7,         .duration = 75},
@@ -32,12 +27,26 @@ const NOTE_t UI_MELODY[] = {
     {.frequency = MELODY_EOP,   .duration = MELODY_EOP},
 };
 
+
+//* _ STATIC VARIABLE DECLARATIONS _____________________________________________
+
+static uint32_t         last_note_timestamp = 0; 
+static BUZZER_STATE_t   curr_state          = BUZZER_IDLE; 
+static const NOTE_t*    curr_melody         = NULL; 
+
+
+//* _ STATIC FUNCTION DECLARATIONS _____________________________________________
+
+static void BUZZER_PLAY_NOTE_state(void); 
+static void BUZZER_WAIT_NOTE_state(void); 
+static void BUZZER_STOP_state(void); 
+
+
 void BUZZER_task(void)
 {
     switch(curr_state)
     {
         case BUZZER_IDLE:
-            BUZZER_IDLE_state(); 
             break; 
         
         case BUZZER_PLAY_NOTE:
@@ -57,18 +66,14 @@ void BUZZER_task(void)
 
 void BUZZER_play_melody(const NOTE_t* melody)
 {
+    // If a melody is already playing, abort. 
     if (curr_state != BUZZER_IDLE)
         return; 
     
+    // Start the TCC, load the melody and go the the playing state. 
     TCC0_PWMStart(); 
     curr_melody = melody; 
     curr_state  = BUZZER_PLAY_NOTE; 
-    return; 
-}
-
-
-static void BUZZER_IDLE_state(void)
-{
     return; 
 }
 
@@ -116,7 +121,9 @@ static void BUZZER_WAIT_NOTE_state(void)
 
 
 static void BUZZER_STOP_state(void)
-{   
+{
+    // Reached the end of the melody, turn off TCC peripheral and reset the 
+    // state machine. 
     curr_melody = NULL; 
     curr_state = BUZZER_IDLE; 
     last_note_timestamp = 0;

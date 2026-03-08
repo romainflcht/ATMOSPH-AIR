@@ -7,7 +7,7 @@
 #include "definitions.h"
 
 #include <stdarg.h>
-#include "../utils/fonts.h"
+#include "../ui/fonts.h"
 
 
 //* _ DEFINITIONS ______________________________________________________________

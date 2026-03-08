@@ -140,8 +140,6 @@ typedef enum
     PORT_PIN_PA00 = 0U,
     /* PA01 pin */
     PORT_PIN_PA01 = 1U,
-    /* PA06 pin */
-    PORT_PIN_PA06 = 6U,
     /* PA07 pin */
     PORT_PIN_PA07 = 7U,
     /* PA20 pin */

@@ -58,7 +58,7 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\port\plib_port.c
   hash: c5272f06ad2d2ad55fd87b491edb908257f7ea7edcb721940d922743d3b41da6
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\port\plib_port.h
-  hash: 3bb4d65003c1d74da5d1fbaf7942f6711ad08ab9dfe1b9edeae4a6812ee27618
+  hash: 737cedb9159feeabdc42bc244cab313621c965f2ba65509b8e5802b10bf0a2b4
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\sercom\i2c_master\plib_sercom1_i2c_master.c
   hash: 23f7ffd595100c1085ccd0585b5f2a7f9df5a31cb8a2f50cd36c352e9b182c71
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\sercom\i2c_master\plib_sercom1_i2c_master.h
@@ -96,7 +96,7 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\tcc\plib_tcc_common.h
   hash: 2bd78c7b794475007265f122ca57ef54a64efc8894cc2423a1d0f74caa627b2b
 - file: ..\..\ATMOSPHAIR\src\config\default\pin_configurations.csv
-  hash: 14943e5c88ba86cab99a6e7588f40502e2b35e2bf6d4479f4d2b3afe07f0fa39
+  hash: 937c4cb96fa0fa1be98cfbb4027d8ee028ab879ccab26dff57f0bc8a0fcbb8a6
 - file: ..\..\ATMOSPHAIR\src\config\default\startup_xc32.c
   hash: 3aa1360f333b564211c35f641c7327c2111e11aa633bd02ec5a0be9466b1df04
 - file: ..\..\ATMOSPHAIR\src\config\default\stdio\xc32_monitor.c
@@ -326,9 +326,9 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\pm\plib_pm.h
   hash: 027462b9369dc5bb8873f96fc3b5ca69ceaf3bd205be7246e58a093b16ee633c
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\port\plib_port.c
-  hash: 3b90dcf2ee095efeebc8087450e50ff467918230652100b5a889b6fc4cca87b7
+  hash: 68f0487343b1a398401a78969db94561d8e4f6fa52138fd8f3db0e193fbbc4db
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\port\plib_port.h
-  hash: 6c23d5bf042228ba02f864f099d26d13d27e2a74a503f2810cea23d753d31555
+  hash: ed034f43864ada668fa16f034a4cf154ee95c33330b715f7d3e3b344b8d684c7
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\startup_xc32.c
   hash: 3aa1360f333b564211c35f641c7327c2111e11aa633bd02ec5a0be9466b1df04
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\stdio\xc32_monitor.c

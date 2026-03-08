@@ -2,6 +2,7 @@
 #define _PWM_H_
 
 //* _ INCLUDES _________________________________________________________________
+
 #include <stdlib.h>
 #include "definitions.h" 
 
@@ -26,6 +27,10 @@ typedef enum tcc1_channel
 
 //* _ FUNCTION DECLARATIONS ____________________________________________________
 
+/// @fn void TCC1_set_duty_cycle(TCC1_CHANNEL_t channel, float duty); 
+/// @brief change the duty cycle of the given TCC1 channel. 
+/// @param channel we want to change the duty cycle. 
+/// @param duty cycle we want on percent (0 to 100). 
 void TCC1_set_duty_cycle(TCC1_CHANNEL_t channel, float duty); 
 
 #endif

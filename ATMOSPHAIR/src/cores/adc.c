@@ -2,14 +2,14 @@
 
 //* _ GLOBAL VARIABLE DECLARATIONS _____________________________________________
 
-volatile ADC_DATA_t         ADC_data[ADC_CHANNEL_COUNT]; 
+volatile ADC_DATA_t ADC_data[ADC_CHANNEL_COUNT]; 
 
 
 //* _ STATIC VARIABLE DECLARATIONS _____________________________________________
 
-static volatile ADC_STATES_t curr_state               = ADC_IDLE; 
-static volatile uint8_t     selected_adc_channel_id   = 0; 
-static uint32_t             last_conversion_timestamp = 0; 
+static volatile ADC_STATES_t    curr_state                = ADC_IDLE; 
+static volatile ADC_CHANNEL_t   selected_adc_channel_id   = ADC_HS2; 
+static uint32_t                 last_conversion_timestamp = 0; 
 
 
 //* _ STATIC FUNCTION DECLARATIONS _____________________________________________
@@ -18,11 +18,12 @@ static void ADC_IDLE_state(void);
 static void ADC_START_CHANNEL_CONVERSION_state(void); 
 static void ADC_WAIT_END_OF_CHANNEL_CONVERSION_state(void); 
 static void ADC_CONVERSION_DONE_state(void); 
+static void ADC_callback(ADC_STATUS status, uintptr_t context); 
 
 
 //* _ LUT ______________________________________________________________________
 
-static const ADC_POSINPUT adc_channel_from_id[] = {
+static const ADC_POSINPUT ADC_CHANNEL_FROM_ID_LUT[] = {
     ADC_POSINPUT_AIN0,  ADC_POSINPUT_AIN1,  ADC_POSINPUT_AIN2,
     ADC_POSINPUT_AIN3,  ADC_POSINPUT_AIN4,  ADC_POSINPUT_AIN5,
     ADC_POSINPUT_AIN6,  ADC_POSINPUT_AIN7,  ADC_POSINPUT_AIN8,
@@ -32,7 +33,6 @@ static const ADC_POSINPUT adc_channel_from_id[] = {
     ADC_POSINPUT_DAC0, ADC_POSINPUT_SCALEDVDD, 
     ADC_POSINPUT_OPAMP01, ADC_POSINPUT_OPAMP2,
 };
-
 
 
 void ADC_init(void)
@@ -73,8 +73,11 @@ void ADC_task(void)
 }
 
 
-void ADC_callback(ADC_STATUS status, uintptr_t context) 
+static void ADC_callback(ADC_STATUS status, uintptr_t context) 
 {
+    uint16_t adc_result; 
+    uint16_t last_filtered_data; 
+    
     // ADC channel select index error, reset the whole machine state. 
     if (selected_adc_channel_id >= ADC_CHANNEL_COUNT)
     {
@@ -83,7 +86,12 @@ void ADC_callback(ADC_STATUS status, uintptr_t context)
     }
     
     // Get the newly converted data from the ADC and mark it has new value. 
-    ADC_data[selected_adc_channel_id].data = ADC_ConversionResultGet(); 
+    adc_result = ADC_ConversionResultGet(); 
+    last_filtered_data = ADC_data[selected_adc_channel_id].ema_filtered_data; 
+    
+    ADC_data[selected_adc_channel_id].ema_filtered_data = last_filtered_data \
+            + ((adc_result - last_filtered_data) >> 3); 
+    ADC_data[selected_adc_channel_id].data = adc_result; 
     ADC_data[selected_adc_channel_id].data_is_new = true;
     
     // Increment the channel selection and go to the START_CHANNEL_CONVERSION 
@@ -116,7 +124,7 @@ static void ADC_START_CHANNEL_CONVERSION_state(void)
     
     // Select the ADC channel and start the conversion. 
     ADC_ChannelSelect(
-            adc_channel_from_id[selected_adc_channel_id], 
+            ADC_CHANNEL_FROM_ID_LUT[selected_adc_channel_id], 
             ADC_NEGINPUT_AVSS
     );
     

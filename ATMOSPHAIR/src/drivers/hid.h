@@ -8,6 +8,8 @@
 #include "../cores/systick.h"
 
 
+//* _ DEFINITIONS ______________________________________________________________
+
 #define LONG_PRESS_TIME_DETECT   500
 
 
@@ -28,6 +30,8 @@ typedef enum hid_event_type
 }   HID_EVENT_TYPE_t;
 
 
+//* _ STRUCTURE DEFINITIONS ____________________________________________________
+
 typedef struct interrupt_status
 {
     bool        is_triggered;
@@ -41,6 +45,17 @@ typedef struct hid_event
     uint32_t            timestamp; 
 }   HID_EVENT_t;
 
+
+//* _ EXTERN VARIABLE DECLARATIONS _____________________________________________
+
+extern HID_EVENT_t scroll_hid; 
+extern HID_EVENT_t select_hid; 
+
+
+//* _ FUNCTION DECLARATIONS ____________________________________________________
+
+/// @fn void HID_init(void); 
+/// @ brief initialize HID push buttons. 
 void HID_init(void); 
 
 #endif

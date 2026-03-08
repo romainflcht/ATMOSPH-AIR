@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include "definitions.h" 
 
-//* _ FUNCTION DECLARATIONS ____________________________________________________
 
+//* _ FUNCTION DECLARATIONS ____________________________________________________
 
 /// @fn void SYSTICK_init(void); 
 /// @brief initialize the SYSTICK peripheral by registering the callback 

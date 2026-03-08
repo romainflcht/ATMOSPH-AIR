@@ -2,13 +2,18 @@
 #define _UTILS_H_
 
 //* _ INCLUDES _________________________________________________________________
+
 #include <stdlib.h>
 #include "definitions.h" 
 
 
+//* _ DEFINITIONS ______________________________________________________________
+
 #define CRC_8_POLYNOMIAL    0x31
 #define CRC_8_INIT_VAL      0xFF
 #define CRC_8_SIZE          8
+
+#define ARRAY_SIZE(arr)     (sizeof(arr) / sizeof((arr)[0]))
 
 //* _ FUNCTION DECLARATIONS ____________________________________________________
 

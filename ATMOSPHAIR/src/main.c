@@ -13,22 +13,11 @@
 #include "drivers/buzzer.h"
 #include "cores/pwm.h"
 #include "drivers/hid.h"
-#include "utils/assets.h"
-#include "utils/widgets.h"
-#include "utils/fonts.h"
-
-extern const uint8_t MENU_LEFT_ASSET[]; 
-extern const uint8_t MENU_RIGHT_ASSET[]; 
-
-extern SEN6X_DATA_t         sen6x_data; 
-extern volatile ADC_DATA_t  ADC_data[4]; 
-
-extern HID_EVENT_t                 scroll_hid; 
-extern HID_EVENT_t                 select_hid; 
-
-extern const NOTE_t BOOT_MELODY[]; 
-extern const NOTE_t ERR_MELODY[]; 
-extern const NOTE_t UI_MELODY[]; 
+#include "ui/assets.h"
+#include "ui/widgets.h"
+#include "ui/pages.h"
+#include "ui/fonts.h"
+#include "utils/utils.h"
 
 
 //* _ ENTRY POINT ______________________________________________________________
@@ -61,6 +50,7 @@ int main(void)
     TCC1_set_duty_cycle(0, 0);
     TCC1_set_duty_cycle(1, 0);
     int batt = 100; 
+    PAGE_INDEX_t index = PAGE_1; 
        
     //* _ MAIN LOOP ____________________________________________________________
     while(true)
@@ -69,24 +59,14 @@ int main(void)
         SYS_Tasks();
         BUZZER_task(); 
         SEN6X_task(); 
-        M95_task(); 
+        M95_tasks(); 
         ADC_task(); 
         
         display_fill(MIN_INTENSITY); 
         draw_menu_widget(0, 0, batt); 
 
-        if (batt > 50)
-        {
-            draw_measurement_widget(34, 1, TEMP_WIDGET); 
-            draw_measurement_widget(138, 1, RH_WIDGET); 
-        }
+        display_page(index); 
         
-        else
-        {
-            draw_measurement_widget(34, 1, PM_1_0_WIDGET); 
-            draw_measurement_widget(138, 1, PM_2_5_WIDGET); 
-        }
- 
         SSD1362_refresh(); 
         batt -= 1; 
         if (batt < 0)
@@ -97,7 +77,12 @@ int main(void)
         if (scroll_hid.type != 0)
         {
             if (scroll_hid.type == 1)
+            {
+                index += 1; 
                 BUZZER_play_melody(UI_MELODY); 
+                if (index >= PAGE_8)
+                    index = PAGE_1; 
+            }
             else
                 BUZZER_play_melody(BOOT_MELODY); 
             

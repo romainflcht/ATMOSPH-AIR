@@ -1,20 +1,22 @@
 #include "sen6x.h"
 
-//* _ GLOBAL VARIABLE __________________________________________________________
 
-SEN6X_DATA_t            sen6x_data; 
+//* _ GLOBAL VARIABLE DECLARATIONS _____________________________________________
+
+SEN6X_DATA_t SEN6X_data; 
+
 
 //* _ STATIC VARIABLES _________________________________________________________
 
-static SEN6X_STATES_t    curr_state                      = SEN6X_IDLE; 
+static SEN6X_STATES_t   curr_state                      = SEN6X_IDLE; 
 static uint8_t          rx_buffer[SEN6X_RX_BUF_LENGTH]  = {0}; 
 static uint8_t          tx_buffer[SEN6X_COMMAND_LENGTH] = {0}; 
 static uint16_t         last_command_executed           = 0; 
 static uint32_t         last_command_timestamp          = 0; 
 
+
 //* _ STATIC FUNCTION DECLARATIONS _____________________________________________
 
-// TODO: Write functions descriptor comment. 
 static void     SEN6X_IDLE_state(void); 
 static void     SEN6X_MEASUREMENT_state(void); 
 static void     SEN6X_WAIT_DATA_state(void); 
@@ -32,7 +34,7 @@ void SEN6X_init(void)
 {
     uint8_t command[2]; 
     
-    SEN6X_data_init(&sen6x_data);
+    SEN6X_data_init(&SEN6X_data);
     
     // Wait for the I²C peripheral to be available. 
     while (SERCOM1_I2C_IsBusy()); 
@@ -165,7 +167,6 @@ static void SEN6X_WAIT_DATA_state(void)
 static void SEN6X_READ_DATA_state(void)
 {
     bool        retval; 
-    uint8_t     crc_check; 
     uint16_t    wait_time; 
     
     retval = false; 
@@ -217,57 +218,57 @@ static void SEN6X_PARSE_DATA_state(void)
         return; 
     
     #if SEN_DEVICE_USED == SEN60
-        process_data(rx_buffer + 0, 10, false, &(sen6x_data.PM_1_0)); 
-        process_data(rx_buffer + 3, 10, false, &(sen6x_data.PM_2_5)); 
-        process_data(rx_buffer + 6, 10, false, &(sen6x_data.PM_4_0)); 
-        process_data(rx_buffer + 9, 10, false, &(sen6x_data.PM_10_0));
-        process_data(rx_buffer + 12, 100, true, &(sen6x_data.PM_0_5));  
+        process_data(rx_buffer + 0, 10, false, &(SEN6X_data.PM_1_0)); 
+        process_data(rx_buffer + 3, 10, false, &(SEN6X_data.PM_2_5)); 
+        process_data(rx_buffer + 6, 10, false, &(SEN6X_data.PM_4_0)); 
+        process_data(rx_buffer + 9, 10, false, &(SEN6X_data.PM_10_0));
+        process_data(rx_buffer + 12, 100, true, &(SEN6X_data.PM_0_5));  
     
     #elif SEN_DEVICE_USED == SEN63C
-        process_data(rx_buffer + 0, 10, false, &(sen6x_data.PM_1_0)); 
-        process_data(rx_buffer + 3, 10, false, &(sen6x_data.PM_2_5)); 
-        process_data(rx_buffer + 6, 10, false, &(sen6x_data.PM_4_0)); 
-        process_data(rx_buffer + 9, 10, false, &(sen6x_data.PM_10_0));
+        process_data(rx_buffer + 0, 10, false, &(SEN6X_data.PM_1_0)); 
+        process_data(rx_buffer + 3, 10, false, &(SEN6X_data.PM_2_5)); 
+        process_data(rx_buffer + 6, 10, false, &(SEN6X_data.PM_4_0)); 
+        process_data(rx_buffer + 9, 10, false, &(SEN6X_data.PM_10_0));
 
-        process_data(rx_buffer + 12, 100, true, &(sen6x_data.humidity)); 
-        process_data(rx_buffer + 15, 200, true, &(sen6x_data.temp)); 
-        process_data(rx_buffer + 18, 1, true, &(sen6x_data.CO2)); 
+        process_data(rx_buffer + 12, 100, true, &(SEN6X_data.humidity)); 
+        process_data(rx_buffer + 15, 200, true, &(SEN6X_data.temp)); 
+        process_data(rx_buffer + 18, 1, true, &(SEN6X_data.CO2)); 
     
     #elif SEN_DEVICE_USED == SEN65
-        process_data(rx_buffer + 0, 10, false, &(sen6x_data.PM_1_0)); 
-        process_data(rx_buffer + 3, 10, false, &(sen6x_data.PM_2_5)); 
-        process_data(rx_buffer + 6, 10, false, &(sen6x_data.PM_4_0)); 
-        process_data(rx_buffer + 9, 10, false, &(sen6x_data.PM_10_0));
+        process_data(rx_buffer + 0, 10, false, &(SEN6X_data.PM_1_0)); 
+        process_data(rx_buffer + 3, 10, false, &(SEN6X_data.PM_2_5)); 
+        process_data(rx_buffer + 6, 10, false, &(SEN6X_data.PM_4_0)); 
+        process_data(rx_buffer + 9, 10, false, &(SEN6X_data.PM_10_0));
 
-        process_data(rx_buffer + 12, 100, true, &(sen6x_data.humidity)); 
-        process_data(rx_buffer + 15, 200, true, &(sen6x_data.temp)); 
-        process_data(rx_buffer + 18, 10, true, &(sen6x_data.VOC)); 
-        process_data(rx_buffer + 21, 10, true, &(sen6x_data.NOx)); 
+        process_data(rx_buffer + 12, 100, true, &(SEN6X_data.humidity)); 
+        process_data(rx_buffer + 15, 200, true, &(SEN6X_data.temp)); 
+        process_data(rx_buffer + 18, 10, true, &(SEN6X_data.VOC)); 
+        process_data(rx_buffer + 21, 10, true, &(SEN6X_data.NOx)); 
     
     #elif SEN_DEVICE_USED == SEN66
-        process_data(rx_buffer + 0, 10, false, &(sen6x_data.PM_1_0)); 
-        process_data(rx_buffer + 3, 10, false, &(sen6x_data.PM_2_5)); 
-        process_data(rx_buffer + 6, 10, false, &(sen6x_data.PM_4_0)); 
-        process_data(rx_buffer + 9, 10, false, &(sen6x_data.PM_10_0));
+        process_data(rx_buffer + 0, 10, false, &(SEN6X_data.PM_1_0)); 
+        process_data(rx_buffer + 3, 10, false, &(SEN6X_data.PM_2_5)); 
+        process_data(rx_buffer + 6, 10, false, &(SEN6X_data.PM_4_0)); 
+        process_data(rx_buffer + 9, 10, false, &(SEN6X_data.PM_10_0));
 
-        process_data(rx_buffer + 12, 100, true, &(sen6x_data.humidity)); 
-        process_data(rx_buffer + 15, 200, true, &(sen6x_data.temp)); 
-        process_data(rx_buffer + 18, 10, true, &(sen6x_data.VOC)); 
-        process_data(rx_buffer + 21, 10, true, &(sen6x_data.NOx)); 
-        process_data(rx_buffer + 24, 1, false, &(sen6x_data.CO2)); 
+        process_data(rx_buffer + 12, 100, true, &(SEN6X_data.humidity)); 
+        process_data(rx_buffer + 15, 200, true, &(SEN6X_data.temp)); 
+        process_data(rx_buffer + 18, 10, true, &(SEN6X_data.VOC)); 
+        process_data(rx_buffer + 21, 10, true, &(SEN6X_data.NOx)); 
+        process_data(rx_buffer + 24, 1, false, &(SEN6X_data.CO2)); 
     
     
     #elif SEN_DEVICE_USED == SEN68
-        process_data(rx_buffer + 0, 10, false, &(sen6x_data.PM_1_0)); 
-        process_data(rx_buffer + 3, 10, false, &(sen6x_data.PM_2_5)); 
-        process_data(rx_buffer + 6, 10, false, &(sen6x_data.PM_4_0)); 
-        process_data(rx_buffer + 9, 10, false, &(sen6x_data.PM_10_0));
+        process_data(rx_buffer + 0, 10, false, &(SEN6X_data.PM_1_0)); 
+        process_data(rx_buffer + 3, 10, false, &(SEN6X_data.PM_2_5)); 
+        process_data(rx_buffer + 6, 10, false, &(SEN6X_data.PM_4_0)); 
+        process_data(rx_buffer + 9, 10, false, &(SEN6X_data.PM_10_0));
 
-        process_data(rx_buffer + 12, 100, true, &(sen6x_data.humidity)); 
-        process_data(rx_buffer + 15, 200, true, &(sen6x_data.temp)); 
-        process_data(rx_buffer + 18, 10, true, &(sen6x_data.VOC)); 
-        process_data(rx_buffer + 21, 10, true, &(sen6x_data.NOx)); 
-        process_data(rx_buffer + 24, 10, false, &(sen6x_data.HCHO)); 
+        process_data(rx_buffer + 12, 100, true, &(SEN6X_data.humidity)); 
+        process_data(rx_buffer + 15, 200, true, &(SEN6X_data.temp)); 
+        process_data(rx_buffer + 18, 10, true, &(SEN6X_data.VOC)); 
+        process_data(rx_buffer + 21, 10, true, &(SEN6X_data.NOx)); 
+        process_data(rx_buffer + 24, 10, false, &(SEN6X_data.HCHO)); 
     
     #endif
     

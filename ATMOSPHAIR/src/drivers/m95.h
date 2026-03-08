@@ -6,6 +6,8 @@
 #include "definitions.h" 
 
 #include <string.h>
+#include "cores/systick.h"
+#include "sen6x.h"
 
 
 //* _ DEFINITIONS ______________________________________________________________
@@ -129,9 +131,9 @@ typedef enum at_command_id
 
 typedef enum at_command_status
 {
-    OK, 
-    ERROR,         
-    NOT_PROCESSED, 
+    OK,             ///< Command response processed successfully. 
+    ERROR,          ///< Command response detected an error. 
+    NOT_PROCESSED,  ///< Command response waiting to be processed. 
 }   AT_COMMAND_STATUS_t;
 
 
@@ -147,10 +149,10 @@ typedef enum sim_status
 
 typedef struct at_command
 {
-    const AT_COMMAND_ID_t   id; 
-    const char*             command; 
-    const size_t            length; 
-    const bool              is_post_resp; 
+    const AT_COMMAND_ID_t   id;           ///< Id of the command. 
+    const char*             command;      ///< String that contains the command. 
+    const size_t            length;       ///< Length of the command, used when writting the command to the transmit buffer. 
+    const bool              is_post_resp; ///< Some commands response first by an ACK and then send the result. Those commands are marked by this field as true. 
 }   AT_COMMAND_t;
 
 
@@ -172,29 +174,47 @@ typedef struct rx_data
 
 typedef struct m95_status
 {
-    bool            fatal_err; 
-    SIM_STATUS_t    sim_status; 
-    uint8_t         signal_strength; 
-    char            operator_name[OPERATOR_NAME_BUF_LENGTH]; 
-    uint8_t         operator_name_length; 
+    bool            fatal_err;                                  ///< Fatal error occurred, need a reboot to clear it. 
+    SIM_STATUS_t    sim_status;                                 ///< INSERTED, LOCKED, READY. 
+    uint8_t         signal_strength;                            ///< Signal strength between 0 and 31 (RSSI). 
+    char            operator_name[OPERATOR_NAME_BUF_LENGTH];    ///< Operator name string. 
+    uint8_t         operator_name_length;                       ///< Operator name length. 
 }   M95_STATUS_t;
 
 
 typedef struct mqtt_conn_status
 {
-    bool gprs_is_up; 
-    bool mqtt_is_open; 
-    bool mqtt_is_conn; 
+    bool gprs_is_up;    ///< GPRS is activated on the module. 
+    bool mqtt_is_open;  ///< Connection open between the module and the server. 
+    bool mqtt_is_conn;  ///< Connected to the server.  
 }   MQTT_CONN_STATUS_t;
+
+
+//* _ EXTERN VARIABLE DECLARATIONS _____________________________________________
+
+extern M95_STATUS_t        M95_status;
+extern MQTT_CONN_STATUS_t  MQTT_status; 
+
 
 //* _ FUNCTION DECLARATIONS ____________________________________________________
 
+/// @fn void M95_init(void); 
+/// @brief turns on the module and sends all initialization commands. 
 void M95_init(void); 
 
-void M95_task(void); 
 
+/// @fn void M95_tasks(void); 
+/// @brief maintains both read and write state machines. 
+void M95_tasks(void); 
+
+
+/// @fn void M95_write_task(void); 
+/// @brief maintains write state machine. 
 void M95_write_task(void); 
 
-void M95_read_task(void); 
+
+/// @fn void M95_read_tasks(void); 
+/// @brief maintains read state machine. 
+void M95_read_tasks(void); 
 
 #endif

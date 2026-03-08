@@ -172,6 +172,8 @@ typedef enum
     PORT_PIN_PA04 = 4,
     /* PA05 pin */
     PORT_PIN_PA05 = 5,
+    /* PA06 pin */
+    PORT_PIN_PA06 = 6,
     /* PA08 pin */
     PORT_PIN_PA08 = 8,
     /* PA09 pin */

@@ -177,12 +177,15 @@
       <logicalFolder name="trustZone" displayName="trustZone" projectFiles="true">
         <itemPath>../src/trustZone/nonsecure_entry.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f4" displayName="ui" projectFiles="true">
+        <itemPath>../src/ui/assets.h</itemPath>
+        <itemPath>../src/ui/fonts.h</itemPath>
+        <itemPath>../src/ui/widgets.h</itemPath>
+        <itemPath>../src/ui/pages.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3" displayName="utils" projectFiles="true">
-        <itemPath>../src/utils/fonts.h</itemPath>
         <itemPath>../src/utils/utils.h</itemPath>
         <itemPath>../src/utils/notes.h</itemPath>
-        <itemPath>../src/utils/assets.h</itemPath>
-        <itemPath>../src/utils/widgets.h</itemPath>
       </logicalFolder>
       <itemPath>../src/configuration.h</itemPath>
     </logicalFolder>
@@ -290,11 +293,14 @@
         <itemPath>../src/drivers/buzzer.c</itemPath>
         <itemPath>../src/drivers/hid.c</itemPath>
       </logicalFolder>
+      <logicalFolder name="f4" displayName="ui" projectFiles="true">
+        <itemPath>../src/ui/assets.c</itemPath>
+        <itemPath>../src/ui/fonts.c</itemPath>
+        <itemPath>../src/ui/widgets.c</itemPath>
+        <itemPath>../src/ui/pages.c</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3" displayName="utils" projectFiles="true">
-        <itemPath>../src/utils/fonts.c</itemPath>
         <itemPath>../src/utils/utils.c</itemPath>
-        <itemPath>../src/utils/assets.c</itemPath>
-        <itemPath>../src/utils/widgets.c</itemPath>
       </logicalFolder>
       <itemPath>../src/main.c</itemPath>
     </logicalFolder>

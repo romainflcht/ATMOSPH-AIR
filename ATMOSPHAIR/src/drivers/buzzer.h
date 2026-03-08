@@ -33,7 +33,23 @@ typedef struct note
 }   NOTE_t;
 
 
+//* _ EXTERN VARIABLES _________________________________________________________
+
+extern bool speaker_is_active; 
+extern const NOTE_t BOOT_MELODY[]; 
+extern const NOTE_t ERR_MELODY[]; 
+extern const NOTE_t UI_MELODY[]; 
+
+
+//* _ FUNCTION DECLARATIONS ____________________________________________________
+
+/// @fn void BUZZER_task(void); 
+/// @brief maintains the buzzer state machine. 
 void BUZZER_task(void); 
+
+/// @fn void BUZZER_play_melody(const NOTE_t* melody); 
+/// @brief initiate playing a given melody.
+/// @param melody the melody that will be played. 
 void BUZZER_play_melody(const NOTE_t* melody); 
 
 #endif
