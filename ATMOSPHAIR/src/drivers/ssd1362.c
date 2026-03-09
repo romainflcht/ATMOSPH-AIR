@@ -263,7 +263,7 @@ void display_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_intensity, con
 }
 
 
-void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity, FONTS_t font)
+void display_draw_str(uint32_t x, uint32_t y, const char* str, uint8_t fg_intensity, FONTS_t font)
 {
     const uint8_t*  font_data; 
     uint8_t         font_height; 
@@ -328,7 +328,7 @@ void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity, F
     }
 }
 
-uint32_t display_printf(uint32_t x, uint32_t y, uint8_t fg_intensity, FONTS_t font, char* format, ...)
+uint32_t display_printf(uint32_t x, uint32_t y, uint8_t fg_intensity, FONTS_t font, const char* format, ...)
 {
     char    str[PRINTF_BUFFER_SIZE]; 
     size_t  char_count;

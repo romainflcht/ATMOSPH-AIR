@@ -65,7 +65,8 @@ int main(void)
         display_fill(MIN_INTENSITY); 
         draw_menu_widget(0, 0, batt); 
 
-        display_page(index); 
+         display_page(index); 
+//        draw_settings_widget(34, 1, SETTINGS_WIDGET_LUT); 
         
         SSD1362_refresh(); 
         batt -= 1; 
@@ -80,7 +81,7 @@ int main(void)
             {
                 index += 1; 
                 BUZZER_play_melody(UI_MELODY); 
-                if (index >= PAGE_8)
+                if (index >= PAGE_10)
                     index = PAGE_1; 
             }
             else

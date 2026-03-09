@@ -11,7 +11,11 @@
 
 //* _ DEFINITIONS ______________________________________________________________
 
-
+#define LEFT_WIDGET_X_POS   34
+#define LEFT_WIDGET_Y_POS   1
+#define RIGHT_WIDGET_X_POS  138
+#define RIGHT_WIDGET_Y_POS  1
+        
 //* _ ENUMERATIONS _____________________________________________________________
 
 typedef enum page_index
@@ -24,6 +28,8 @@ typedef enum page_index
     PAGE_6, 
     PAGE_7, 
     PAGE_8, 
+    PAGE_9, 
+    PAGE_10, 
 }   PAGE_INDEX_t;
 
 
@@ -31,8 +37,8 @@ typedef enum page_index
 
 typedef struct page
 {
-    WIDGET_ID_t    left_widget_id; 
-    WIDGET_ID_t    right_widget_id; 
+    const WIDGET_t* const left_widget; 
+    const WIDGET_t* const right_widget; 
 }   PAGE_t;
 
 

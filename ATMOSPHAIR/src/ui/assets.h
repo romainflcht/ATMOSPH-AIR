@@ -47,16 +47,18 @@ extern const uint8_t    SERVER_0_ASSET[];
 extern const uint8_t    SERVER_1_ASSET[];
 extern const uint8_t    SPEAKER_0_ASSET[];
 extern const uint8_t    SPEAKER_1_ASSET[];
-extern const uint8_t    FLAMMABLE_GASES_ASSET[]; 
-extern const uint8_t    PM_ASSET[]; 
-extern const uint8_t    NOX_ASSET[]; 
-extern const uint8_t    VOC_ASSET[]; 
-extern const uint8_t    TEMP_ASSET[]; 
-extern const uint8_t    RH_ASSET[]; 
-extern const uint8_t    CO2_H2S_ASSET[];
-extern const uint8_t    CO_ASSET[]; 
-extern const uint8_t    O2_ASSET[]; 
-extern const uint8_t    BATTERY_ASSET[]; 
+extern const uint8_t    FLAMMABLE_GASES_ICON_ASSET[]; 
+extern const uint8_t    PM_ICON_ASSET[]; 
+extern const uint8_t    NOX_ICON_ASSET[]; 
+extern const uint8_t    VOC_ICON_ASSET[]; 
+extern const uint8_t    TEMP_ICON_ASSET[]; 
+extern const uint8_t    RH_ICON_ASSET[]; 
+extern const uint8_t    CO2_H2S_ICON_ASSET[];
+extern const uint8_t    CO_ICON_ASSET[]; 
+extern const uint8_t    O2_ICON_ASSET[]; 
+extern const uint8_t    BATTERY_ICON_ASSET[]; 
+
+extern const uint8_t    SETTINGS_ICON_ASSET[]; 
 
 extern const uint8_t*   NETWORK_STATUS[5];
 extern const uint8_t*   SERVER_STATUS[2];

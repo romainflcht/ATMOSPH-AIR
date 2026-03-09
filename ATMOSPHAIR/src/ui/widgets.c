@@ -2,10 +2,10 @@
 
 // _ STATIC VARIABLE DECLARATIONS ______________________________________________
 
-static const WIDGET_t MEASURE_WIDGET_LUT[] = {
+const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "PM 0.5", 
-        .icon                 = PM_ASSET, 
+        .icon                 = PM_ICON_ASSET, 
         .type                 = WIDGET_PM_0_5, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
@@ -13,7 +13,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title                = "PM 1.0", 
-        .icon                 = PM_ASSET,
+        .icon                 = PM_ICON_ASSET,
         .type                 = WIDGET_PM_1_0, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
@@ -21,7 +21,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title                = "PM 2.5", 
-        .icon                 = PM_ASSET,
+        .icon                 = PM_ICON_ASSET,
         .type                 = WIDGET_PM_2_5, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
@@ -29,7 +29,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title                = "PM 4.0", 
-        .icon                 = PM_ASSET,
+        .icon                 = PM_ICON_ASSET,
         .type                 = WIDGET_PM_4_0, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
@@ -37,7 +37,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title                = "PM 10.0", 
-        .icon                 = PM_ASSET,
+        .icon                 = PM_ICON_ASSET,
         .type                 = WIDGET_PM_10_0, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
@@ -45,7 +45,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title                = "TEMP", 
-        .icon                 = TEMP_ASSET,
+        .icon                 = TEMP_ICON_ASSET,
         .type                 = WIDGET_TEMP, 
         .val_type             = FLOAT,
         .unit                 = "C", 
@@ -53,7 +53,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title                = "HUMIDITY", 
-        .icon                 = RH_ASSET,
+        .icon                 = RH_ICON_ASSET,
         .type                 = WIDGET_RH, 
         .val_type             = FLOAT,
         .unit                 = "%", 
@@ -61,7 +61,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title                = "VOC", 
-        .icon                 = VOC_ASSET,
+        .icon                 = VOC_ICON_ASSET,
         .type                 = WIDGET_VOC, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
@@ -69,7 +69,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title                = "NOx", 
-        .icon                 = NOX_ASSET,
+        .icon                 = NOX_ICON_ASSET,
         .type                 = WIDGET_NOX, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
@@ -77,7 +77,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title                = "CO2", 
-        .icon                 = CO2_H2S_ASSET,
+        .icon                 = CO2_H2S_ICON_ASSET,
         .type                 = WIDGET_CO2, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
@@ -93,7 +93,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title              = "H2S", 
-        .icon               = CO2_H2S_ASSET,
+        .icon               = CO2_H2S_ICON_ASSET,
         .type               = WIDGET_H2S, 
         .val_type           = INTEGER,
         .unit               = "PPM", 
@@ -101,7 +101,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title              = "O2", 
-        .icon               = O2_ASSET,
+        .icon               = O2_ICON_ASSET,
         .type               = WIDGET_O2, 
         .val_type           = INTEGER,
         .unit               = "PPM", 
@@ -109,7 +109,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title              = "CO", 
-        .icon               = CO_ASSET,
+        .icon               = CO_ICON_ASSET,
         .type               = WIDGET_CO, 
         .val_type           = INTEGER,
         .unit               = "PPM", 
@@ -117,7 +117,7 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title              = "GASES", 
-        .icon               = FLAMMABLE_GASES_ASSET,
+        .icon               = FLAMMABLE_GASES_ICON_ASSET,
         .type               = WIDGET_FLAMMABLE_GASES, 
         .val_type           = INTEGER,
         .unit               = "PPM", 
@@ -125,11 +125,29 @@ static const WIDGET_t MEASURE_WIDGET_LUT[] = {
     }, 
     {
         .title              = "BATTERY", 
-        .icon               = BATTERY_ASSET,
+        .icon               = BATTERY_ICON_ASSET,
         .type               = WIDGET_BATTERY_CHARGE, 
         .val_type           = INTEGER,
         .unit               = "%", 
         .measurement.as_int = &(ADC_data[ADC_BATTERY_CHARGE].data),
+    }, 
+}; 
+
+
+const SETTINGS_WIDGET_t SETTINGS_WIDGET_LUT[] = {
+    {
+        .title = "SETTINGS",
+        .icon  = SETTINGS_ICON_ASSET,
+        .actions = {
+            {
+                .icon = FLAMMABLE_GASES_ICON_ASSET,
+                .name = "MUTE"
+            }, 
+            {
+                .icon = FLAMMABLE_GASES_ICON_ASSET,
+                .name = "OP", 
+            }, 
+        },
     }, 
 }; 
 
@@ -182,42 +200,41 @@ void draw_menu_widget(uint32_t x, uint32_t y, uint32_t battery_percent)
 }
 
 
-void draw_measurement_widget(uint32_t x, uint32_t y, WIDGET_ID_t measure_widget_id)
-{
-    WIDGET_t    measure_widget; 
+void draw_measurement_widget(uint32_t x, uint32_t y, const MEASURE_WIDGET_t* measure_widget)
+{ 
     uint32_t            value_len; 
     uint32_t            unit_len; 
     char                buffer[16]; 
     
-    if (measure_widget_id >= WIDGET_COUNT)
+    // If no widget is given, abort.
+    if (!measure_widget)
         return; 
     
-    measure_widget = MEASURE_WIDGET_LUT[measure_widget_id]; 
     
     // Get the length of strings that will be drawn onto the screen, used to 
     // center those strings. 
-    if (measure_widget.val_type == FLOAT)
-        value_len = sprintf(buffer, "%." DECIMAL_COUNT "f", *(measure_widget.measurement.as_float));
+    if (measure_widget->val_type == FLOAT)
+        value_len = sprintf(buffer, "%." DECIMAL_COUNT "f", *(measure_widget->measurement.as_float));
     
-    else if (measure_widget.val_type == INTEGER)
-        value_len = sprintf(buffer, "%d", *(measure_widget.measurement.as_int));
+    else if (measure_widget->val_type == INTEGER)
+        value_len = sprintf(buffer, "%d", *(measure_widget->measurement.as_int));
 
-    unit_len = strlen(measure_widget.unit); 
+    unit_len = strlen(measure_widget->unit); 
     
-    if (measure_widget.icon)
+    if (measure_widget->icon)
         display_img(
             x + 2, 
             y + 4, 
             MEASURE_WIDGET_ICON_WIDTH, 
             MEASURE_WIDGET_ICON_HEIGHT, 
-            measure_widget.icon
+            measure_widget->icon
         ); 
     
     // Draw the title. 
     display_draw_str(
-        x + 2 + ((measure_widget.icon) ? (MEASURE_WIDGET_ICON_WIDTH + 5) : 0), 
+        x + 2 + ((measure_widget->icon) ? (MEASURE_WIDGET_ICON_WIDTH + 5) : 0), 
         y, 
-        measure_widget.title, 
+        measure_widget->title, 
         MAX_INTENSITY, 
         FONT_10X16
     ); 
@@ -236,9 +253,31 @@ void draw_measurement_widget(uint32_t x, uint32_t y, WIDGET_ID_t measure_widget_
         (x + (MEASURE_WIDGET_WIDTH / 2) - (value_len * FONT_10X12_WIDTH) / 2) \
             + value_len * FONT_10X12_WIDTH - unit_len * FONT_6X8_WIDTH + 5, 
         MEASURE_WIDGET_HEIGHT / 2 + (FONT_10X12_HEIGHT / 2) + 2,
-        measure_widget.unit, 
+        measure_widget->unit, 
         MAX_INTENSITY, 
         FONT_6X8
     ); 
     return; 
+}
+
+
+void draw_settings_widget(uint32_t x, uint32_t y, const SETTINGS_WIDGET_t* widget)
+{
+    if (!widget)
+        return; 
+    
+    if (widget->icon)
+        display_img(x, y + 5, MEASURE_WIDGET_ICON_WIDTH, MEASURE_WIDGET_ICON_HEIGHT, widget->icon); 
+        
+    display_draw_str(x + MEASURE_WIDGET_ICON_WIDTH + 5, y, widget->title, MAX_INTENSITY, FONT_10X16_BOLD); 
+    
+    // ACTION 0. 
+    display_draw_rect(x, y + 20, 208, 16, MAX_INTENSITY); 
+    display_img(x + 2, y + 22, MEASURE_WIDGET_ICON_WIDTH, MEASURE_WIDGET_ICON_HEIGHT, widget->actions[0].icon); 
+    display_draw_str(x + 2 + MEASURE_WIDGET_ICON_WIDTH + 5, y + 18, widget->actions[0].name, MAX_INTENSITY, FONT_10X16); 
+    
+    // ACTION 1. 
+    display_draw_rect(x, y + 40 + 2, 208, 16, MAX_INTENSITY); 
+    display_img(x + 2, y + 44, MEASURE_WIDGET_ICON_WIDTH, MEASURE_WIDGET_ICON_HEIGHT, widget->actions[1].icon); 
+    display_draw_str(x + 2 + MEASURE_WIDGET_ICON_WIDTH + 5, y + 40, widget->actions[1].name, MAX_INTENSITY, FONT_10X16); 
 }

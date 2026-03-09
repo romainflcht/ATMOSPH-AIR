@@ -207,10 +207,10 @@ void display_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_intensity, con
 /// @param y            y coordinate. 
 /// @param str          string to draw. 
 /// @param fg_intensity foreground intensity. 
-void display_draw_str(uint32_t x, uint32_t y, char* str, uint8_t fg_intensity, FONTS_t font); 
+void display_draw_str(uint32_t x, uint32_t y, const char* str, uint8_t fg_intensity, FONTS_t font); 
 
 
-uint32_t display_printf(uint32_t x, uint32_t y, uint8_t fg_intensity, FONTS_t font, char* format, ...); 
+uint32_t display_printf(uint32_t x, uint32_t y, uint8_t fg_intensity, FONTS_t font, const char* format, ...); 
 
 
 /// @fn void display_img(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t* img);  

@@ -35,10 +35,11 @@
 typedef enum widget_type
 {
     WIDGET_MEASUREMENT,  
+    WIDGET_SETTINGS,  
 }   WIDGET_TYPE_t;
 
 
-typedef enum widget_id
+typedef enum measure_widget_id
 {
     WIDGET_PM_0_5, 
     WIDGET_PM_1_0, 
@@ -57,31 +58,70 @@ typedef enum widget_id
     WIDGET_FLAMMABLE_GASES,
     WIDGET_BATTERY_CHARGE,
     WIDGET_COUNT, 
-}   WIDGET_ID_t;
+}   MEASURE_WIDGET_ID_t;
 
 
-typedef enum widget_val_type
+typedef enum reasure_widget_val_type
 {
     FLOAT, 
     INTEGER, 
-}   WIDGET_VAL_TYPE_t;
+}   MEASURE_WIDGET_VAL_TYPE_t;
 
 
 //* _ STRUCTURE DECLARATIONS ___________________________________________________
 
-typedef struct widget
+// _ measure widget ____________________________________________________________
+
+typedef struct measure_widget
 {
-    WIDGET_ID_t             type; 
-    WIDGET_VAL_TYPE_t       val_type; 
-    const uint8_t*          icon; 
-    char                    title[16]; 
-    char                    unit[16]; 
+    MEASURE_WIDGET_ID_t         type; 
+    MEASURE_WIDGET_VAL_TYPE_t   val_type; 
+    uint8_t const*              icon; 
+    char                        title[16]; 
+    char                        unit[16]; 
     union   
     {
-        volatile float*     as_float; 
-        volatile uint16_t*  as_int; 
-    }                       measurement;
+        volatile float*         as_float; 
+        volatile uint16_t*      as_int; 
+    }                           measurement;
+}   MEASURE_WIDGET_t;
+
+
+// _ settings widget ____________________________________________________________
+
+typedef struct settings_actions_widget
+{
+    uint8_t const*  icon; 
+    char            name[16]; 
+    void            (*f_action)(); 
+}   SETTINGS_ACTIONS_WIDGET;
+
+
+typedef struct settings_widget
+{
+    uint8_t const*          icon; 
+    char                    title[16]; 
+    SETTINGS_ACTIONS_WIDGET actions[2]; 
+}   SETTINGS_WIDGET_t;
+
+
+// _ wrapper widget ____________________________________________________________
+
+typedef struct widget
+{
+    WIDGET_TYPE_t type; 
+    union
+    {
+        MEASURE_WIDGET_t const*     measure_widget;
+        SETTINGS_WIDGET_t const*    settings_widget; 
+    };
 }   WIDGET_t;
+
+
+//* _ EXTERN VARIABLE DECLARATIONS _____________________________________________
+
+extern const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[]; 
+extern const SETTINGS_WIDGET_t SETTINGS_WIDGET_LUT[]; 
 
 
 //* _ FUNCTION DECLARATIONS ____________________________________________________
@@ -89,6 +129,9 @@ typedef struct widget
 void draw_menu_widget(uint32_t x, uint32_t y, uint32_t battery_percent); 
 
 
-void draw_measurement_widget(uint32_t x, uint32_t y, WIDGET_ID_t measure_widget); 
+void draw_measurement_widget(uint32_t x, uint32_t y, const MEASURE_WIDGET_t* measure_widget); 
+
+
+void draw_settings_widget(uint32_t x, uint32_t y, const SETTINGS_WIDGET_t* widget);
 
 #endif
