@@ -30,6 +30,7 @@ typedef enum page_index
     PAGE_8, 
     PAGE_9, 
     PAGE_10, 
+    PAGE_COUNT, 
 }   PAGE_INDEX_t;
 
 
@@ -37,8 +38,8 @@ typedef enum page_index
 
 typedef struct page
 {
-    const WIDGET_t* const left_widget; 
-    const WIDGET_t* const right_widget; 
+    const WIDGET_t* left_widget; 
+    const WIDGET_t* right_widget; 
 }   PAGE_t;
 
 
@@ -46,8 +47,14 @@ typedef struct page
 
 /// @fn void display_page(PAGE_INDEX_t page_index); 
 /// @brief display a page composed of either one or two widget on the screen. 
-/// @param page_index correspond to which page to display from the LUT page 
-///                   table. 
-void display_page(PAGE_INDEX_t page_index); 
+void display_page(void); 
+
+
+/// @fn void page_increment(void); 
+/// @brief increment the current page index, scroll throught each page. 
+void page_scroll(void); 
+
+
+void page_interact(void); 
 
 #endif

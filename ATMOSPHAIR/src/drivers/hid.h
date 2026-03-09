@@ -6,19 +6,20 @@
 #include "definitions.h" 
 
 #include "../cores/systick.h"
+#include "../ui/pages.h"
 
 
 //* _ DEFINITIONS ______________________________________________________________
 
-#define LONG_PRESS_TIME_DETECT   500
+#define LONG_PRESS_TIME_DETECT_MS   200
 
 
 //* _ ENUMERATION DEFINITIONS __________________________________________________
 
 typedef enum hid_button
 {
-    SCROLL_BUTTON = EIC_PIN_1, 
-    SELECT_BUTTON = EIC_PIN_2, 
+    SCROLL_BUTTON   = EIC_PIN_1, 
+    INTERACT_BUTTON = EIC_PIN_2, 
 }   HID_BUTTON_t; 
 
 
@@ -28,7 +29,6 @@ typedef enum hid_event_type
     PRESS, 
     LONG_PRESS, 
 }   HID_EVENT_TYPE_t;
-
 
 //* _ STRUCTURE DEFINITIONS ____________________________________________________
 
@@ -42,14 +42,13 @@ typedef struct interrupt_status
 typedef struct hid_event
 {
     HID_EVENT_TYPE_t    type; 
-    uint32_t            timestamp; 
 }   HID_EVENT_t;
 
 
 //* _ EXTERN VARIABLE DECLARATIONS _____________________________________________
 
 extern HID_EVENT_t scroll_hid; 
-extern HID_EVENT_t select_hid; 
+extern HID_EVENT_t interact_hid; 
 
 
 //* _ FUNCTION DECLARATIONS ____________________________________________________

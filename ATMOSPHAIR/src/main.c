@@ -49,8 +49,6 @@ int main(void)
     
     TCC1_set_duty_cycle(0, 0);
     TCC1_set_duty_cycle(1, 0);
-    int batt = 100; 
-    PAGE_INDEX_t index = PAGE_1; 
        
     //* _ MAIN LOOP ____________________________________________________________
     while(true)
@@ -63,41 +61,39 @@ int main(void)
         ADC_task(); 
         
         display_fill(MIN_INTENSITY); 
-        draw_menu_widget(0, 0, batt); 
+        draw_menu_widget(0, 0, 57); 
 
-         display_page(index); 
-//        draw_settings_widget(34, 1, SETTINGS_WIDGET_LUT); 
+         display_page(); 
         
         SSD1362_refresh(); 
-        batt -= 1; 
-        if (batt < 0)
-            batt = 100; 
         
-
-        
-        if (scroll_hid.type != 0)
+        if (scroll_hid.type != NO_ACTION)
         {
-            if (scroll_hid.type == 1)
+            if (scroll_hid.type == PRESS)
             {
-                index += 1; 
+                page_scroll(); 
                 BUZZER_play_melody(UI_MELODY); 
-                if (index >= PAGE_10)
-                    index = PAGE_1; 
+            }
+            else
+            {
+                
+                BUZZER_play_melody(BOOT_MELODY); 
+            }
+            
+            scroll_hid.type = NO_ACTION; 
+        }
+        
+        if (interact_hid.type != 0)
+        {
+            if (interact_hid.type == PRESS)
+            {
+                page_interact();
+                BUZZER_play_melody(UI_MELODY); 
             }
             else
                 BUZZER_play_melody(BOOT_MELODY); 
             
-            scroll_hid.type = 0; 
-        }
-        
-        if (select_hid.type != 0)
-        {
-            if (select_hid.type == 1)
-                BUZZER_play_melody(UI_MELODY); 
-            else
-                BUZZER_play_melody(BOOT_MELODY); 
-            
-            select_hid.type = 0; 
+            interact_hid.type = NO_ACTION; 
         }
     }
 

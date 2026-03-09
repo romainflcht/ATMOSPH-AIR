@@ -15,6 +15,7 @@
 
 #define ARRAY_SIZE(arr)     (sizeof(arr) / sizeof((arr)[0]))
 
+
 //* _ FUNCTION DECLARATIONS ____________________________________________________
 
 /// @fn uint8_t crc_8_check(const uint8_t* data, uint32_t length); 

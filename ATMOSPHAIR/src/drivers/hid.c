@@ -3,20 +3,20 @@
 
 //* _ GLOBAL VARIABLE DECLARATIONS _____________________________________________
 
-HID_EVENT_t scroll_hid = {0}; 
-HID_EVENT_t select_hid = {0}; 
+HID_EVENT_t scroll_hid   = {0}; 
+HID_EVENT_t interact_hid = {0}; 
 
 
 //* _ STATIC VARIABLE DECLARATION ______________________________________________
 
-static INTERRUPT_STATUS_t scroll_status = {0}; 
-static INTERRUPT_STATUS_t select_status = {0}; 
+static INTERRUPT_STATUS_t scroll_status   = {0}; 
+static INTERRUPT_STATUS_t interact_status = {0}; 
 
 
 //* _ STATIC FUNCTION DECLARATIONS _____________________________________________
 
 static void scroll_button_callback(uintptr_t context); 
-static void select_button_callback(uintptr_t context); 
+static void interact_button_callback(uintptr_t context); 
 static void button_action(HID_BUTTON_t trigger); 
 
 
@@ -24,10 +24,10 @@ void HID_init(void)
 {
     // Register callback for each user button and enable interrupt. 
     EIC_CallbackRegister(SCROLL_BUTTON, scroll_button_callback, (uintptr_t)NULL); 
-    EIC_CallbackRegister(SELECT_BUTTON, select_button_callback, (uintptr_t)NULL); 
+    EIC_CallbackRegister(INTERACT_BUTTON, interact_button_callback, (uintptr_t)NULL); 
     
     EIC_InterruptEnable(SCROLL_BUTTON); 
-    EIC_InterruptEnable(SELECT_BUTTON); 
+    EIC_InterruptEnable(INTERACT_BUTTON); 
 }
 
 
@@ -38,9 +38,9 @@ static void scroll_button_callback(uintptr_t context)
 }
 
 
-static void select_button_callback(uintptr_t context)
+static void interact_button_callback(uintptr_t context)
 {
-    button_action(SELECT_BUTTON); 
+    button_action(INTERACT_BUTTON); 
     return; 
 }
 
@@ -66,10 +66,10 @@ static void button_action(HID_BUTTON_t trigger)
             hid        = &scroll_hid; 
             break; 
             
-        case SELECT_BUTTON: 
+        case INTERACT_BUTTON: 
             is_pressed = HID_SELECT_Get() == 0; 
-            status     = &select_status; 
-            hid        = &select_hid; 
+            status     = &interact_status; 
+            hid        = &interact_hid; 
             break;
             
         default:
@@ -89,13 +89,11 @@ static void button_action(HID_BUTTON_t trigger)
     if (status->is_triggered)
     {
         // Button has been released, check the press time. 
-        if (timestamp - status->last_trigger_timestamp >= LONG_PRESS_TIME_DETECT)
+        if (timestamp - status->last_trigger_timestamp >= LONG_PRESS_TIME_DETECT_MS)
             hid->type = LONG_PRESS; 
         
         else
             hid->type = PRESS; 
-        
-        hid->timestamp = timestamp; 
     }
     
     return; 

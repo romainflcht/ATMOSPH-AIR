@@ -52,4 +52,9 @@ void BUZZER_task(void);
 /// @param melody the melody that will be played. 
 void BUZZER_play_melody(const NOTE_t* melody); 
 
+
+/// @fn void BUZZER_toggle_mute(void); 
+/// @brief toggle the mute variable to disable buzzer beeping. 
+void BUZZER_toggle_mute(void); 
+
 #endif

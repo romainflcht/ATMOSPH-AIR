@@ -1,6 +1,11 @@
 #include "pages.h"
 
 
+// _ GLOBAL VARIABLE DECLARATIONS ______________________________________________
+
+PAGE_INDEX_t curr_page = PAGE_1; 
+
+
 // _ STATIC VARIABLE DECLARATIONS ______________________________________________
 
 static const PAGE_t PAGES_LUT[] = {
@@ -93,15 +98,17 @@ static const PAGE_t PAGES_LUT[] = {
 };
 
 
-void display_page(PAGE_INDEX_t page_index)
+void display_page(void)
 {
-    // If the requested page doesn't exist, abort. 
-    if (page_index >= ARRAY_SIZE(PAGES_LUT))
-        return; 
+    // If the requested page doesn't exist, reset the page queue. 
+    if (curr_page >= ARRAY_SIZE(PAGES_LUT))
+        curr_page = PAGE_1; 
     
-    const WIDGET_t* left_widget = PAGES_LUT[page_index].left_widget; 
-    const WIDGET_t* right_widget = PAGES_LUT[page_index].right_widget; 
-    
+    const WIDGET_t* left_widget = PAGES_LUT[curr_page].left_widget; 
+    const WIDGET_t* right_widget = PAGES_LUT[curr_page].right_widget; 
+
+    // Check if a left widget is defined in this page, if so, draws it using the
+    // correct drawing funtions depending on it's type. 
     if (left_widget)
     {
         switch (left_widget->type)
@@ -126,6 +133,8 @@ void display_page(PAGE_INDEX_t page_index)
         }
     }
     
+    // Same here for the right widget. Settings widget can't be rendered on the 
+    // right because they're full screen. 
     if (right_widget)
     {
         switch (right_widget->type)
@@ -141,5 +150,38 @@ void display_page(PAGE_INDEX_t page_index)
             default: 
                 break; 
         }
+    }
+    
+    return; 
+}
+
+
+void page_scroll(void)
+{
+    curr_page += 1; 
+    
+    // If the requested page doesn't exist, reset the page queue. 
+    if (curr_page >= ARRAY_SIZE(PAGES_LUT))
+        curr_page = PAGE_1; 
+    
+    return; 
+}
+
+
+void page_interact(void)
+{
+    // If the requested page doesn't exist, reset the page queue and abort. 
+    if (curr_page >= ARRAY_SIZE(PAGES_LUT))
+    {
+        curr_page = PAGE_1; 
+        return; 
+    }
+    
+    const WIDGET_t* left_widget = PAGES_LUT[curr_page].left_widget; 
+    
+    if (left_widget->type == WIDGET_SETTINGS)
+    {
+        if (left_widget->settings_widget->action.f_ptr)
+            left_widget->settings_widget->action.f_ptr(); 
     }
 }

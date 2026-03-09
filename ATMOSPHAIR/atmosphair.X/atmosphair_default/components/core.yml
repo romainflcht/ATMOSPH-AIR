@@ -1339,6 +1339,11 @@ data:
             value: '349.52533'
           type: Float
         type: Attributes
+      - children:
+        - attributes:
+            value: '1.0'
+          type: User
+        type: Values
       type: Float
     SYSTICK_PERIOD_US:
       attributes:

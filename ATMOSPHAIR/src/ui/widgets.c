@@ -6,7 +6,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "PM 0.5", 
         .icon                 = PM_ICON_ASSET, 
-        .type                 = WIDGET_PM_0_5, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
         .measurement.as_float = &(SEN6X_data.PM_0_5),
@@ -14,7 +14,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "PM 1.0", 
         .icon                 = PM_ICON_ASSET,
-        .type                 = WIDGET_PM_1_0, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
         .measurement.as_float = &(SEN6X_data.PM_1_0),
@@ -22,7 +22,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "PM 2.5", 
         .icon                 = PM_ICON_ASSET,
-        .type                 = WIDGET_PM_2_5, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
         .measurement.as_float = &(SEN6X_data.PM_2_5),
@@ -30,7 +30,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "PM 4.0", 
         .icon                 = PM_ICON_ASSET,
-        .type                 = WIDGET_PM_4_0, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
         .measurement.as_float = &(SEN6X_data.PM_4_0),
@@ -38,7 +38,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "PM 10.0", 
         .icon                 = PM_ICON_ASSET,
-        .type                 = WIDGET_PM_10_0, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
         .measurement.as_float = &(SEN6X_data.PM_10_0),
@@ -46,7 +46,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "TEMP", 
         .icon                 = TEMP_ICON_ASSET,
-        .type                 = WIDGET_TEMP, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "C", 
         .measurement.as_float = &(SEN6X_data.temp),
@@ -54,7 +54,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "HUMIDITY", 
         .icon                 = RH_ICON_ASSET,
-        .type                 = WIDGET_RH, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "%", 
         .measurement.as_float = &(SEN6X_data.humidity),
@@ -62,7 +62,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "VOC", 
         .icon                 = VOC_ICON_ASSET,
-        .type                 = WIDGET_VOC, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
         .measurement.as_float = &(SEN6X_data.VOC),
@@ -70,7 +70,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "NOx", 
         .icon                 = NOX_ICON_ASSET,
-        .type                 = WIDGET_NOX, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
         .measurement.as_float = &(SEN6X_data.NOx),
@@ -78,7 +78,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "CO2", 
         .icon                 = CO2_H2S_ICON_ASSET,
-        .type                 = WIDGET_CO2, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
         .measurement.as_float = &(SEN6X_data.CO2),
@@ -86,7 +86,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title                = "HCHO", 
         .icon                 = NULL,
-        .type                 = WIDGET_HCHO, 
+        .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
         .unit                 = "INDEX", 
         .measurement.as_float = &(SEN6X_data.HCHO),
@@ -94,7 +94,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title              = "H2S", 
         .icon               = CO2_H2S_ICON_ASSET,
-        .type               = WIDGET_H2S, 
+        .icon_size          = WIDGET_ICON_SIZE, 
         .val_type           = INTEGER,
         .unit               = "PPM", 
         .measurement.as_int = &(ADC_data[ADC_HS2].data),
@@ -102,7 +102,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title              = "O2", 
         .icon               = O2_ICON_ASSET,
-        .type               = WIDGET_O2, 
+        .icon_size          = WIDGET_ICON_SIZE, 
         .val_type           = INTEGER,
         .unit               = "PPM", 
         .measurement.as_int = &(ADC_data[ADC_O2].data),
@@ -110,7 +110,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title              = "CO", 
         .icon               = CO_ICON_ASSET,
-        .type               = WIDGET_CO, 
+        .icon_size          = WIDGET_ICON_SIZE, 
         .val_type           = INTEGER,
         .unit               = "PPM", 
         .measurement.as_int = &(ADC_data[ADC_CO].data),
@@ -118,7 +118,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title              = "GASES", 
         .icon               = FLAMMABLE_GASES_ICON_ASSET,
-        .type               = WIDGET_FLAMMABLE_GASES, 
+        .icon_size          = WIDGET_ICON_SIZE, 
         .val_type           = INTEGER,
         .unit               = "PPM", 
         .measurement.as_int = &(ADC_data[ADC_FLAMMABLE_GASES].data),
@@ -126,7 +126,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
     {
         .title              = "BATTERY", 
         .icon               = BATTERY_ICON_ASSET,
-        .type               = WIDGET_BATTERY_CHARGE, 
+        .icon_size          = WIDGET_ICON_SIZE, 
         .val_type           = INTEGER,
         .unit               = "%", 
         .measurement.as_int = &(ADC_data[ADC_BATTERY_CHARGE].data),
@@ -134,20 +134,17 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
 }; 
 
 
-const SETTINGS_WIDGET_t SETTINGS_WIDGET_LUT[] = {
+const SETTING_WIDGET_t SETTINGS_WIDGET_LUT[] = {
     {
-        .title = "SETTINGS",
-        .icon  = SETTINGS_ICON_ASSET,
-        .actions = {
-            {
-                .icon = FLAMMABLE_GASES_ICON_ASSET,
-                .name = "MUTE"
-            }, 
-            {
-                .icon = FLAMMABLE_GASES_ICON_ASSET,
-                .name = "OP", 
-            }, 
-        },
+        .title  = "AUDIO SETTINGS",
+        .icon   = SETTINGS_ICON_ASSET,
+        .icon_size = WIDGET_ICON_SIZE, 
+        .action = {
+            .icon      = MUTE_ACTION_ASSET, 
+            .icon_size = MUTE_ACTION_SIZE, 
+            .name      = "TOGGLE SPEAKER",
+            .f_ptr     = BUZZER_toggle_mute, 
+        }
     }, 
 }; 
 
@@ -225,14 +222,14 @@ void draw_measurement_widget(uint32_t x, uint32_t y, const MEASURE_WIDGET_t* mea
         display_img(
             x + 2, 
             y + 4, 
-            MEASURE_WIDGET_ICON_WIDTH, 
-            MEASURE_WIDGET_ICON_HEIGHT, 
+            measure_widget->icon_size, 
+            measure_widget->icon_size, 
             measure_widget->icon
         ); 
     
     // Draw the title. 
     display_draw_str(
-        x + 2 + ((measure_widget->icon) ? (MEASURE_WIDGET_ICON_WIDTH + 5) : 0), 
+        x + 2 + ((measure_widget->icon) ? (WIDGET_ICON_WIDTH + 5) : 0), 
         y, 
         measure_widget->title, 
         MAX_INTENSITY, 
@@ -261,23 +258,39 @@ void draw_measurement_widget(uint32_t x, uint32_t y, const MEASURE_WIDGET_t* mea
 }
 
 
-void draw_settings_widget(uint32_t x, uint32_t y, const SETTINGS_WIDGET_t* widget)
+void draw_settings_widget(uint32_t x, uint32_t y, const SETTING_WIDGET_t* widget)
 {
+    uint32_t action_name_len; 
+    
+    // If no widget is provided, abort. 
     if (!widget)
         return; 
     
+    
+    action_name_len = strlen(widget->action.name); 
+    
+    // Draws widget icon. 
     if (widget->icon)
-        display_img(x, y + 5, MEASURE_WIDGET_ICON_WIDTH, MEASURE_WIDGET_ICON_HEIGHT, widget->icon); 
+        display_img(
+            x, y + 5, widget->icon_size, 
+            widget->icon_size, widget->icon
+        ); 
         
-    display_draw_str(x + MEASURE_WIDGET_ICON_WIDTH + 5, y, widget->title, MAX_INTENSITY, FONT_10X16_BOLD); 
+    // Draws widget title. 
+    display_draw_str(
+        x + WIDGET_ICON_WIDTH + 5, y, widget->title, 
+        MAX_INTENSITY, FONT_10X16_BOLD
+    ); 
+
+    display_img(
+        x + (SETTINGS_WIDGET_WIDTH / 2) - (widget->action.icon_size / 2), 
+        y + FONT_10X12_HEIGHT + 2, widget->action.icon_size, 
+        widget->action.icon_size, widget->action.icon
+    ); 
     
-    // ACTION 0. 
-    display_draw_rect(x, y + 20, 208, 16, MAX_INTENSITY); 
-    display_img(x + 2, y + 22, MEASURE_WIDGET_ICON_WIDTH, MEASURE_WIDGET_ICON_HEIGHT, widget->actions[0].icon); 
-    display_draw_str(x + 2 + MEASURE_WIDGET_ICON_WIDTH + 5, y + 18, widget->actions[0].name, MAX_INTENSITY, FONT_10X16); 
-    
-    // ACTION 1. 
-    display_draw_rect(x, y + 40 + 2, 208, 16, MAX_INTENSITY); 
-    display_img(x + 2, y + 44, MEASURE_WIDGET_ICON_WIDTH, MEASURE_WIDGET_ICON_HEIGHT, widget->actions[1].icon); 
-    display_draw_str(x + 2 + MEASURE_WIDGET_ICON_WIDTH + 5, y + 40, widget->actions[1].name, MAX_INTENSITY, FONT_10X16); 
+    display_draw_str(
+        x + (SETTINGS_WIDGET_WIDTH / 2) - ((action_name_len * FONT_10X12_WIDTH) / 2),
+        y + FONT_10X12_HEIGHT + widget->action.icon_size + 4, 
+        widget->action.name, MAX_INTENSITY, FONT_10X16
+    ); 
 }

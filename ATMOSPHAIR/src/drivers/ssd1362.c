@@ -170,11 +170,11 @@ void display_draw_circle(uint32_t cx, uint32_t cy, uint32_t r, uint8_t intensity
         if (p > 0)
         {
             y += 1; 
-            p += 2 * (x + y) + 1; 
+            p += (2 * (x + y) + 1); 
         }
 
         else 
-            p += 2 * x + 1;  
+            p += (2 * x + 1);  
 
         display_set_pixel(cx + x, cy + y, intensity); 
         display_set_pixel(cx - x, cy + y, intensity); 
@@ -199,6 +199,81 @@ void display_draw_rect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t i
     display_fast_h_line(x, y + h, w, intensity); 
     display_fast_v_line(x + w, y, h + 1, intensity); 
     return; 
+}
+
+
+void display_draw_rounded_rect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t r, uint8_t intensity)
+{
+    int32_t cx_l; 
+    int32_t cx_r; 
+    int32_t cy_t;  
+    int32_t cy_b;
+    int32_t dx; 
+    int32_t dy; 
+    int32_t p;
+    
+    // if the radius is null draws a simple rectangle. 
+    if (r <= 0) 
+    {
+        display_draw_rect(x, y, w, h, intensity); 
+        return; 
+    }
+
+    // The radius should not go over the height or width divided by 2. 
+    if (r > w / 2) 
+        r = w / 2;
+    
+    if (r > h / 2) 
+        r = h / 2;
+
+    // Draws straight line of the rectangle. 
+    display_fast_h_line(x + r, y, w - 2 * r, intensity); 
+    display_fast_h_line(x + r, y + h - 1, w - 2 * r, intensity); 
+    display_fast_v_line(x, y + r, h - 2 * r, intensity); 
+    display_fast_v_line(x + w - 1, y + r, h - 2 * r, intensity); 
+
+    // Calculate each corner arc center. 
+    cx_l = x + r;
+    cx_r = x + w - 1 - r;
+    cy_t = y + r;
+    cy_b = y + h - 1 - r;
+
+    dx = 0; 
+    dy = -r;
+    p = -r; 
+
+    // explaination of how this algorithm works are available here: 
+    // https://www.youtube.com/watch?v=hpiILbMkF9w from NoBS Code. 
+    while (dx < -dy)
+    {
+        if (p > 0)
+        {
+            dy += 1; 
+            p  += (2 * (dx + dy) + 1); 
+        }
+        else 
+        {
+            p += (2 * dx + 1);  
+        }
+
+        // Haut-Gauche
+        display_set_pixel(cx_l - dx, cy_t + dy, intensity);
+        display_set_pixel(cx_l + dy, cy_t - dx, intensity);
+
+        // Haut-Droite
+        display_set_pixel(cx_r + dx, cy_t + dy, intensity);
+        display_set_pixel(cx_r - dy, cy_t - dx, intensity);
+
+        // Bas-Gauche
+        display_set_pixel(cx_l - dx, cy_b - dy, intensity);
+        display_set_pixel(cx_l + dy, cy_b + dx, intensity);
+
+        // Bas-Droite
+        display_set_pixel(cx_r + dx, cy_b - dy, intensity);
+        display_set_pixel(cx_r - dy, cy_b + dx, intensity);
+
+        dx += 1; 
+    }
 }
 
 

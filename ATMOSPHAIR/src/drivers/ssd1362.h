@@ -182,6 +182,17 @@ void display_draw_circle(uint32_t cx, uint32_t cy, uint32_t r, uint8_t intensity
 void display_draw_rect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t intensity); 
 
 
+/// @fn void display_draw_rounded_rect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t r, uint8_t intensity); 
+/// @brief draw a rounded rectangle outline. 
+/// @param x         x coordinate. 
+/// @param y         y coordinate. 
+/// @param w         width of the rectangle. 
+/// @param h         height of the rectangle. 
+/// @param r         radius of the rounded corners. 
+/// @param intensity value between 0 and 15 to set the grayscale of the rectangle. 
+void display_draw_rounded_rect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t r, uint8_t intensity); 
+
+
 /// @fn void display_draw_fillrect(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint8_t intensity);
 /// @brief draw a filled rectangle. 
 /// @param x         x coordinate. 

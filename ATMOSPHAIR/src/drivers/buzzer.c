@@ -67,7 +67,7 @@ void BUZZER_task(void)
 void BUZZER_play_melody(const NOTE_t* melody)
 {
     // If a melody is already playing, abort. 
-    if (curr_state != BUZZER_IDLE)
+    if (curr_state != BUZZER_IDLE || !speaker_is_active)
         return; 
     
     // Start the TCC, load the melody and go the the playing state. 
@@ -75,6 +75,12 @@ void BUZZER_play_melody(const NOTE_t* melody)
     curr_melody = melody; 
     curr_state  = BUZZER_PLAY_NOTE; 
     return; 
+}
+
+
+void BUZZER_toggle_mute(void)
+{
+    speaker_is_active = !speaker_is_active; 
 }
 
 
