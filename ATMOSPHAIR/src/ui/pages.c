@@ -163,7 +163,7 @@ void page_scroll(void)
     // If the requested page doesn't exist, reset the page queue. 
     if (curr_page >= ARRAY_SIZE(PAGES_LUT))
         curr_page = PAGE_1; 
-    
+        
     return; 
 }
 
@@ -179,9 +179,13 @@ void page_interact(void)
     
     const WIDGET_t* left_widget = PAGES_LUT[curr_page].left_widget; 
     
+    // Fetch the action associated to the settings page and execute it if 
+    // it's available. 
     if (left_widget->type == WIDGET_SETTINGS)
     {
         if (left_widget->settings_widget->action.f_ptr)
             left_widget->settings_widget->action.f_ptr(); 
     }
+
+    return; 
 }

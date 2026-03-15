@@ -56,6 +56,7 @@
 #include "peripheral/port/plib_port.h"
 #include "peripheral/nvic/plib_nvic.h"
 #include "peripheral/systick/plib_systick.h"
+#include "peripheral/dmac/plib_dmac.h"
 #include "peripheral/adc/plib_adc.h"
 #include "peripheral/eic/plib_eic.h"
 #include "peripheral/tcc/plib_tcc1.h"

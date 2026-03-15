@@ -8,7 +8,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
         .icon                 = PM_ICON_ASSET, 
         .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
-        .unit                 = "INDEX", 
+        .unit                 = "uG/m3", 
         .measurement.as_float = &(SEN6X_data.PM_0_5),
     }, 
     {
@@ -16,7 +16,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
         .icon                 = PM_ICON_ASSET,
         .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
-        .unit                 = "INDEX", 
+        .unit                 = "uG/m3", 
         .measurement.as_float = &(SEN6X_data.PM_1_0),
     }, 
     {
@@ -24,7 +24,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
         .icon                 = PM_ICON_ASSET,
         .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
-        .unit                 = "INDEX", 
+        .unit                 = "uG/m3", 
         .measurement.as_float = &(SEN6X_data.PM_2_5),
     }, 
     {
@@ -32,7 +32,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
         .icon                 = PM_ICON_ASSET,
         .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
-        .unit                 = "INDEX", 
+        .unit                 = "uG/m3", 
         .measurement.as_float = &(SEN6X_data.PM_4_0),
     }, 
     {
@@ -40,7 +40,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
         .icon                 = PM_ICON_ASSET,
         .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
-        .unit                 = "INDEX", 
+        .unit                 = "uG/m3", 
         .measurement.as_float = &(SEN6X_data.PM_10_0),
     }, 
     {
@@ -80,7 +80,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
         .icon                 = CO2_H2S_ICON_ASSET,
         .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
-        .unit                 = "INDEX", 
+        .unit                 = "PPM", 
         .measurement.as_float = &(SEN6X_data.CO2),
     }, 
     {
@@ -88,7 +88,7 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
         .icon                 = NULL,
         .icon_size            = WIDGET_ICON_SIZE, 
         .val_type             = FLOAT,
-        .unit                 = "INDEX", 
+        .unit                 = "PPB", 
         .measurement.as_float = &(SEN6X_data.HCHO),
     }, 
     {
@@ -103,9 +103,9 @@ const MEASURE_WIDGET_t MEASURE_WIDGET_LUT[] = {
         .title              = "O2", 
         .icon               = O2_ICON_ASSET,
         .icon_size          = WIDGET_ICON_SIZE, 
-        .val_type           = INTEGER,
+        .val_type           = FLOAT,
         .unit               = "PPM", 
-        .measurement.as_int = &(ADC_data[ADC_O2].data),
+        .measurement.as_float = &(processed_data[ADC_O2].data),
     }, 
     {
         .title              = "CO", 
@@ -284,7 +284,7 @@ void draw_settings_widget(uint32_t x, uint32_t y, const SETTING_WIDGET_t* widget
 
     display_img(
         x + (SETTINGS_WIDGET_WIDTH / 2) - (widget->action.icon_size / 2), 
-        y + FONT_10X12_HEIGHT + 2, widget->action.icon_size, 
+        y + FONT_10X12_HEIGHT + 4, widget->action.icon_size, 
         widget->action.icon_size, widget->action.icon
     ); 
     

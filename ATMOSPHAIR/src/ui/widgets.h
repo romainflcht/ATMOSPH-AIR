@@ -6,12 +6,13 @@
 #include <stdlib.h>
 #include "definitions.h"
 
+#include "assets.h"
 #include "../drivers/ssd1362.h"
 #include "../drivers/buzzer.h"
 #include "../drivers/sen6x.h"
 #include "../drivers/m95.h"
 #include "../cores/adc.h"
-#include "assets.h"
+#include "../utils/adc_processing.h"
 
 //* _ DEFINITIONS ______________________________________________________________
 

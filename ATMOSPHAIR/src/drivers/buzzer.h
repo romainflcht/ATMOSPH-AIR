@@ -24,6 +24,7 @@ typedef enum buzzer_state
     BUZZER_STOP, 
 }   BUZZER_STATE_t;
 
+
 //* _ STRUCTURE DEFINITIONS ____________________________________________________
 
 typedef struct note
@@ -35,10 +36,11 @@ typedef struct note
 
 //* _ EXTERN VARIABLES _________________________________________________________
 
-extern bool speaker_is_active; 
+extern bool         speaker_is_active; 
 extern const NOTE_t BOOT_MELODY[]; 
 extern const NOTE_t ERR_MELODY[]; 
 extern const NOTE_t UI_MELODY[]; 
+extern const NOTE_t DANGER_MELODY[]; 
 
 
 //* _ FUNCTION DECLARATIONS ____________________________________________________

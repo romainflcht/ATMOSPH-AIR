@@ -116,6 +116,7 @@ const H3DeviceVectors exception_table=
     .pfnWDT_Handler                = WDT_Handler,
     .pfnEIC_EXTINT_1_Handler       = EIC_EXTINT_1_InterruptHandler,
     .pfnEIC_EXTINT_2_Handler       = EIC_EXTINT_2_InterruptHandler,
+    .pfnDMAC_0_Handler             = DMAC_0_InterruptHandler,
     .pfnSERCOM0_0_Handler          = SERCOM0_USART_InterruptHandler,
     .pfnSERCOM0_1_Handler          = SERCOM0_USART_InterruptHandler,
     .pfnSERCOM0_2_Handler          = SERCOM0_USART_InterruptHandler,

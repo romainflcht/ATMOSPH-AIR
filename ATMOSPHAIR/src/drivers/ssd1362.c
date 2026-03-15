@@ -1,10 +1,20 @@
 #include "ssd1362.h"
 
 
-static PIXEL_INTENSITY_t framebuffer[BUFFER_SIZE]; 
+static PIXEL_INTENSITY_t    framebuffer[BUFFER_SIZE] = {0}; 
+
+static volatile SSD1362_STATES_t     curr_state = SSD1362_READY; 
+static volatile bool                 dma_transfert_finished = 1; 
+static uint32_t                      last_refresh_timestamp; 
+
+static void DMAC_callback(DMAC_TRANSFER_EVENT status, uintptr_t context); 
+static void SSD1362_TRANSMIT_state(void); 
+static void SSD1362_END_TRANSFERT_state(void); 
+static void SSD1362_REFRESH_RATE_WAIT_state(void);
 
 
 //* _ HARDWARE FUNCTIONS _______________________________________________________
+
 void ssd1362_init(void)
 {
     uint8_t command;
@@ -29,30 +39,102 @@ void ssd1362_init(void)
     DISPLAY_CS_Set(); 
     DISPLAY_DATA_Set(); 
     
-    // Set the callback to reset the chip select and data command pin. 
-    SERCOM2_SPI_CallbackRegister(SPI_callback, (uintptr_t)NULL); 
+    // Set the DMA callback to raise finished transfert flag and go to next 
+    // state. 
+    DMAC_ChannelCallbackRegister(DMAC_CHANNEL_0, DMAC_callback, (uintptr_t)NULL);
     
     return; 
 }
 
 
-void SPI_callback(uintptr_t context)
+static void DMAC_callback(DMAC_TRANSFER_EVENT status, uintptr_t context)
 {
-    // Reset chip select and data select when the transimit is finished. 
-    DISPLAY_CS_Set(); 
-    DISPLAY_DATA_Set(); 
+    if (status == DMAC_TRANSFER_EVENT_COMPLETE) 
+    {
+        dma_transfert_finished = 1; 
+        curr_state             = SSD1362_END_TRANSFERT; 
+    }
+    
     return; 
 }
 
 
-bool SSD1362_refresh(void)
+void SSD1362_task(void)
 {
-    // If the SPI peripheral isn't busy, send the framebuffer to the screen. 
-    if (SERCOM2_SPI_IsBusy())
-        return false; 
+    switch (curr_state)
+    {
+        case SSD1362_READY: 
+            // Wait for software trigger to send the current framebuffer. 
+            break; 
+            
+        case SSD1362_TRANSMIT:
+            SSD1362_TRANSMIT_state(); 
+            break; 
+            
+        case SSD1362_WAIT_TRANFERT: 
+            // Wait for the DMA callback to be executed. 
+            break; 
+            
+        case SSD1362_END_TRANSFERT: 
+            SSD1362_END_TRANSFERT_state(); 
+            break; 
+        
+        case SSD1362_REFRESH_RATE_WAIT: 
+            SSD1362_REFRESH_RATE_WAIT_state(); 
+            break; 
+    }
+}
+
+
+static void SSD1362_TRANSMIT_state(void)
+{
+    if (!dma_transfert_finished)
+        return; 
     
     DISPLAY_CS_Clear(); 
-    return SERCOM2_SPI_Write((uint8_t*)framebuffer, BUFFER_SIZE); 
+    dma_transfert_finished = 0; 
+    DMAC_ChannelTransfer(
+        DMAC_CHANNEL_0, 
+        framebuffer, 
+        (const void*)&(SERCOM2_REGS->SPIM.SERCOM_DATA), 
+        BUFFER_SIZE
+    );
+    
+    last_refresh_timestamp = SYSTICK_millis(); 
+    curr_state = SSD1362_WAIT_TRANFERT; 
+    return; 
+}
+
+
+static void SSD1362_END_TRANSFERT_state(void)
+{
+    if (!((SERCOM2_REGS->SPIM.SERCOM_INTFLAG & SERCOM_SPIM_INTFLAG_TXC_Msk) 
+            == SERCOM_SPIM_INTFLAG_TXC_Msk))
+        return; 
+    
+    DISPLAY_CS_Set(); 
+    DISPLAY_DATA_Set(); 
+    curr_state = SSD1362_REFRESH_RATE_WAIT; 
+    return; 
+}
+
+
+static void SSD1362_REFRESH_RATE_WAIT_state(void)
+{
+    if (SYSTICK_millis() - last_refresh_timestamp < DISPLAY_REFRESH_RATE_MS)
+        return; 
+    
+    curr_state = SSD1362_READY; 
+}
+
+
+
+void SSD1362_refresh(void)
+{
+    if (curr_state == SSD1362_READY)
+        curr_state = SSD1362_TRANSMIT;
+
+    return; 
 }
 
 //* _ SOFTWARE FUNCTIONS _______________________________________________________
@@ -60,6 +142,9 @@ bool SSD1362_refresh(void)
 void display_fill(uint8_t intensity)
 {
     int i; 
+    
+    if (curr_state != SSD1362_READY)
+        return; 
     
     // Fill the framebuffer of the given intensity. 
     for (i = 0; i < BUFFER_SIZE; i += 1)
@@ -73,6 +158,9 @@ void display_set_pixel(uint32_t x, uint32_t y, uint8_t intensity)
 {
     // Check if the given coordinates are in the screen boundaries. 
     if (COORD_ISINVALID(x, y))
+        return; 
+    
+    else if (curr_state != SSD1362_READY)
         return; 
     
     // Set the correct half of the byte depending on the x position (each byte 
@@ -300,6 +388,9 @@ void display_draw_char(uint32_t x, uint32_t y, char c, uint8_t fg_intensity, con
     if (!font_data)
         return; 
     
+    else if (curr_state != SSD1362_READY)
+        return; 
+    
     // Get font information from font header. 
     font_width        = font_data[HEADER_FONT_WIDTH]; 
     font_height       = font_data[HEADER_FONT_HEIGHT]; 
@@ -429,6 +520,9 @@ void display_img(uint32_t x, uint32_t y, uint32_t w, uint32_t h, const uint8_t* 
     int x_index; 
     int y_index; 
     uint8_t curr_pixel; 
+    
+    if (curr_state != SSD1362_READY)
+        return; 
 
     for (y_index = 0; y_index < h; y_index += 1)
         for (x_index = 0; x_index < (w + 1) / 2; x_index += 1)

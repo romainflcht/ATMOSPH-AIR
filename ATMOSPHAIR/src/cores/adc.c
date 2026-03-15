@@ -2,7 +2,7 @@
 
 //* _ GLOBAL VARIABLE DECLARATIONS _____________________________________________
 
-volatile ADC_DATA_t ADC_data[ADC_CHANNEL_COUNT]; 
+volatile ADC_RAW_DATA_t ADC_data[ADC_CHANNEL_COUNT]; 
 
 
 //* _ STATIC VARIABLE DECLARATIONS _____________________________________________
@@ -152,6 +152,8 @@ static void ADC_CONVERSION_DONE_state(void)
 {
     if (SYSTICK_millis() - last_conversion_timestamp <= WAIT_BETWEEN_CYCLE_MS)
         return; 
+    
+    // Process each channel ADC conversion. 
     
     curr_state = ADC_IDLE; 
     return; 

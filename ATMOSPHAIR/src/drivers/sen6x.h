@@ -24,7 +24,7 @@
 ///         - SEN65  -> PM, RH, T, VOC and NOx sensor. 
 ///         - SEN66  -> PM, RH, T, CO2, VOC and NOx sensor.
 ///         - SEN68  -> PM, RH, T, VOC, NOx and HCHO sensor. 
-#define SEN_DEVICE_USED                 SEN65
+#define SEN_DEVICE_USED                 SEN66
 
 // Buffer configuration. 
 #define SEN6X_RX_BUF_LENGTH             32

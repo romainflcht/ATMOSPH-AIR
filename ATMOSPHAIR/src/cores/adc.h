@@ -11,7 +11,7 @@
 //* _ DEFINITIONS ______________________________________________________________
 
 #define CONVERSION_TIMEOUT_MS   10
-#define WAIT_BETWEEN_CYCLE_MS   1
+#define WAIT_BETWEEN_CYCLE_MS   500
 
 #define EMA_ALPHA_FACTOR        0.5
 
@@ -40,17 +40,17 @@ typedef enum adc_channel
 
 //* _ STRUCTURE DEFINITIONS ____________________________________________________
 
-typedef struct adc_data
+typedef struct adc_raw_data
 {
     uint16_t    data;               ///< ADC conversion result. 
     uint16_t    ema_filtered_data;  ///< ADC conversion result filtered using the EMA algorithm. 
     bool        data_is_new;        ///< Data has been converted and ready to be read. 
-}   ADC_DATA_t;
+}   ADC_RAW_DATA_t;
 
 
 //* _ EXTERN VARIABLE DECLARATIONS _____________________________________________
 
-extern volatile ADC_DATA_t ADC_data[ADC_CHANNEL_COUNT]; 
+extern volatile ADC_RAW_DATA_t ADC_data[ADC_CHANNEL_COUNT]; 
 
 
 //* _ FUNCTION DECLARATIONS ____________________________________________________

@@ -8,6 +8,7 @@
 
 #include <stdarg.h>
 #include "../ui/fonts.h"
+#include "../cores/systick.h"
 
 
 //* _ DEFINITIONS ______________________________________________________________
@@ -15,6 +16,7 @@
 #define DISPLAY_WIDTH           256
 #define DISPLAY_HEIGHT          64
 #define BIT_PER_PIXEL           4
+#define DISPLAY_REFRESH_RATE_MS 30
 
 #define DISPLAY_LOGICAL_WIDTH   256 / (8 / BIT_PER_PIXEL)
 #define DISPLAY_LOGICAL_HEIGHT  64
@@ -84,6 +86,15 @@ typedef enum ssd1362_reg
 }   SSD1362_REG_t;
 
 
+typedef enum ssd1362_states
+{
+    SSD1362_READY, 
+    SSD1362_TRANSMIT, 
+    SSD1362_WAIT_TRANFERT, 
+    SSD1362_END_TRANSFERT, 
+    SSD1362_REFRESH_RATE_WAIT, 
+}   SSD1362_STATES_t;
+
 //* _ STRUCTURES _______________________________________________________________
 
 typedef union pixel_intensity
@@ -105,18 +116,13 @@ typedef union pixel_intensity
 void ssd1362_init(void); 
 
 
-/// @fn void ssd1362_callback(uintptr_t context); 
-/// @brief set high to chip select and data/command pin (unselect the SPI 
-///        device). 
-/// @param context not used. 
-void SPI_callback(uintptr_t context); 
+
+void SSD1362_task(void); 
 
 
 /// @fn bool ssd1362_refresh(void);  
 /// @brief send the framebuffer data to the screen. 
-/// @return false in case the SPI peripheral is busy, true is the request has 
-///         been accepted by the peripheral. 
-bool SSD1362_refresh(void); 
+void SSD1362_refresh(void); 
 
 
 //* _ SOFTWARE GRAPHICAL FUNCTION DECLARATIONS _________________________________

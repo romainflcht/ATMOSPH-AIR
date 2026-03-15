@@ -11,6 +11,9 @@
               <itemPath>../src/config/default/peripheral/adc/plib_adc_common.h</itemPath>
               <itemPath>../src/config/default/peripheral/adc/plib_adc.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="dmac" displayName="dmac" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/dmac/plib_dmac.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="eic" displayName="eic" projectFiles="true">
               <itemPath>../src/config/default/peripheral/eic/plib_eic.h</itemPath>
             </logicalFolder>
@@ -66,6 +69,7 @@
         <itemPath>../src/drivers/m95.h</itemPath>
         <itemPath>../src/drivers/buzzer.h</itemPath>
         <itemPath>../src/drivers/hid.h</itemPath>
+        <itemPath>../src/drivers/led.h</itemPath>
       </logicalFolder>
       <logicalFolder name="packs" displayName="packs" projectFiles="true">
         <logicalFolder name="CMSIS" displayName="CMSIS" projectFiles="true">
@@ -174,6 +178,9 @@
           <itemPath>../src/packs/PIC32CM5164LS00048_DFP/pic32cm5164ls00048.h</itemPath>
         </logicalFolder>
       </logicalFolder>
+      <logicalFolder name="f5" displayName="processes" projectFiles="true">
+        <itemPath>../src/processes/alert.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="trustZone" displayName="trustZone" projectFiles="true">
         <itemPath>../src/trustZone/nonsecure_entry.h</itemPath>
       </logicalFolder>
@@ -186,6 +193,7 @@
       <logicalFolder name="f3" displayName="utils" projectFiles="true">
         <itemPath>../src/utils/utils.h</itemPath>
         <itemPath>../src/utils/notes.h</itemPath>
+        <itemPath>../src/utils/adc_processing.h</itemPath>
       </logicalFolder>
       <itemPath>../src/configuration.h</itemPath>
     </logicalFolder>
@@ -238,6 +246,9 @@
           <logicalFolder name="peripheral" displayName="peripheral" projectFiles="true">
             <logicalFolder name="adc" displayName="adc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/adc/plib_adc.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="dmac" displayName="dmac" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/dmac/plib_dmac.c</itemPath>
             </logicalFolder>
             <logicalFolder name="eic" displayName="eic" projectFiles="true">
               <itemPath>../src/config/default/peripheral/eic/plib_eic.c</itemPath>
@@ -292,6 +303,10 @@
         <itemPath>../src/drivers/m95.c</itemPath>
         <itemPath>../src/drivers/buzzer.c</itemPath>
         <itemPath>../src/drivers/hid.c</itemPath>
+        <itemPath>../src/drivers/led.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f5" displayName="processes" projectFiles="true">
+        <itemPath>../src/processes/alert.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f4" displayName="ui" projectFiles="true">
         <itemPath>../src/ui/assets.c</itemPath>
@@ -301,6 +316,7 @@
       </logicalFolder>
       <logicalFolder name="f3" displayName="utils" projectFiles="true">
         <itemPath>../src/utils/utils.c</itemPath>
+        <itemPath>../src/utils/adc_processing.c</itemPath>
       </logicalFolder>
       <itemPath>../src/main.c</itemPath>
     </logicalFolder>
@@ -322,8 +338,8 @@
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="PIC32CM-LS_DFP" vendor="Microchip" version="1.3.278"/>
         <pack name="CMSIS" vendor="ARM" version="5.4.0"/>
+        <pack name="PIC32CM-LS_DFP" vendor="Microchip" version="1.3.278"/>
       </packs>
       <ScriptingSettings>
       </ScriptingSettings>
@@ -400,7 +416,7 @@
         <property key="oXC16gcc-sfr-warn" value="false"/>
         <property key="oXC16gcc-smar-io-lvl" value="1"/>
         <property key="oXC16gcc-smart-io-fmt" value=""/>
-        <property key="optimization-level" value="-O0"/>
+        <property key="optimization-level" value="-O2"/>
         <property key="place-data-into-section" value="true"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
@@ -512,7 +528,7 @@
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>
         <property key="make-warnings-into-errors" value="false"/>
-        <property key="optimization-level" value=""/>
+        <property key="optimization-level" value="-O2"/>
         <property key="place-data-into-section" value="false"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
@@ -641,8 +657,6 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-7ffff"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="C:/Users/Romain/MPLABXProjects/ATMOSPHAIR/atmosphair.X/debug/default/atmosphair_ptg"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.preservedataflash" value="false"/>
         <property key="programoptions.preservedataflash.ranges"

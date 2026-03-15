@@ -24,7 +24,7 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR\src\config\default\PIC32CM5164LS00048.ld
   hash: 30191e9762084f61078552f0f3c0c72f9ae205f659a0b5c8a39366bd0f159676
 - file: ..\..\ATMOSPHAIR\src\config\default\definitions.h
-  hash: 3580f1fb64776203e055d6903fc750032f2f309b06d0f8f8dc2d3472eb0bb4dc
+  hash: 4d2d0febc1374a2dbbc9ccb263453db88e41f6d8272a335f3d429daca41d9fa2
 - file: ..\..\ATMOSPHAIR\src\config\default\device.h
   hash: 93a786fe6c731ae7fed16e8e6f02040c17e745ffa9b8b884d51ec7bdb658f951
 - file: ..\..\ATMOSPHAIR\src\config\default\device_cache.h
@@ -34,11 +34,11 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR\src\config\default\exceptions.c
   hash: d1567a190561858cc1cb7e796cf1a29720e52b9799bbd88b087993d8539e137f
 - file: ..\..\ATMOSPHAIR\src\config\default\initialization.c
-  hash: 02a4a888cf12c156487233f98deb20cdcba2687389192994f619eae8a1ac4298
+  hash: 9b3aee56ded119f2aa6c3b2060d1ee8ce74949f115bb4132ba2ef0a88c8260e8
 - file: ..\..\ATMOSPHAIR\src\config\default\interrupts.c
-  hash: 585b2346af4e65d74db0d052cfac2f5789ca3ea6f406dbfeceec0ff69c05d268
+  hash: 2bb17111556ed8df2906c41e0048d3b3c6d01cb30ebdcaf4b8367581a781fff0
 - file: ..\..\ATMOSPHAIR\src\config\default\interrupts.h
-  hash: 2f33b7924050bccba818c778717223b59311495cd4009afcdd9beddc395f2ef0
+  hash: 19efe42dab2933b612d575e0a7c314c8329bf33bbcd10dc919df964c89010362
 - file: ..\..\ATMOSPHAIR\src\config\default\libc_syscalls.c
   hash: c9afc1b1257829415a1a6746ce3744f0a768b339d59fff2ab3ca1fab58b2a916
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\adc\plib_adc.c
@@ -47,12 +47,16 @@ generatedFileHashHistoryMap:
   hash: 5a5459a15845d340e60668393d123c9dc37453916a7e8d5313397f2fd5886ce6
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\adc\plib_adc_common.h
   hash: 49b797f995c200ea33d613a8a073f4567b652e3304f18eea7fe6567fad67b608
+- file: ..\..\ATMOSPHAIR\src\config\default\peripheral\dmac\plib_dmac.c
+  hash: c5dc11802feb9b7246717d8f1d425e9592bb59c8b8a0e0999e1ce5fb3b987858
+- file: ..\..\ATMOSPHAIR\src\config\default\peripheral\dmac\plib_dmac.h
+  hash: 3a2c43fa53bb62d4f8703bceb0909b7785338653372b1e786bd980008f81a08f
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\eic\plib_eic.c
   hash: f247c6bc8829f89b6b05b26f2c93a9bae8ec8febc325d57c27554602afbd4721
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\eic\plib_eic.h
   hash: 640172847361f46fa555da12ef06733858c77539a41411bc8db2cfec3e449854
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\nvic\plib_nvic.c
-  hash: f5150a4e205d35b8db7211e5cdc4b0695f94fee838f1ba7b22cdc8e9884ba465
+  hash: b8da86f874f9db8721dc4767d1facb18861711582801d853fe7bb1e744a8e17b
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\nvic\plib_nvic.h
   hash: 9936ac782115af41003255283fa2f603f4ff2212d16275b7c80ea8d067a9e208
 - file: ..\..\ATMOSPHAIR\src\config\default\peripheral\port\plib_port.c
@@ -296,7 +300,7 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\initialization.c
   hash: 044978ec22390d5bd443fdc6baa807b37850565ed035085519c57dda8ebae2ca
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\interrupts.c
-  hash: 80757050b49f06c340ec2579d6d804c5e53a5cd4c7b33b659babeee1ad90fcbf
+  hash: 5dc681625aa75d2985c80abe4ff0d986b249825da816f42e6b773ac7ea3ff48e
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\interrupts.h
   hash: b4dd0ce5d3e62a422c995a0846d00a8df0ced7850bfb1bb9917cbac4df94f18d
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\libc_syscalls.c
@@ -314,7 +318,7 @@ generatedFileHashHistoryMap:
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\evsys\plib_evsys.h
   hash: f7d08eb8162f271ce1db384c082586a6624e506aa7f502c64c4ab5a1aadac47d
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\nvic\plib_nvic.c
-  hash: 77eba5a96b225091d270f3946f4d0472ff8d609e8f71f85f024b7a0dc954b30a
+  hash: 6cea6df3d1e7d9aa1935636f5fc517240fcc0a9b4367330eeb2a77867222ed89
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\nvic\plib_nvic.h
   hash: 9936ac782115af41003255283fa2f603f4ff2212d16275b7c80ea8d067a9e208
 - file: ..\..\ATMOSPHAIR_secure\src\config\default\peripheral\nvmctrl\plib_nvmctrl.c

@@ -23,7 +23,13 @@ const NOTE_t ERR_MELODY[] = {
 };
 
 const NOTE_t UI_MELODY[] = {
-    {.frequency = 1550,          .duration = 5},
+    {.frequency = FS6,          .duration = 10},
+    {.frequency = MELODY_EOP,   .duration = MELODY_EOP},
+};
+
+const NOTE_t DANGER_MELODY[] = {
+    {.frequency = A4,           .duration = 250},
+    {.frequency = A5,           .duration = 25},
     {.frequency = MELODY_EOP,   .duration = MELODY_EOP},
 };
 
